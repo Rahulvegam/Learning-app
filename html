@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAP Career Navigator — Your TM to MM Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --tm: #00bfa5;
+  --mm: #2979ff;
+  --abap: #ffab00;
+  --ai: #aa00ff;
+  --bg: #0a0e1a;
+  --bg2: #111827;
+  --bg3: #1a2236;
+  --card: #161d2e;
+  --border: #1e2d45;
+  --text: #e8edf5;
+  --muted: #6b7a99;
+  --success: #00e676;
+  --danger: #ff5252;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+[data-theme="light"] {
+  --bg: #f0f4ff; --bg2: #e8edf8; --bg3: #dde5f5;
+  --card: #ffffff; --border: #c5d0e8; --text: #0d1526; --muted: #5a6a8a;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  background:rgba(10,14,26,0.92); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; padding:0 20px; height:56px; gap:4px;
+}
+.nav-logo { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--tm); letter-spacing:2px; margin-right:12px; white-space:nowrap; }
+.nav-tabs { display:flex; gap:2px; flex-wrap:nowrap; overflow-x:auto; flex:1; }
+.nav-tabs::-webkit-scrollbar { display:none; }
+.nav-tab { padding:6px 12px; border:none; background:transparent; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; border-radius:6px; transition:all .2s; white-space:nowrap; }
+.nav-tab.active { background:var(--bg3); color:var(--text); }
+.nav-tab:hover:not(.active) { color:var(--text); }
+.nav-actions { display:flex; gap:6px; margin-left:8px; }
+.nav-btn { padding:5px 10px; border-radius:6px; border:1px solid var(--border); background:transparent; color:var(--text); cursor:pointer; font-size:12px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+.nav-btn:hover { background:var(--bg3); }
+
+main { padding-top:56px; }
+.section { display:none; min-height:calc(100vh - 56px); padding:24px 20px 48px; max-width:1200px; margin:0 auto; animation:pageFade .3s ease; }
+.section.active { display:block; }
+@keyframes pageFade { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+/* HERO */
+.hero-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.hero-main { background:linear-gradient(135deg,#0d2137,#0a1628); border:1px solid var(--tm); border-radius:var(--radius); padding:28px; position:relative; overflow:hidden; }
+.hero-main::before { content:''; position:absolute; top:-50px; right:-50px; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,rgba(0,191,165,.15),transparent 70%); }
+.hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(0,191,165,.15); border:1px solid rgba(0,191,165,.3); border-radius:20px; padding:3px 12px; font-size:11px; color:var(--tm); font-weight:600; margin-bottom:12px; }
+.hero-title { font-family:'Bebas Neue',sans-serif; font-size:44px; line-height:1; color:#fff; margin-bottom:8px; letter-spacing:2px; }
+.hero-title span { color:var(--tm); }
+.hero-sub { color:var(--muted); font-size:14px; line-height:1.6; margin-bottom:20px; }
+.hero-stats { display:flex; gap:20px; }
+.h-stat-val { font-family:'Space Mono',monospace; font-size:26px; color:var(--tm); font-weight:700; }
+.h-stat-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+
+/* SCENE */
+.scene-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
+.scene-title { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; font-family:'Space Mono',monospace; }
+.logistics-scene { position:relative; height:150px; background:linear-gradient(180deg,#0a1628,#0d2137 60%,#112040); border-radius:8px; overflow:hidden; }
+.road { position:absolute; bottom:28px; left:0; right:0; height:18px; background:#1a2a3a; }
+.road::after { content:''; position:absolute; top:50%; left:0; right:0; height:2px; background:repeating-linear-gradient(90deg,#ffab00 0,#ffab00 18px,transparent 18px,transparent 36px); transform:translateY(-50%); }
+.warehouse { position:absolute; bottom:46px; width:55px; height:46px; background:#1e3a5f; border:2px solid #2979ff; border-radius:4px; }
+.warehouse::before { content:'▲'; position:absolute; top:-16px; left:50%; transform:translateX(-50%); color:#2979ff; font-size:14px; }
+.wh1 { left:35px; } .wh2 { right:35px; }
+.truck { position:absolute; bottom:46px; width:44px; height:26px; background:#00bfa5; border-radius:4px 8px 8px 4px; animation:driveTruck 8s linear infinite; }
+.truck::before { content:''; position:absolute; right:-11px; top:0; bottom:0; width:13px; background:#006d5b; border-radius:0 4px 4px 0; }
+.truck::after { content:''; position:absolute; bottom:-8px; left:5px; width:10px; height:10px; background:#333; border-radius:50%; box-shadow:20px 0 0 #333; }
+.truck2 { animation-delay:-4s; background:#ffab00; }
+.truck2::before { background:#c67c00; }
+.ship { position:absolute; bottom:8px; left:10%; width:75px; height:18px; background:#aa00ff; border-radius:4px 4px 10px 10px; animation:sailShip 12s linear infinite; opacity:.7; }
+.ship::before { content:'▲'; position:absolute; top:-18px; left:28px; color:#aa00ff; font-size:12px; }
+.cloud { position:absolute; width:48px; height:14px; background:rgba(255,255,255,.06); border-radius:20px; animation:driftCloud 20s linear infinite; top:8px; }
+.cloud:nth-child(2) { top:20px; animation-delay:-10s; animation-duration:25s; width:65px; }
+@keyframes driveTruck { from{left:-60px} to{left:calc(100% + 60px)} }
+@keyframes sailShip { from{left:-100px} to{left:calc(100% + 100px)} }
+@keyframes driftCloud { from{right:-80px} to{right:calc(100% + 80px)} }
+
+/* PROGRESS RINGS */
+.prog-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px; }
+.prog-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px; text-align:center; cursor:pointer; transition:all .25s; }
+.prog-card:hover { transform:translateY(-2px); }
+.ring-wrap { position:relative; width:76px; height:76px; margin:0 auto 10px; }
+.ring-wrap svg { transform:rotate(-90deg); }
+.ring-bg { fill:none; stroke:var(--bg3); stroke-width:6; }
+.ring-fill { fill:none; stroke-width:6; stroke-linecap:round; }
+.ring-pct { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Space Mono',monospace; font-size:13px; font-weight:700; }
+.prog-mod { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; }
+.prog-label { font-size:10px; color:var(--muted); margin-top:3px; }
+
+/* CARDS */
+.card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:14px; }
+.card-header { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.card-icon { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.card-title { font-size:15px; font-weight:600; }
+.card-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+
+/* SECTION HEADING */
+.section-heading { margin-bottom:20px; }
+.section-heading h1 { font-family:'Bebas Neue',sans-serif; font-size:38px; letter-spacing:2px; line-height:1; }
+.section-heading p { color:var(--muted); font-size:13px; margin-top:5px; }
+
+/* ROADMAP */
+.roadmap-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.month-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:18px; position:relative; cursor:pointer; transition:all .2s; }
+.month-card:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+.month-card.done { border-color:var(--success); background:rgba(0,230,118,.05); }
+.month-card.current { border-color:var(--tm); box-shadow:0 0 18px rgba(0,191,165,.2); }
+.month-num { font-family:'Bebas Neue',sans-serif; font-size:34px; line-height:1; color:var(--muted); }
+.month-card.done .month-num { color:var(--success); }
+.month-card.current .month-num { color:var(--tm); }
+.month-focus { font-size:13px; font-weight:600; margin:3px 0; }
+.month-tasks { list-style:none; margin-top:6px; }
+.month-tasks li { font-size:11px; color:var(--muted); padding:2px 0; display:flex; align-items:center; gap:5px; }
+.month-tasks li::before { content:'›'; color:var(--tm); }
+.month-tag { display:inline-block; padding:2px 8px; border-radius:20px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-top:6px; }
+.tag-tm { background:rgba(0,191,165,.15); color:var(--tm); }
+.tag-mm { background:rgba(41,121,255,.15); color:var(--mm); }
+.tag-ai { background:rgba(170,0,255,.15); color:var(--ai); }
+.tag-abap { background:rgba(255,171,0,.15); color:var(--abap); }
+.month-done-btn { position:absolute; top:10px; right:10px; width:26px; height:26px; border-radius:50%; border:2px solid var(--border); background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px; transition:all .2s; }
+.month-done-btn:hover { border-color:var(--success); }
+.month-card.done .month-done-btn { border-color:var(--success); background:var(--success); color:#000; }
+
+/* FLASHCARDS */
+.fc-controls { display:flex; gap:10px; justify-content:center; margin-bottom:20px; flex-wrap:wrap; }
+.fc-filter-btn { padding:7px 14px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; font-size:12px; transition:all .2s; }
+.fc-filter-btn[data-mod="tm"].active { background:rgba(0,191,165,.15); border-color:var(--tm); color:var(--tm); }
+.fc-filter-btn[data-mod="mm"].active { background:rgba(41,121,255,.15); border-color:var(--mm); color:var(--mm); }
+.fc-filter-btn[data-mod="abap"].active { background:rgba(255,171,0,.15); border-color:var(--abap); color:var(--abap); }
+.fc-filter-btn[data-mod="ai"].active { background:rgba(170,0,255,.15); border-color:var(--ai); color:var(--ai); }
+.fc-filter-btn[data-mod="all"].active { background:rgba(255,255,255,.1); border-color:var(--muted); color:var(--text); }
+.flashcard-container { perspective:1000px; width:480px; max-width:100%; height:260px; margin:0 auto 20px; }
+.flashcard { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform .5s; cursor:pointer; }
+.flashcard.flipped { transform:rotateY(180deg); }
+.fc-face { position:absolute; inset:0; border-radius:14px; padding:28px; display:flex; flex-direction:column; justify-content:center; align-items:center; backface-visibility:hidden; border:2px solid var(--border); }
+.fc-front { background:var(--card); }
+.fc-back { background:var(--bg3); transform:rotateY(180deg); }
+.fc-tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; margin-bottom:14px; }
+.fc-tcode { font-family:'Space Mono',monospace; font-size:38px; font-weight:700; margin-bottom:6px; }
+.fc-hint { font-size:12px; color:var(--muted); }
+.fc-answer { font-size:17px; font-weight:600; line-height:1.5; margin-bottom:6px; text-align:center; }
+.fc-detail { font-size:12px; color:var(--muted); line-height:1.6; text-align:center; }
+.fc-nav { display:flex; gap:10px; justify-content:center; align-items:center; }
+.fc-nav-btn { padding:9px 20px; border-radius:8px; border:1px solid var(--border); background:var(--card); color:var(--text); cursor:pointer; font-size:13px; transition:all .2s; }
+.fc-nav-btn:hover { background:var(--bg3); }
+.fc-counter { font-family:'Space Mono',monospace; font-size:13px; color:var(--muted); min-width:70px; text-align:center; }
+.fc-known-btn { padding:9px 18px; border-radius:8px; border:1px solid var(--success); background:rgba(0,230,118,.1); color:var(--success); cursor:pointer; font-size:12px; transition:all .2s; }
+.fc-known-btn.known { background:var(--success); color:#000; }
+
+/* INTERVIEW */
+.interview-area { max-width:780px; margin:0 auto; }
+.question-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:14px; }
+.q-meta { display:flex; gap:8px; align-items:center; margin-bottom:14px; }
+.q-num { font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); }
+.q-diff { padding:2px 9px; border-radius:20px; font-size:10px; font-weight:700; text-transform:uppercase; }
+.q-diff.easy { background:rgba(0,230,118,.15); color:var(--success); }
+.q-diff.med { background:rgba(255,171,0,.15); color:var(--abap); }
+.q-diff.hard { background:rgba(255,82,82,.15); color:var(--danger); }
+.q-text { font-size:15px; line-height:1.6; margin-bottom:18px; }
+.q-answer-area { width:100%; min-height:110px; padding:14px; border-radius:8px; border:1px solid var(--border); background:var(--bg3); color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; resize:vertical; outline:none; transition:border-color .2s; }
+.q-answer-area:focus { border-color:var(--tm); }
+.btn { padding:9px 22px; border-radius:8px; border:none; cursor:pointer; font-size:13px; font-weight:600; transition:all .2s; font-family:'DM Sans',sans-serif; }
+.btn-primary { background:var(--tm); color:#000; }
+.btn-primary:hover { filter:brightness(1.1); }
+.btn-secondary { background:var(--card); border:1px solid var(--border); color:var(--text); }
+.btn-secondary:hover { background:var(--bg3); }
+.score-panel { text-align:center; padding:36px; }
+.score-big { font-family:'Bebas Neue',sans-serif; font-size:90px; line-height:1; }
+.score-bar-track { height:8px; background:var(--bg3); border-radius:4px; overflow:hidden; max-width:360px; margin:12px auto; }
+.score-bar-fill { height:100%; border-radius:4px; background:var(--tm); transition:width .8s ease; }
+.model-answer { background:var(--bg3); border-left:3px solid var(--tm); padding:14px; border-radius:0 8px 8px 0; margin-top:10px; font-size:13px; line-height:1.7; color:var(--muted); display:none; }
+.model-answer.show { display:block; }
+.reveal-btn { background:transparent; border:1px solid var(--muted); color:var(--muted); padding:5px 14px; border-radius:6px; font-size:11px; cursor:pointer; margin-top:6px; transition:all .2s; }
+.reveal-btn:hover { border-color:var(--text); color:var(--text); }
+
+/* PROCESS */
+.flow-area { overflow-x:auto; padding:4px 0; }
+.flow-steps { display:flex; gap:0; align-items:center; min-width:max-content; }
+.flow-step { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 18px; text-align:center; cursor:pointer; transition:all .25s; min-width:130px; }
+.flow-step:hover { transform:translateY(-3px); }
+.flow-step.tm-step:hover { border-color:var(--tm); box-shadow:0 0 16px rgba(0,191,165,.2); }
+.flow-step.mm-step:hover { border-color:var(--mm); box-shadow:0 0 16px rgba(41,121,255,.2); }
+.flow-step.active-step { border-color:var(--tm) !important; }
+.flow-step.active-step.mm-step { border-color:var(--mm) !important; }
+.flow-arrow { width:36px; text-align:center; color:var(--muted); font-size:18px; }
+.flow-icon { font-size:26px; margin-bottom:6px; }
+.flow-name { font-size:11px; font-weight:600; }
+.flow-tcode { font-family:'Space Mono',monospace; font-size:10px; color:var(--muted); margin-top:3px; }
+.flow-detail { background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:14px 18px; margin-top:14px; font-size:14px; line-height:1.7; color:var(--muted); animation:fadeIn .3s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+
+/* INNER TABS */
+.inner-tabs { display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
+.inner-tab { padding:7px 16px; border-radius:8px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; font-size:12px; font-weight:500; transition:all .2s; }
+.inner-tab.active { background:var(--bg3); color:var(--text); }
+
+/* CERTS */
+.cert-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px; }
+.cert-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+.cert-name { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:3px; }
+.cert-full { font-size:11px; color:var(--muted); margin-bottom:12px; line-height:1.4; }
+.cert-timer-display { font-family:'Space Mono',monospace; font-size:30px; color:var(--tm); font-weight:700; margin-bottom:4px; }
+.cert-date-input { width:100%; padding:7px 12px; border-radius:6px; border:1px solid var(--border); background:var(--bg3); color:var(--text); font-size:12px; outline:none; margin-bottom:6px; }
+.cert-progress { height:5px; background:var(--bg3); border-radius:3px; overflow:hidden; margin-top:6px; }
+.cert-progress-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--tm),var(--mm)); transition:width .5s; }
+
+/* JOBS */
+.job-table { width:100%; border-collapse:collapse; }
+.job-table th { padding:10px 14px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); border-bottom:1px solid var(--border); font-weight:600; }
+.job-table td { padding:10px 14px; border-bottom:1px solid rgba(255,255,255,.04); font-size:13px; }
+.job-table tr:hover td { background:var(--bg3); }
+.job-status { padding:2px 9px; border-radius:20px; font-size:10px; font-weight:700; text-transform:uppercase; }
+.status-applied { background:rgba(41,121,255,.15); color:var(--mm); }
+.status-interview { background:rgba(255,171,0,.15); color:var(--abap); }
+.status-offer { background:rgba(0,230,118,.15); color:var(--success); }
+.status-rejected { background:rgba(255,82,82,.15); color:var(--danger); }
+.status-pending { background:rgba(107,122,153,.15); color:var(--muted); }
+.add-job-form { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:20px; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:10px; margin-bottom:10px; }
+.form-input { padding:9px 12px; border-radius:7px; border:1px solid var(--border); background:var(--bg3); color:var(--text); font-size:13px; width:100%; outline:none; font-family:'DM Sans',sans-serif; transition:border-color .2s; }
+.form-input:focus { border-color:var(--tm); }
+.form-select { padding:9px 12px; border-radius:7px; border:1px solid var(--border); background:var(--bg3); color:var(--text); font-size:13px; width:100%; outline:none; }
+.delete-btn { background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:15px; padding:4px 7px; border-radius:4px; transition:all .2s; }
+.delete-btn:hover { color:var(--danger); background:rgba(255,82,82,.1); }
+
+/* RESUME */
+.resume-sections { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.checklist-group { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+.checklist-group h3 { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; color:var(--muted); }
+.check-item { display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.04); cursor:pointer; }
+.check-item:last-child { border-bottom:none; }
+.check-box { width:18px; height:18px; border-radius:4px; border:2px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all .2s; margin-top:1px; font-size:11px; }
+.check-item.checked .check-box { background:var(--success); border-color:var(--success); color:#000; }
+.check-text { flex:1; }
+.check-title { font-size:13px; }
+.check-desc { font-size:11px; color:var(--muted); margin-top:1px; }
+.resume-score-wrap { text-align:center; margin-bottom:20px; }
+.resume-score-circle { width:110px; height:110px; position:relative; margin:0 auto 10px; }
+.resume-score-circle svg { transform:rotate(-90deg); }
+.score-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.score-pct-big { font-family:'Space Mono',monospace; font-size:26px; font-weight:700; color:var(--success); }
+.score-pct-label { font-size:10px; color:var(--muted); }
+
+/* STREAK */
+.streak-section { text-align:center; margin-bottom:20px; }
+.streak-flame { font-size:70px; animation:flamePulse 2s ease-in-out infinite; display:block; }
+@keyframes flamePulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+.streak-count { font-family:'Bebas Neue',sans-serif; font-size:72px; line-height:1; color:var(--abap); }
+.streak-label { font-size:13px; color:var(--muted); margin-bottom:20px; }
+.goals-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px; }
+.goal-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:18px; text-align:center; }
+.goal-icon { font-size:28px; margin-bottom:6px; }
+.goal-title { font-size:13px; font-weight:600; margin-bottom:3px; }
+.goal-desc { font-size:11px; color:var(--muted); margin-bottom:10px; }
+.goal-progress { height:5px; background:var(--bg3); border-radius:3px; overflow:hidden; }
+.goal-fill { height:100%; border-radius:3px; background:var(--tm); transition:width .5s; }
+.goal-complete-btn { padding:6px 14px; border-radius:6px; border:1px solid var(--border); background:transparent; color:var(--text); cursor:pointer; font-size:11px; margin-top:10px; transition:all .2s; }
+.goal-complete-btn:hover { background:var(--tm); border-color:var(--tm); color:#000; }
+.goal-complete-btn.done { background:var(--success); border-color:var(--success); color:#000; }
+.week-grid { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
+.week-day { width:42px; height:42px; border-radius:8px; background:var(--card); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:10px; color:var(--muted); cursor:pointer; transition:all .2s; }
+.week-day.done { background:rgba(0,191,165,.15); border-color:var(--tm); color:var(--tm); }
+.week-day.today { border-color:var(--abap); }
+.week-day-name { font-size:8px; font-weight:700; text-transform:uppercase; }
+
+/* AI */
+.joule-demo { background:linear-gradient(135deg,#1a0733,#0a1628); border:1px solid rgba(170,0,255,.3); border-radius:var(--radius); padding:20px; }
+.joule-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+.joule-avatar { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,var(--ai),#6200ea); display:flex; align-items:center; justify-content:center; font-size:22px; animation:joulePulse 3s ease-in-out infinite; }
+@keyframes joulePulse { 0%,100%{box-shadow:0 0 0 0 rgba(170,0,255,.4)} 50%{box-shadow:0 0 0 10px rgba(170,0,255,0)} }
+.joule-chat { display:flex; flex-direction:column; gap:10px; max-height:260px; overflow-y:auto; margin-bottom:14px; }
+.joule-msg { max-width:80%; padding:10px 14px; border-radius:10px; font-size:13px; line-height:1.6; }
+.joule-msg.bot { background:rgba(170,0,255,.15); border:1px solid rgba(170,0,255,.2); align-self:flex-start; }
+.joule-msg.user { background:var(--bg3); align-self:flex-end; }
+.joule-input-row { display:flex; gap:8px; }
+.joule-input { flex:1; padding:9px 14px; border-radius:7px; border:1px solid rgba(170,0,255,.3); background:rgba(170,0,255,.05); color:var(--text); font-size:13px; outline:none; font-family:'DM Sans',sans-serif; }
+.joule-input:focus { border-color:var(--ai); }
+.joule-send { padding:9px 18px; border-radius:7px; border:none; background:var(--ai); color:#fff; cursor:pointer; font-size:13px; }
+.joule-send:hover { filter:brightness(1.2); }
+
+/* TOAST */
+.toast { position:fixed; bottom:20px; right:20px; z-index:3000; background:var(--bg3); border:1px solid var(--border); border-radius:9px; padding:12px 18px; font-size:13px; display:flex; align-items:center; gap:8px; transform:translateY(100px); opacity:0; transition:all .3s; pointer-events:none; }
+.toast.show { transform:translateY(0); opacity:1; }
+
+@media(max-width:768px) {
+  .hero-grid { grid-template-columns:1fr; }
+  .prog-grid { grid-template-columns:repeat(2,1fr); }
+  .roadmap-grid { grid-template-columns:1fr 1fr; }
+  .form-grid { grid-template-columns:1fr 1fr; }
+  .resume-sections { grid-template-columns:1fr; }
+  .cert-grid { grid-template-columns:1fr; }
+  .goals-grid { grid-template-columns:1fr 1fr; }
+  .ai-main-grid { grid-template-columns:1fr !important; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">SAP NAV</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('dashboard')">🏠 Dashboard</button>
+    <button class="nav-tab" onclick="showSection('roadmap')">🗺 Roadmap</button>
+    <button class="nav-tab" onclick="showSection('flashcards')">🃏 Flashcards</button>
+    <button class="nav-tab" onclick="showSection('interview')">🎤 Interview</button>
+    <button class="nav-tab" onclick="showSection('process')">⚙️ Processes</button>
+    <button class="nav-tab" onclick="showSection('ai')">🤖 SAP AI</button>
+    <button class="nav-tab" onclick="showSection('streak')">🔥 Goals</button>
+    <button class="nav-tab" onclick="showSection('jobs')">💼 Jobs</button>
+    <button class="nav-tab" onclick="showSection('resume')">📄 Resume</button>
+    <button class="nav-tab" onclick="showSection('certs')">🏆 Certs</button>
+  </div>
+  <div class="nav-actions">
+    <button class="nav-btn" onclick="showSection('streak')">🔥 <span id="nav-streak">0</span></button>
+    <button class="nav-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
+  </div>
+</nav>
+
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+<main>
+<!-- DASHBOARD -->
+<section class="section active" id="s-dashboard">
+  <div class="hero-grid">
+    <div class="hero-main">
+      <div class="hero-badge">🚛 SAP TM Expert → 💼 MM Consultant</div>
+      <div class="hero-title">YOUR SAP<br><span>CAREER PATH</span></div>
+      <div class="hero-sub">Manual Tester with SAP TM knowledge — 92% ready for the leap. Fastest route: SAP TM → MM Functional Consultant in 6 months.</div>
+      <div class="hero-stats">
+        <div><div class="h-stat-val" id="dash-topics">0</div><div class="h-stat-label">Topics Done</div></div>
+        <div><div class="h-stat-val" id="dash-streak">0</div><div class="h-stat-label">Day Streak</div></div>
+        <div><div class="h-stat-val" id="dash-score">0%</div><div class="h-stat-label">Readiness</div></div>
+      </div>
+    </div>
+    <div class="scene-card">
+      <div class="scene-title">SAP TM — Live Logistics Scene</div>
+      <div class="logistics-scene">
+        <div class="cloud"></div><div class="cloud"></div>
+        <div class="road"></div>
+        <div class="warehouse wh1"></div>
+        <div class="warehouse wh2"></div>
+        <div class="truck"></div>
+        <div class="truck truck2"></div>
+        <div class="ship"></div>
+      </div>
+    </div>
+  </div>
+  <div class="prog-grid">
+    <div class="prog-card" onclick="showSection('flashcards')">
+      <div class="ring-wrap"><svg width="76" height="76" viewBox="0 0 76 76"><circle class="ring-bg" cx="38" cy="38" r="31"/><circle class="ring-fill" cx="38" cy="38" r="31" stroke="#00bfa5" stroke-dasharray="194.8" stroke-dashoffset="15.6"/></svg><div class="ring-pct" style="color:var(--tm)">92%</div></div>
+      <div class="prog-mod" style="color:var(--tm)">SAP TM</div><div class="prog-label">Your Foundation</div>
+    </div>
+    <div class="prog-card" onclick="showSection('flashcards')">
+      <div class="ring-wrap"><svg width="76" height="76" viewBox="0 0 76 76"><circle class="ring-bg" cx="38" cy="38" r="31"/><circle class="ring-fill" cx="38" cy="38" r="31" stroke="#2979ff" stroke-dasharray="194.8" stroke-dashoffset="42.9"/></svg><div class="ring-pct" style="color:var(--mm)">78%</div></div>
+      <div class="prog-mod" style="color:var(--mm)">SAP MM</div><div class="prog-label">Target Module</div>
+    </div>
+    <div class="prog-card" onclick="showSection('ai')">
+      <div class="ring-wrap"><svg width="76" height="76" viewBox="0 0 76 76"><circle class="ring-bg" cx="38" cy="38" r="31"/><circle class="ring-fill" cx="38" cy="38" r="31" stroke="#aa00ff" stroke-dasharray="194.8" stroke-dashoffset="58.4"/></svg><div class="ring-pct" style="color:var(--ai)">70%</div></div>
+      <div class="prog-mod" style="color:var(--ai)">SAP AI</div><div class="prog-label">Add Month 5</div>
+    </div>
+    <div class="prog-card" onclick="showSection('flashcards')">
+      <div class="ring-wrap"><svg width="76" height="76" viewBox="0 0 76 76"><circle class="ring-bg" cx="38" cy="38" r="31"/><circle class="ring-fill" cx="38" cy="38" r="31" stroke="#ffab00" stroke-dasharray="194.8" stroke-dashoffset="93.5"/></svg><div class="ring-pct" style="color:var(--abap)">52%</div></div>
+      <div class="prog-mod" style="color:var(--abap)">ABAP</div><div class="prog-label">Bonus Skill</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div class="card" style="cursor:pointer" onclick="showSection('roadmap')">
+      <div class="card-header"><div class="card-icon" style="background:rgba(0,191,165,.15)">🗺</div><div><div class="card-title">12-Month Roadmap</div><div class="card-sub">Track progress month by month</div></div></div>
+      <div id="dash-roadmap-preview" style="color:var(--muted);font-size:13px">Loading...</div>
+    </div>
+    <div class="card" style="cursor:pointer" onclick="showSection('jobs')">
+      <div class="card-header"><div class="card-icon" style="background:rgba(41,121,255,.15)">💼</div><div><div class="card-title">Job Applications</div><div class="card-sub" id="dash-job-count">No applications yet</div></div></div>
+      <div id="dash-job-status" style="font-size:13px;color:var(--muted)">Start tracking your applications →</div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="section" id="s-roadmap">
+  <div class="section-heading"><h1>12-MONTH <span style="color:var(--tm)">ROADMAP</span></h1><p>Click ✓ on each month to mark it complete.</p></div>
+  <div class="roadmap-grid" id="roadmap-grid"></div>
+</section>
+
+<!-- FLASHCARDS -->
+<section class="section" id="s-flashcards">
+  <div class="section-heading"><h1>TRANSACTION <span style="color:var(--mm)">FLASHCARDS</span></h1><p>Master SAP T-codes. Click card to reveal answer.</p></div>
+  <div class="fc-controls">
+    <button class="fc-filter-btn active" data-mod="all" onclick="setFCFilter('all',this)">All</button>
+    <button class="fc-filter-btn" data-mod="tm" onclick="setFCFilter('tm',this)">TM</button>
+    <button class="fc-filter-btn" data-mod="mm" onclick="setFCFilter('mm',this)">MM</button>
+    <button class="fc-filter-btn" data-mod="abap" onclick="setFCFilter('abap',this)">ABAP</button>
+    <button class="fc-filter-btn" data-mod="ai" onclick="setFCFilter('ai',this)">AI</button>
+  </div>
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard" id="flashcard">
+      <div class="fc-face fc-front">
+        <div class="fc-tag" id="fc-tag-front">SAP TM</div>
+        <div class="fc-tcode" id="fc-tcode">FPM_OIF</div>
+        <div class="fc-hint">Tap to reveal answer</div>
+      </div>
+      <div class="fc-face fc-back">
+        <div class="fc-tag" id="fc-tag-back">SAP TM</div>
+        <div class="fc-answer" id="fc-answer">Freight Planning Monitor</div>
+        <div class="fc-detail" id="fc-detail">Key transaction for logistics planners.</div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-nav">
+    <button class="fc-nav-btn" onclick="prevCard()">← Prev</button>
+    <div class="fc-counter"><span id="fc-current">1</span> / <span id="fc-total">1</span></div>
+    <button class="fc-nav-btn" onclick="nextCard()">Next →</button>
+    <button class="fc-known-btn" id="fc-known-btn" onclick="markKnown()">✓ Know it</button>
+  </div>
+  <div style="text-align:center;margin-top:14px;color:var(--muted);font-size:13px">Known: <span id="fc-known-count" style="color:var(--success)">0</span> / <span id="fc-total2">0</span></div>
+</section>
+
+<!-- INTERVIEW -->
+<section class="section" id="s-interview">
+  <div class="section-heading"><h1>MOCK <span style="color:var(--tm)">INTERVIEW</span></h1><p>Practice real SAP questions. Get scored and see model answers.</p></div>
+  <div id="interview-score-panel" style="display:none" class="card score-panel">
+    <div class="score-big" id="score-big" style="color:var(--tm)">0%</div>
+    <div style="color:var(--muted);font-size:14px;margin-bottom:12px" id="score-grade-lbl"></div>
+    <div class="score-bar-track"><div class="score-bar-fill" id="score-bar" style="width:0"></div></div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:20px">
+      <button class="btn btn-primary" onclick="startInterview()">Retake</button>
+      <button class="btn btn-secondary" onclick="showAnswers()">Review Answers</button>
+    </div>
+  </div>
+  <div id="interview-area" class="interview-area">
+    <div id="interview-questions"></div>
+    <div style="text-align:center;margin-top:18px" id="interview-submit-wrap">
+      <button class="btn btn-primary" onclick="submitInterview()">Submit All Answers</button>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESSES -->
+<section class="section" id="s-process">
+  <div class="section-heading"><h1>PROCESS <span style="color:var(--mm)">FLOWS</span></h1><p>Click any step to learn more. Master these for interviews.</p></div>
+  <div class="inner-tabs">
+    <button class="inner-tab active" onclick="showProcess('p2p',this)">MM Procure-to-Pay</button>
+    <button class="inner-tab" onclick="showProcess('tm',this)">TM Shipment Cycle</button>
+    <button class="inner-tab" onclick="showProcess('o2c',this)">SD Order-to-Cash</button>
+  </div>
+  <div id="process-display"></div>
+</section>
+
+<!-- SAP AI -->
+<section class="section" id="s-ai">
+  <div class="section-heading"><h1>SAP <span style="color:var(--ai)">AI & JOULE</span></h1><p>AI is transforming SAP. Learn how Joule works.</p></div>
+  <div class="ai-main-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+    <div class="joule-demo">
+      <div class="joule-header">
+        <div class="joule-avatar">🤖</div>
+        <div><div style="font-weight:700;font-size:15px">Joule</div><div style="font-size:11px;color:var(--ai)">SAP's Generative AI Copilot</div></div>
+      </div>
+      <div class="joule-chat" id="joule-chat">
+        <div class="joule-msg bot">Hi! I'm Joule, SAP's AI copilot. Ask me about SAP processes, T-codes, certifications, or anything on your learning journey!</div>
+      </div>
+      <div class="joule-input-row">
+        <input class="joule-input" id="joule-input" placeholder="Ask about freight orders, purchase orders, certs..." onkeydown="if(event.key==='Enter')jouleChat()">
+        <button class="joule-send" onclick="jouleChat()">Send ✦</button>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:0;height:100%">
+        <div class="card-header"><div class="card-icon" style="background:rgba(170,0,255,.15)">🧠</div><div><div class="card-title">AI Use Cases in SAP</div></div></div>
+        <div id="ai-features"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-icon" style="background:rgba(170,0,255,.15)">📚</div><div><div class="card-title">SAP Business AI — Key Concepts</div></div></div>
+    <div id="ai-concepts" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
+  </div>
+</section>
+
+<!-- GOALS / STREAK -->
+<section class="section" id="s-streak">
+  <div class="section-heading"><h1>DAILY <span style="color:var(--abap)">GOALS</span></h1><p>Build consistent habits. Complete today's goals to maintain your streak.</p></div>
+  <div class="streak-section">
+    <span class="streak-flame">🔥</span>
+    <div class="streak-count" id="streak-display">0</div>
+    <div class="streak-label">Day Streak</div>
+    <div class="week-grid" id="week-grid"></div>
+  </div>
+  <div class="goals-grid" id="goals-grid"></div>
+  <div class="card" style="text-align:center">
+    <div class="card-header" style="justify-content:center"><div class="card-icon" style="background:rgba(255,171,0,.15)">📅</div><div><div class="card-title">Daily Check-In</div><div class="card-sub">Mark today as a study day</div></div></div>
+    <button class="btn btn-primary" onclick="checkInToday()">✓ Check In Today</button>
+  </div>
+</section>
+
+<!-- JOBS -->
+<section class="section" id="s-jobs">
+  <div class="section-heading"><h1>JOB <span style="color:var(--mm)">TRACKER</span></h1><p>Track every application. Never lose sight of an opportunity.</p></div>
+  <div class="add-job-form">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;color:var(--muted)">Add Application</div>
+    <div class="form-grid">
+      <input class="form-input" id="j-company" placeholder="Company">
+      <input class="form-input" id="j-role" placeholder="Role">
+      <input class="form-input" id="j-location" placeholder="Location / Remote">
+      <select class="form-select" id="j-status">
+        <option value="pending">📋 Pending</option>
+        <option value="applied">📤 Applied</option>
+        <option value="interview">🎤 Interview</option>
+        <option value="offer">🎉 Offer</option>
+        <option value="rejected">❌ Rejected</option>
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto;gap:10px">
+      <input class="form-input" id="j-notes" placeholder="Notes (salary, recruiter, etc.)">
+      <button class="btn btn-primary" onclick="addJob()">+ Add</button>
+    </div>
+  </div>
+  <div id="jobs-summary" style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap"></div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+    <table class="job-table">
+      <thead><tr><th>Company</th><th>Role</th><th>Location</th><th>Status</th><th>Notes</th><th>Date</th><th></th></tr></thead>
+      <tbody id="jobs-tbody"></tbody>
+    </table>
+    <div id="jobs-empty" style="text-align:center;padding:36px;color:var(--muted);font-size:13px">No applications yet. Add your first one above!</div>
+  </div>
+</section>
+
+<!-- RESUME -->
+<section class="section" id="s-resume">
+  <div class="section-heading"><h1>RESUME <span style="color:var(--tm)">BUILDER</span></h1><p>Check every item to maximise your chances. Score updates in real time.</p></div>
+  <div class="resume-score-wrap">
+    <div class="resume-score-circle">
+      <svg width="110" height="110" viewBox="0 0 110 110"><circle cx="55" cy="55" r="48" fill="none" stroke="var(--bg3)" stroke-width="8"/><circle id="resume-ring" cx="55" cy="55" r="48" fill="none" stroke="var(--success)" stroke-width="8" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6"/></svg>
+      <div class="score-center"><div class="score-pct-big" id="resume-pct">0%</div><div class="score-pct-label">Complete</div></div>
+    </div>
+    <div id="resume-grade" style="font-size:13px;color:var(--muted)">Start checking items to build your score</div>
+  </div>
+  <div class="resume-sections" id="resume-sections"></div>
+</section>
+
+<!-- CERTS -->
+<section class="section" id="s-certs">
+  <div class="section-heading"><h1>CERT <span style="color:var(--abap)">COUNTDOWN</span></h1><p>Set your exam date and track days remaining.</p></div>
+  <div class="cert-grid" id="cert-grid"></div>
+  <div class="card">
+    <div class="card-header"><div class="card-icon" style="background:rgba(255,171,0,.15)">📖</div><div><div class="card-title">Recommended Study Resources</div></div></div>
+    <div id="cert-resources" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px"></div>
+  </div>
+</section>
+</main>
+
+<script>
+// =================== DATA ===================
+const ROADMAP=[
+  {month:1,focus:"SAP TM Deep Dive",tag:"tm",tasks:["SAP TM navigation mastery","Freight Order management","/SCMTMS/MON_LC, FPM_OIF"]},
+  {month:2,focus:"SAP MM Foundations",tag:"mm",tasks:["MM org structure","PR → PO cycle","ME21N, ME51N, MIGO"]},
+  {month:3,focus:"MM Config & Customising",tag:"mm",tasks:["Configure purchasing org","Vendor master setup","Invoice verification MIRO"]},
+  {month:4,focus:"Integration & Testing",tag:"mm",tasks:["TM ↔ MM integration","End-to-end test scripts","P2P cycle practice"]},
+  {month:5,focus:"SAP AI & Fiori",tag:"ai",tasks:["SAP Business AI overview","Joule copilot features","Fiori launchpad for MM"]},
+  {month:6,focus:"First Job Applications",tag:"tm",tasks:["Build SAP resume","Apply to 10+ roles","C_TM_95 prep begins"]},
+  {month:7,focus:"Certification C_TM_95",tag:"tm",tasks:["SAP TM exam preparation","Practice tests × 3","Book exam date"]},
+  {month:8,focus:"SAP MM Certification",tag:"mm",tasks:["C_MM_301 preparation","Mock interviews ×5","Deepen P2P knowledge"]},
+  {month:9,focus:"ABAP Basics",tag:"abap",tasks:["ABAP syntax fundamentals","Data Dictionary SE11","Report writing SE38"]},
+  {month:10,focus:"SAP Activate Method",tag:"mm",tasks:["SAP project methodology","Fit-to-Standard workshops","Documentation skills"]},
+  {month:11,focus:"Advanced AI & BTP",tag:"ai",tasks:["SAP BTP overview","Joule extension basics","Integration Suite intro"]},
+  {month:12,focus:"Senior Role Prep",tag:"abap",tasks:["Architecture discussions","Client handling skills","Salary negotiation prep"]},
+];
+
+const FLASHCARDS=[
+  {mod:"tm",code:"/SCMTMS/MON_LC",answer:"TM: Load/Carrier Monitor",detail:"Monitor all freight orders and transportation requests. Essential for daily TM operations."},
+  {mod:"tm",code:"FPM_OIF",answer:"TM: Order Integration Framework",detail:"Trigger freight planning and create freight orders from transportation requirements."},
+  {mod:"tm",code:"/SCMTMS/FO",answer:"TM: Freight Order Cockpit",detail:"Central transaction for managing freight orders — create, edit, confirm, and tender."},
+  {mod:"tm",code:"/SAPAPO/VS_OAT",answer:"TM: Vehicle Scheduling",detail:"Optimize vehicle scheduling and routing. Links to carrier assignment and cost calculation."},
+  {mod:"tm",code:"/SCMTMS/CQ",answer:"TM: Carrier Query",detail:"Search and manage carrier master data, capacities, and transportation lane assignments."},
+  {mod:"mm",code:"ME21N",answer:"MM: Create Purchase Order",detail:"Primary transaction to create a standard PO. Most used T-code in SAP MM."},
+  {mod:"mm",code:"ME51N",answer:"MM: Create Purchase Requisition",detail:"Create internal requests for goods/services that trigger the purchasing process."},
+  {mod:"mm",code:"MIGO",answer:"MM: Goods Movement",detail:"All goods movements: GR (101), GI (261), transfers, returns. Multifunctional T-code."},
+  {mod:"mm",code:"MIRO",answer:"MM: Invoice Verification",detail:"Enter and verify vendor invoices against POs and GRs (3-way match)."},
+  {mod:"mm",code:"ME2M",answer:"MM: POs by Material",detail:"Display purchase orders filtered by material number. Track procurement history."},
+  {mod:"mm",code:"ML81N",answer:"MM: Service Entry Sheet",detail:"Confirm external services received. Required before service invoice can be processed."},
+  {mod:"mm",code:"MB51",answer:"MM: Material Document List",detail:"List all goods movements for a material. Essential for stock reconciliation and auditing."},
+  {mod:"abap",code:"SE38",answer:"ABAP: Program Editor",detail:"Create, edit, and execute ABAP programs (reports). Core development environment."},
+  {mod:"abap",code:"SE11",answer:"ABAP: Data Dictionary",detail:"Define database tables, views, data elements, domains, and search helps."},
+  {mod:"abap",code:"SE16N",answer:"ABAP: Table Browser",detail:"Display contents of any database table. Critical for debugging and data investigation."},
+  {mod:"abap",code:"ST05",answer:"ABAP: SQL Trace",detail:"Trace SQL statements executed by ABAP programs. Essential for performance tuning."},
+  {mod:"abap",code:"SM37",answer:"ABAP: Background Jobs",detail:"Monitor and manage background jobs. View status, logs, and reschedule."},
+  {mod:"ai",code:"JOULE",answer:"AI: SAP Copilot",detail:"SAP's generative AI assistant across S/4HANA, SuccessFactors, Ariba. Natural language queries."},
+  {mod:"ai",code:"BTP AI Core",answer:"AI: SAP AI Core",detail:"Platform to train, deploy, and manage ML models. Extend SAP AI to custom scenarios."},
+  {mod:"ai",code:"AI Launchpad",answer:"AI: MLOps Platform",detail:"Monitor AI deployments, track model performance, manage AI scenarios."},
+];
+
+const INTERVIEW_QS=[
+  {q:"Explain the Procure-to-Pay process in SAP MM from Purchase Requisition to invoice payment.",diff:"med",mod:"mm",model:"The P2P cycle starts with a Purchase Requisition (ME51N) which can be manual or auto-generated from MRP. Purchasing converts this to a Purchase Order (ME21N) selecting a vendor. When goods arrive, a Goods Receipt is posted (MIGO - movement type 101) creating an accounting document. The vendor invoice is then verified in MIRO using 3-way match (PO qty, GR qty, invoice qty). Upon successful match, payment is processed through FI via payment run (F110)."},
+  {q:"How does SAP TM integrate with SAP MM? Give a specific example.",diff:"hard",mod:"tm",model:"SAP TM integrates with MM via the Transportation Management Integration component. When an MM purchase order with transportation relevance is created, TM receives it as a Transportation Requirement (TR). TM then plans this into a Freight Order, selecting carriers via tendering or automated carrier selection. The shipment cost is posted back to MM as a delivery cost condition. Example: A PO for imported goods triggers a TM freight order for ocean freight — carrier confirmed, cost settled back to the PO."},
+  {q:"What is the difference between a Purchase Order and a Scheduling Agreement in SAP MM?",diff:"easy",mod:"mm",model:"A Purchase Order is a one-time document for specific quantity at a price. A Scheduling Agreement is a longer-term arrangement where delivery schedules (JIT calls or forecast deliveries) release goods over time without individual POs. Scheduling Agreements suit regular materials with known demand patterns, reducing admin effort and supporting just-in-time delivery."},
+  {q:"Describe how you would handle a Goods Receipt discrepancy in SAP MM.",diff:"med",mod:"mm",model:"First check tolerance settings in the PO — SAP allows under/over delivery tolerances (SPRO config). If within tolerance, GR posts with a warning. If outside, GR is blocked. Resolution: 1) Contact vendor for credit/debit memo, 2) Post a return delivery (MIGO mvt 122) if goods returned, 3) Raise a subsequent debit/credit in MIRO to adjust. Document everything in PO text for audit trail."},
+  {q:"What role does SAP AI / Joule play in modern SAP implementations? How would you position this in a client conversation?",diff:"med",mod:"ai",model:"Joule is SAP's embedded AI copilot using generative AI to simplify complex SAP tasks. Client positioning: 1) Reduces user training burden — natural language replaces T-code memorisation, 2) Automates repetitive tasks like PO creation from emails, 3) Intelligent recommendations in procurement and finance. Demo example: 'Instead of navigating 5 screens, ask Joule: What was our on-time delivery rate for Vendor X last quarter?'"},
+  {q:"You are implementing SAP MM for a client who uses SAP TM. What key integration touchpoints must you configure?",diff:"hard",mod:"mm",model:"Key touchpoints: 1) ERP-TM Connection — RFC connections and iDoc message types (SHPMNT), 2) Delivery Costs — map TM freight costs to MM condition types (freight, insurance, customs), 3) Vendor Master Sync — carriers in TM match vendor master in MM, 4) Material Master — maintain shipping-relevant fields (loading group, shipping point), 5) Invoice Integration — service POs for freight so costs post correctly to FI. Run end-to-end integration test: PO → TM Freight Order → GR → MIRO."},
+];
+
+const PROCESSES={
+  p2p:{title:"MM Procure-to-Pay",type:"mm",steps:[
+    {icon:"📋",name:"Purchase Requisition",code:"ME51N",detail:"User department raises a PR for required goods/services. Can be manual or auto-generated from MRP. Approval workflow routes to purchasing manager for release."},
+    {icon:"🔍",name:"Vendor Selection",code:"ME47",detail:"Purchasing compares quotations (ME47), evaluates vendors on price, quality, delivery. Source list and purchasing info records help automate vendor selection."},
+    {icon:"📄",name:"Purchase Order",code:"ME21N",detail:"PO created with agreed price, quantity, delivery date, payment terms. Sent to vendor via output type (email, EDI, fax). Most important MM transaction."},
+    {icon:"🚚",name:"Goods Receipt",code:"MIGO",detail:"Warehouse receives goods and posts GR (movement type 101). Creates material document and accounting document, updating stock and inventory value."},
+    {icon:"📬",name:"Invoice Verification",code:"MIRO",detail:"AP receives vendor invoice and posts in MIRO. System performs 3-way match: PO qty = GR qty = Invoice qty. Tolerance checks configured in SPRO."},
+    {icon:"💳",name:"Payment",code:"F110",detail:"Finance runs automatic payment program (F110) to pay vendor. Clears open items in vendor account. Payment advice sent to vendor via output."},
+  ]},
+  tm:{title:"TM Shipment Cycle",type:"tm",steps:[
+    {icon:"📦",name:"Sales/PO Order",code:"VA01/ME21N",detail:"Process starts when a sales order (SD) or purchase order (MM) with transportation relevance is created. This generates a transportation demand in TM."},
+    {icon:"🗺",name:"Transportation Req",code:"/SCMTMS/TR",detail:"TM receives the Transportation Requirement from ECC via integration. Contains origin, destination, material, weight, service level, and required dates."},
+    {icon:"🚛",name:"Freight Order",code:"/SCMTMS/FO",detail:"Planner creates a Freight Order grouping compatible TRs. System calculates route, suggests carriers based on transportation lanes and rate contracts."},
+    {icon:"📤",name:"Carrier Tendering",code:"/SCMTMS/TEND",detail:"Freight Order tendered to carriers via email, EDI, or carrier portal. Carriers can accept, reject, or counter-offer. System tracks all responses automatically."},
+    {icon:"⚓",name:"Carrier Confirm",code:"/SCMTMS/MON_LC",detail:"Carrier confirms shipment. Booking confirmation received. Shipment details locked — container number, vessel/truck details, departure time."},
+    {icon:"✅",name:"POD & Settlement",code:"/SCMTMS/CQ",detail:"Proof of Delivery received. Freight costs calculated and posted back to ECC. Carrier invoice verified against agreed costs. Settlement completed."},
+  ]},
+  o2c:{title:"SD Order-to-Cash",type:"mm",steps:[
+    {icon:"📞",name:"Customer Inquiry",code:"VA11",detail:"Customer requests a quotation. Sales team creates an inquiry in SAP SD to track the potential opportunity and begin the pricing process."},
+    {icon:"💬",name:"Quotation",code:"VA21",detail:"Quotation sent to customer with pricing (condition technique), validity period, and delivery date. Pricing includes freight, taxes, discounts."},
+    {icon:"🛒",name:"Sales Order",code:"VA01",detail:"Customer confirms and Sales Order is created. Credit check performed. ATP check confirms delivery date. This is when revenue recognition begins."},
+    {icon:"🚢",name:"Delivery",code:"VL01N",detail:"Outbound delivery created. Goods issue posted (reduces stock). If TM active, delivery triggers transportation requirement for shipment planning."},
+    {icon:"🧾",name:"Billing",code:"VF01",detail:"Invoice created from delivery. Billing document posts revenue to FI. Invoice sent to customer via output (email/EDI/print)."},
+    {icon:"💰",name:"Cash Collection",code:"F-28",detail:"Customer payment received and posted (F-28 or via bank statement import). Clears open receivable in customer account. Cycle complete."},
+  ]},
+};
+
+const CERT_DATA=[
+  {id:"tm95",name:"C_TM_95",full:"SAP Certified Application Associate – SAP TM 9.5",color:"var(--tm)",desc:"Most achievable cert — leverages your TM knowledge. Recommended Month 7."},
+  {id:"mm301",name:"C_MM_301",full:"SAP Certified Application Associate – SAP MM",color:"var(--mm)",desc:"Validates MM functional skills. Target after 6+ months of MM learning."},
+  {id:"btp",name:"C_BTP_2409",full:"SAP Certified Associate – SAP BTP",color:"var(--ai)",desc:"AI/BTP cert showing intelligent enterprise knowledge. Bonus credential."},
+];
+
+const RESOURCES=[
+  {title:"SAP Learning Hub",url:"https://learninghub.sap.com",tag:"Official",color:"var(--tm)"},
+  {title:"OpenSAP Free Courses",url:"https://learning.sap.com/courses",tag:"Free",color:"var(--mm)"},
+  {title:"SAP TM Help Docs",url:"https://help.sap.com/docs/SAP_TM",tag:"Docs",color:"var(--tm)"},
+  {title:"Udemy SAP MM",url:"https://www.udemy.com/topic/sap-mm/",tag:"Course",color:"var(--abap)"},
+  {title:"SAP Community",url:"https://community.sap.com",tag:"Community",color:"var(--ai)"},
+  {title:"SAP YouTube Channel",url:"https://www.youtube.com/user/saplearning",tag:"Video",color:"var(--mm)"},
+];
+
+const RESUME_CHECKLIST=[
+  {section:"Contact & Header",items:[
+    {id:"r1",title:"Professional email address",desc:"firstname.lastname@gmail.com format"},
+    {id:"r2",title:"LinkedIn profile URL",desc:"Customise your LinkedIn URL in settings"},
+    {id:"r3",title:"City and Country only",desc:"No full address needed"},
+    {id:"r4",title:"Certification badges listed",desc:"Add cert numbers when earned"},
+  ]},
+  {section:"SAP Summary Statement",items:[
+    {id:"r5",title:"Opens with 'SAP TM' prominently",desc:"Recruiters scan for module names"},
+    {id:"r6",title:"Years of experience stated",desc:"'X years SAP TM testing experience'"},
+    {id:"r7",title:"Target role stated",desc:"'Transitioning to SAP MM Functional Consultant'"},
+    {id:"r8",title:"Key modules listed",desc:"TM, MM, ABAP basics, SAP AI"},
+  ]},
+  {section:"SAP Skills Section",items:[
+    {id:"r9",title:"T-codes listed by module",desc:"Group under TM, MM headings"},
+    {id:"r10",title:"SAP version mentioned",desc:"S/4HANA, ECC 6.0 etc."},
+    {id:"r11",title:"Testing skills highlighted",desc:"STMS, test script creation, UAT"},
+    {id:"r12",title:"Integration knowledge noted",desc:"MM-TM, MM-FI integration"},
+  ]},
+  {section:"Experience",items:[
+    {id:"r13",title:"Bullets start with action verbs",desc:"Executed, Configured, Optimised, Led"},
+    {id:"r14",title:"Quantified achievements",desc:"'Reduced testing cycle by 30%'"},
+    {id:"r15",title:"SAP project types mentioned",desc:"Greenfield, rollout, upgrade"},
+    {id:"r16",title:"Business impact stated",desc:"Link SAP work to business outcomes"},
+  ]},
+  {section:"Education & Certs",items:[
+    {id:"r17",title:"SAP certifications section",desc:"Even in-progress certs show commitment"},
+    {id:"r18",title:"Relevant coursework listed",desc:"SAP Learning Hub, OpenSAP courses"},
+    {id:"r19",title:"ATS-friendly format",desc:"No tables, no graphics, clean .docx"},
+    {id:"r20",title:"One or two pages maximum",desc:"Recruiters spend 6 seconds on first scan"},
+  ]},
+];
+
+const GOALS=[
+  {id:"g1",icon:"📖",title:"Study 1 Hour",desc:"Read SAP docs or do a tutorial"},
+  {id:"g2",icon:"🃏",title:"10 Flashcards",desc:"Practice 10 SAP transaction codes"},
+  {id:"g3",icon:"💼",title:"Apply to 1 Job",desc:"Submit one job application today"},
+];
+
+const JOULE_RESP={
+  "freight order":"A Freight Order (/SCMTMS/FO) is the main TM execution document. It contains carrier assignment, route, stops, freight costs, and legal documents. It is created from Transportation Requirements and confirmed with the carrier.",
+  "purchase order":"In SAP MM, a PO (ME21N) is a legal document committing to buy from a vendor. Key fields: vendor, material, quantity, price, delivery date, payment terms. It links PR → PO → GR (MIGO) → IR (MIRO) in the P2P cycle.",
+  "miro":"MIRO is SAP's Logistics Invoice Verification transaction. It performs 3-way matching: PO quantity vs Goods Receipt quantity vs Invoice quantity. Tolerances are configured in SPRO under MM settings.",
+  "joule":"I'm Joule, SAP's built-in AI copilot powered by LLMs. I'm embedded in S/4HANA, SuccessFactors, Ariba, and more. I can create documents, answer questions, and automate tasks using natural language — no T-codes needed!",
+  "salary":"SAP MM Functional Consultants in India typically earn ₹8–18 LPA with 3–5 years experience. Senior consultants with TM+MM skills can reach ₹20–35 LPA. SAP AI skills add a further premium in 2024–25.",
+  "certification":"Your path: Start with C_TM_95 (Month 7) — validates your existing TM knowledge. Then C_MM_301 (Month 8) for MM. Both available via SAP Training centres or online proctored exams through Pearson VUE.",
+  "abap":"ABAP (Advanced Business Application Programming) is SAP's proprietary language. For a functional consultant, you need: SE38 (editor), SE11 (data dictionary), SE16N (table browser). Deep ABAP is for Month 9+ in your roadmap.",
+  "default":"Great question! In a real S/4HANA system, Joule would access your company data for a precise answer. Key principle: SAP processes are highly integrated — always think about upstream and downstream impacts when making changes.",
+};
+
+// =================== STATE ===================
+let S={
+  roadmapDone:[],fcKnown:[],fcFilter:'all',fcIndex:0,fcFlipped:false,
+  interviewAnswers:{},jobs:[],resumeChecked:[],certDates:{},
+  streak:0,checkIns:[],goalsToday:[],currentProcess:'p2p',activeFlowStep:null,
+};
+
+function loadS(){try{const d=localStorage.getItem('sap_nav2');if(d)S={...S,...JSON.parse(d)};}catch(e){}}
+function saveS(){localStorage.setItem('sap_nav2',JSON.stringify(S));updateDash();}
+
+// =================== NAV ===================
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>{if((t.getAttribute('onclick')||'').includes("'"+id+"'"))t.classList.add('active');});
+  if(id==='process')renderProcess(S.currentProcess);
+  if(id==='streak')renderStreak();
+  if(id==='certs')renderCerts();
+}
+
+function toggleTheme(){
+  const light=document.body.getAttribute('data-theme')==='light';
+  document.body.setAttribute('data-theme',light?'':'light');
+  document.getElementById('theme-btn').textContent=light?'🌙':'☀️';
+}
+
+// =================== ROADMAP ===================
+function renderRoadmap(){
+  const g=document.getElementById('roadmap-grid');
+  g.innerHTML=ROADMAP.map((m,i)=>{
+    const done=S.roadmapDone.includes(m.month);
+    const cur=!done&&S.roadmapDone.length===i;
+    return`<div class="month-card ${done?'done':''} ${cur?'current':''}">
+      <button class="month-done-btn" onclick="event.stopPropagation();toggleMonth(${m.month})">${done?'✓':'○'}</button>
+      <div class="month-num">M${m.month}</div>
+      <div class="month-focus">${m.focus}</div>
+      <span class="month-tag tag-${m.tag}">${m.tag.toUpperCase()}</span>
+      <ul class="month-tasks">${m.tasks.map(t=>`<li>${t}</li>`).join('')}</ul>
+    </div>`;
+  }).join('');
+  updateDash();
+}
+
+function toggleMonth(month){
+  if(S.roadmapDone.includes(month))S.roadmapDone=S.roadmapDone.filter(m=>m!==month);
+  else{S.roadmapDone.push(month);toast(`Month ${month} complete! 🎉`);}
+  saveS();renderRoadmap();
+}
+
+// =================== FLASHCARDS ===================
+function getFC(){return S.fcFilter==='all'?FLASHCARDS:FLASHCARDS.filter(c=>c.mod===S.fcFilter);}
+const modColors={tm:'var(--tm)',mm:'var(--mm)',abap:'var(--abap)',ai:'var(--ai)'};
+
+function setFCFilter(mod,btn){
+  S.fcFilter=mod;S.fcIndex=0;S.fcFlipped=false;
+  document.querySelectorAll('.fc-filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderFC();
+}
+
+function renderFC(){
+  const cards=getFC();if(!cards.length)return;
+  const c=cards[S.fcIndex%cards.length];
+  const col=modColors[c.mod];
+  ['fc-tag-front','fc-tag-back'].forEach(id=>{const el=document.getElementById(id);el.textContent='SAP '+c.mod.toUpperCase();el.style.color=col;});
+  document.getElementById('fc-tcode').textContent=c.code;
+  document.getElementById('fc-tcode').style.color=col;
+  document.getElementById('fc-answer').textContent=c.answer;
+  document.getElementById('fc-detail').textContent=c.detail;
+  document.getElementById('fc-current').textContent=(S.fcIndex%cards.length)+1;
+  document.getElementById('fc-total').textContent=cards.length;
+  document.getElementById('fc-total2').textContent=cards.length;
+  document.getElementById('fc-known-count').textContent=S.fcKnown.filter(k=>cards.find(c2=>c2.code===k)).length;
+  const kb=document.getElementById('fc-known-btn');
+  const known=S.fcKnown.includes(c.code);
+  kb.classList.toggle('known',known);
+  kb.textContent=known?'✓ Known!':'✓ Know it';
+  document.getElementById('flashcard').classList.remove('flipped');
+  S.fcFlipped=false;
+}
+
+function flipCard(){S.fcFlipped=!S.fcFlipped;document.getElementById('flashcard').classList.toggle('flipped',S.fcFlipped);}
+function nextCard(){const c=getFC();S.fcIndex=(S.fcIndex+1)%c.length;renderFC();}
+function prevCard(){const c=getFC();S.fcIndex=(S.fcIndex-1+c.length)%c.length;renderFC();}
+function markKnown(){
+  const c=getFC()[S.fcIndex%getFC().length];
+  if(S.fcKnown.includes(c.code))S.fcKnown=S.fcKnown.filter(k=>k!==c.code);
+  else{S.fcKnown.push(c.code);toast('Marked as known! 🧠');}
+  saveS();renderFC();
+}
+
+// =================== INTERVIEW ===================
+function startInterview(){
+  S.interviewAnswers={};
+  document.getElementById('interview-score-panel').style.display='none';
+  document.getElementById('interview-area').style.display='block';
+  document.getElementById('interview-submit-wrap').style.display='block';
+  document.getElementById('interview-questions').innerHTML=INTERVIEW_QS.map((q,i)=>`
+    <div class="question-card">
+      <div class="q-meta"><span class="q-num">Q${i+1}/${INTERVIEW_QS.length}</span><span class="q-diff ${q.diff}">${q.diff.toUpperCase()}</span><span style="font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,.07);color:var(--muted)">${q.mod.toUpperCase()}</span></div>
+      <div class="q-text">${q.q}</div>
+      <textarea class="q-answer-area" id="ans-${i}" placeholder="Type your answer here..." oninput="S.interviewAnswers[${i}]=this.value"></textarea>
+    </div>
+  `).join('');
+}
+
+function submitInterview(){
+  const ans=INTERVIEW_QS.filter((_,i)=>S.interviewAnswers[i]&&S.interviewAnswers[i].trim().length>20).length;
+  const pct=Math.round((ans/INTERVIEW_QS.length)*100);
+  const bonus=Math.min(20,Object.values(S.interviewAnswers).reduce((a,v)=>a+Math.min(5,Math.floor((v||'').length/50)),0));
+  const score=Math.min(100,pct*.7+bonus);
+  document.getElementById('interview-score-panel').style.display='block';
+  document.getElementById('interview-area').style.display='none';
+  document.getElementById('score-big').textContent=Math.round(score)+'%';
+  document.getElementById('score-grade-lbl').textContent=score>=90?'Excellent 🌟':score>=75?'Good 👍':score>=60?'Needs Work 📚':'Keep Practising 💪';
+  setTimeout(()=>{document.getElementById('score-bar').style.width=score+'%';},100);
+}
+
+function showAnswers(){
+  document.getElementById('interview-score-panel').style.display='none';
+  document.getElementById('interview-area').style.display='block';
+  document.getElementById('interview-submit-wrap').style.display='none';
+  document.getElementById('interview-questions').innerHTML=INTERVIEW_QS.map((q,i)=>`
+    <div class="question-card">
+      <div class="q-meta"><span class="q-num">Q${i+1}</span><span class="q-diff ${q.diff}">${q.diff.toUpperCase()}</span></div>
+      <div class="q-text">${q.q}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Your answer:</div>
+      <div style="font-size:13px;line-height:1.7;margin-bottom:10px">${S.interviewAnswers[i]||'<span style="color:var(--muted)">No answer provided</span>'}</div>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show');this.textContent=this.textContent.includes('Show')?'Hide model answer':'Show model answer'">Show model answer</button>
+      <div class="model-answer">${q.model}</div>
+    </div>
+  `).join('');
+}
+
+// =================== PROCESS FLOWS ===================
+function showProcess(key,btn){
+  S.currentProcess=key;S.activeFlowStep=null;
+  document.querySelectorAll('.inner-tab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderProcess(key);
+}
+
+function renderProcess(key){
+  const p=PROCESSES[key];
+  const el=document.getElementById('process-display');
+  el.innerHTML=`
+    <div style="margin-bottom:12px;font-size:13px;color:var(--muted)">Click any step to learn more. Knowing this flow end-to-end is essential for SAP interviews.</div>
+    <div class="flow-area">
+      <div class="flow-steps">
+        ${p.steps.map((s,i)=>`
+          <div class="flow-step ${key}-step" id="fs-${i}" onclick="toggleFlowStep(${i},'${key}')">
+            <div class="flow-icon">${s.icon}</div>
+            <div class="flow-name">${s.name}</div>
+            <div class="flow-tcode">${s.code}</div>
+          </div>
+          ${i<p.steps.length-1?'<div class="flow-arrow">→</div>':''}
+        `).join('')}
+      </div>
+    </div>
+    <div id="flow-detail-panel"></div>`;
+}
+
+function toggleFlowStep(idx,key){
+  const p=PROCESSES[key];const panel=document.getElementById('flow-detail-panel');
+  document.querySelectorAll('.flow-step').forEach(s=>s.classList.remove('active-step'));
+  if(S.activeFlowStep===idx){panel.innerHTML='';S.activeFlowStep=null;return;}
+  S.activeFlowStep=idx;
+  document.getElementById('fs-'+idx).classList.add('active-step');
+  const s=p.steps[idx];
+  panel.innerHTML=`<div class="flow-detail"><strong style="font-size:14px">${s.icon} ${s.name}</strong> <span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);margin-left:8px">${s.code}</span><br><br>${s.detail}</div>`;
+}
+
+// =================== SAP AI ===================
+function renderAI(){
+  const features=[
+    {title:"Intelligent Document Processing",desc:"Joule reads POs, invoices, and delivery notes from emails automatically",tag:"MM"},
+    {title:"Predictive Analytics",desc:"Forecast demand, predict vendor delays, optimise stock using ML models",tag:"TM"},
+    {title:"Natural Language Queries",desc:"Ask 'Show me all overdue POs for Vendor XYZ' in plain English",tag:"MM/TM"},
+    {title:"Automated GR Processing",desc:"AI matches invoices to GRs automatically, reducing manual verification",tag:"MM"},
+  ];
+  document.getElementById('ai-features').innerHTML=features.map(f=>`
+    <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+      <span style="padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(170,0,255,.15);color:var(--ai);flex-shrink:0;height:fit-content;margin-top:1px">${f.tag}</span>
+      <div><div style="font-size:13px;font-weight:600;margin-bottom:1px">${f.title}</div><div style="font-size:12px;color:var(--muted)">${f.desc}</div></div>
+    </div>`).join('');
+  const concepts=[
+    {t:"SAP Business AI",d:"Strategy to embed AI across all SAP products with a trust-first approach"},
+    {t:"SAP AI Core",d:"Platform to train, deploy and manage custom ML models"},
+    {t:"Joule",d:"Gen AI copilot embedded across SAP's product portfolio"},
+    {t:"SAP BTP",d:"Business Technology Platform for integration, extension, AI"},
+    {t:"Vector Embeddings",d:"How SAP AI understands semantic meaning of business documents"},
+    {t:"AI Launchpad",d:"MLOps tool to monitor and manage AI deployments"},
+  ];
+  document.getElementById('ai-concepts').innerHTML=concepts.map(c=>`
+    <div style="background:rgba(170,0,255,.08);border:1px solid rgba(170,0,255,.2);border-radius:8px;padding:12px">
+      <div style="font-size:11px;font-weight:700;color:var(--ai);margin-bottom:5px">${c.t}</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.5">${c.d}</div>
+    </div>`).join('');
+}
+
+function jouleChat(){
+  const inp=document.getElementById('joule-input');
+  const msg=inp.value.trim();if(!msg)return;
+  const chat=document.getElementById('joule-chat');
+  chat.innerHTML+=`<div class="joule-msg user">${msg}</div>`;
+  inp.value='';
+  const low=msg.toLowerCase();
+  let resp=JOULE_RESP.default;
+  for(const k of Object.keys(JOULE_RESP)){if(k!=='default'&&low.includes(k)){resp=JOULE_RESP[k];break;}}
+  setTimeout(()=>{chat.innerHTML+=`<div class="joule-msg bot">🤖 ${resp}</div>`;chat.scrollTop=9999;},700);
+  chat.scrollTop=9999;
+}
+
+// =================== STREAK ===================
+function renderStreak(){
+  document.getElementById('streak-display').textContent=S.streak;
+  document.getElementById('nav-streak').textContent=S.streak;
+  const today=new Date().toDateString();
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const d=new Date();
+  const week=[];
+  for(let i=6;i>=0;i--){const dd=new Date(d);dd.setDate(d.getDate()-i);week.push({label:days[dd.getDay()],date:dd.toDateString(),isToday:dd.toDateString()===today});}
+  document.getElementById('week-grid').innerHTML=week.map(w=>`
+    <div class="week-day ${S.checkIns.includes(w.date)?'done':''} ${w.isToday?'today':''}">
+      <div class="week-day-name">${w.label}</div>
+      <div>${S.checkIns.includes(w.date)?'✓':'·'}</div>
+    </div>`).join('');
+  document.getElementById('goals-grid').innerHTML=GOALS.map(g=>{
+    const done=S.goalsToday.includes(g.id);
+    return`<div class="goal-card">
+      <div class="goal-icon">${g.icon}</div>
+      <div class="goal-title">${g.title}</div>
+      <div class="goal-desc">${g.desc}</div>
+      <div class="goal-progress"><div class="goal-fill" style="width:${done?100:0}%"></div></div>
+      <button class="goal-complete-btn ${done?'done':''}" onclick="toggleGoal('${g.id}')">${done?'✓ Done!':'Mark Complete'}</button>
+    </div>`;
+  }).join('');
+}
+
+function toggleGoal(id){
+  if(S.goalsToday.includes(id))S.goalsToday=S.goalsToday.filter(g=>g!==id);
+  else{S.goalsToday.push(id);toast('Goal complete! 🔥');}
+  saveS();renderStreak();
+}
+
+function checkInToday(){
+  const today=new Date().toDateString();
+  if(!S.checkIns.includes(today)){
+    S.checkIns.push(today);
+    let streak=0;const d=new Date();
+    while(S.checkIns.includes(new Date(d.getTime()-streak*86400000).toDateString()))streak++;
+    S.streak=streak;
+    toast(`Day ${streak} streak! 🔥`);
+    saveS();renderStreak();
+  }else toast('Already checked in today!');
+}
+
+// =================== JOBS ===================
+function addJob(){
+  const company=document.getElementById('j-company').value.trim();
+  if(!company){toast('Enter a company name');return;}
+  S.jobs.unshift({id:Date.now(),company,role:document.getElementById('j-role').value.trim()||'SAP Consultant',location:document.getElementById('j-location').value.trim()||'Remote',status:document.getElementById('j-status').value,notes:document.getElementById('j-notes').value.trim(),date:new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short'})});
+  ['j-company','j-role','j-location','j-notes'].forEach(id=>document.getElementById(id).value='');
+  saveS();renderJobs();toast('Application added! 💼');
+}
+
+function deleteJob(id){S.jobs=S.jobs.filter(j=>j.id!==id);saveS();renderJobs();}
+
+function renderJobs(){
+  const empty=document.getElementById('jobs-empty');
+  empty.style.display=S.jobs.length?'none':'block';
+  document.getElementById('jobs-tbody').innerHTML=S.jobs.map(j=>`
+    <tr>
+      <td style="font-weight:600">${j.company}</td>
+      <td>${j.role}</td>
+      <td style="color:var(--muted)">${j.location}</td>
+      <td><span class="job-status status-${j.status}">${j.status}</span></td>
+      <td style="color:var(--muted);font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${j.notes||'—'}</td>
+      <td style="color:var(--muted);font-size:12px">${j.date}</td>
+      <td><button class="delete-btn" onclick="deleteJob(${j.id})">🗑</button></td>
+    </tr>`).join('');
+  const cnt={applied:0,interview:0,offer:0,rejected:0};
+  S.jobs.forEach(j=>{if(cnt[j.status]!==undefined)cnt[j.status]++;});
+  document.getElementById('jobs-summary').innerHTML=Object.entries({applied:'Applied',interview:'Interviews',offer:'Offers',rejected:'Rejected'}).map(([k,l])=>`
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 16px;text-align:center">
+      <div style="font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:var(--${k==='applied'?'mm':k==='interview'?'abap':k==='offer'?'success':'danger'})">${cnt[k]||0}</div>
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">${l}</div>
+    </div>`).join('');
+}
+
+// =================== RESUME ===================
+function renderResume(){
+  const total=RESUME_CHECKLIST.flatMap(s=>s.items).length;
+  const done=S.resumeChecked.length;
+  const pct=Math.round((done/total)*100);
+  document.getElementById('resume-pct').textContent=pct+'%';
+  document.getElementById('resume-ring').style.strokeDashoffset=301.6-(pct/100)*301.6;
+  document.getElementById('resume-grade').textContent=pct>=90?'🌟 Interview-ready resume!':pct>=70?'👍 Strong resume':pct>=50?'📝 Good progress':'🔨 Keep building';
+  document.getElementById('resume-sections').innerHTML=RESUME_CHECKLIST.map(section=>`
+    <div class="checklist-group">
+      <h3>${section.section}</h3>
+      ${section.items.map(item=>`
+        <div class="check-item ${S.resumeChecked.includes(item.id)?'checked':''}" onclick="toggleResume('${item.id}')">
+          <div class="check-box">${S.resumeChecked.includes(item.id)?'✓':''}</div>
+          <div class="check-text"><div class="check-title">${item.title}</div><div class="check-desc">${item.desc}</div></div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function toggleResume(id){
+  if(S.resumeChecked.includes(id))S.resumeChecked=S.resumeChecked.filter(i=>i!==id);
+  else{S.resumeChecked.push(id);if(S.resumeChecked.length%5===0)toast(`${S.resumeChecked.length} resume items done! 📄`);}
+  saveS();renderResume();
+}
+
+// =================== CERTS ===================
+function renderCerts(){
+  document.getElementById('cert-grid').innerHTML=CERT_DATA.map(c=>`
+    <div class="cert-card">
+      <div class="cert-name" style="color:${c.color}">${c.name}</div>
+      <div class="cert-full">${c.full}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">${c.desc}</div>
+      <label style="font-size:11px;color:var(--muted)">Target exam date:</label>
+      <input type="date" class="cert-date-input" value="${S.certDates[c.id]||''}" onchange="setCertDate('${c.id}',this.value)">
+      <div class="cert-timer-display" id="ct-${c.id}" style="color:${c.color}">${getCertCD(c.id)}</div>
+      <div style="font-size:11px;color:var(--muted)">days remaining</div>
+      <div class="cert-progress"><div class="cert-progress-fill" style="width:${getCertProg(c.id)}%"></div></div>
+    </div>`).join('');
+  document.getElementById('cert-resources').innerHTML=RESOURCES.map(r=>`
+    <a href="${r.url}" target="_blank" style="text-decoration:none">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;transition:all .2s" onmouseover="this.style.borderColor='${r.color}'" onmouseout="this.style.borderColor='var(--border)'">
+        <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:rgba(0,0,0,.2);color:${r.color};margin-bottom:5px;display:inline-block">${r.tag}</span>
+        <div style="font-size:13px;font-weight:600;color:var(--text)">${r.title}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">${r.url.replace('https://','')}</div>
+      </div>
+    </a>`).join('');
+}
+
+function setCertDate(id,val){S.certDates[id]=val;saveS();document.getElementById('ct-'+id).textContent=getCertCD(id);renderCerts();}
+function getCertCD(id){const d=S.certDates[id];if(!d)return'—';const days=Math.round((new Date(d)-new Date())/86400000);return days>0?days:days===0?'TODAY!':'Past';}
+function getCertProg(id){const d=S.certDates[id];if(!d)return 0;const t=new Date(d);const s=new Date(t);s.setDate(s.getDate()-180);const el=(new Date()-s)/86400000;return Math.min(100,Math.max(0,Math.round((el/180)*100)));}
+
+// =================== DASHBOARD ===================
+function updateDash(){
+  const done=S.fcKnown.length+S.roadmapDone.length;
+  document.getElementById('dash-topics').textContent=done;
+  document.getElementById('dash-streak').textContent=S.streak;
+  document.getElementById('nav-streak').textContent=S.streak;
+  const r=Math.min(100,Math.round((S.roadmapDone.length/12)*40+(S.fcKnown.length/FLASHCARDS.length)*30+(S.resumeChecked.length/20)*30));
+  document.getElementById('dash-score').textContent=r+'%';
+  const cur=ROADMAP[S.roadmapDone.length];
+  document.getElementById('dash-roadmap-preview').innerHTML=cur?`<span style="color:var(--tm);font-weight:600">Now: Month ${cur.month} — ${cur.focus}</span><br><span style="font-size:12px">${S.roadmapDone.length} of 12 months complete</span>`:`<span style="color:var(--success);font-weight:600">🎉 All 12 months complete!</span>`;
+  const jc=S.jobs.length;
+  document.getElementById('dash-job-count').textContent=jc?`${jc} application${jc>1?'s':''} tracked`:'No applications yet';
+  const offers=S.jobs.filter(j=>j.status==='offer').length;
+  const ints=S.jobs.filter(j=>j.status==='interview').length;
+  if(jc)document.getElementById('dash-job-status').innerHTML=`<span style="color:var(--abap)">${ints} interviews</span> · <span style="color:var(--success)">${offers} offers</span>`;
+}
+
+// =================== TOAST ===================
+function toast(msg){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+// =================== INIT ===================
+function init(){
+  loadS();
+  renderRoadmap();
+  renderFC();
+  renderJobs();
+  renderResume();
+  renderAI();
+  startInterview();
+  renderProcess('p2p');
+  renderStreak();
+  updateDash();
+  // Reset daily goals if new day
+  const today=new Date().toDateString();
+  const last=localStorage.getItem('sap_goals_day');
+  if(last!==today){S.goalsToday=[];localStorage.setItem('sap_goals_day',today);saveS();}
+}
+
+init();
+</script>
+</body>
+</html>
