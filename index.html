@@ -346,17 +346,52 @@ main { padding-top:56px; }
         <div><div class="h-stat-val" id="dash-score">0%</div><div class="h-stat-label">Readiness</div></div>
       </div>
     </div>
-    <div class="scene-card">
-      <div class="scene-title">SAP TM — Live Logistics Scene</div>
-      <div class="logistics-scene">
-        <div class="cloud"></div><div class="cloud"></div>
-        <div class="road"></div>
-        <div class="warehouse wh1"></div>
-        <div class="warehouse wh2"></div>
-        <div class="truck"></div>
-        <div class="truck truck2"></div>
-        <div class="ship"></div>
+    <div id="sap-cinema-outer" style="background:#05090f;border-radius:var(--radius);overflow:hidden;border:1px solid #1e3048;position:relative;font-family:'Space Mono',monospace;">
+      <!-- HUD Header bar -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:rgba(0,0,0,0.55);border-bottom:1px solid rgba(0,191,165,0.18);position:relative;z-index:2;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="width:7px;height:7px;border-radius:50%;background:#00bfa5;display:inline-block;animation:sapHudBlink 1.8s ease-in-out infinite;box-shadow:0 0 6px #00bfa5"></span>
+          <span style="font-size:9px;letter-spacing:2px;color:rgba(0,191,165,0.85);text-transform:uppercase;">▼ SAP TM | Live Operations</span>
+          <span style="font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:1px">·</span>
+          <span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.9)">FO Active: <span id="sap-hud-fo" style="color:#00bfa5">2,854</span></span>
+        </div>
+        <div style="text-align:right;">
+          <span style="font-size:9px;letter-spacing:2px;color:rgba(180,220,255,0.45);text-transform:uppercase;">Global Freight Status</span>
+          <span style="font-size:9px;color:rgba(255,255,255,0.3);margin:0 6px">|</span>
+          <span style="font-size:10px;font-weight:700;color:#00e676">ON SCHEDULE · 94.2%</span>
+        </div>
       </div>
+      <!-- 4-panel grid -->
+      <div style="display:grid;grid-template-rows:140px 100px;grid-template-columns:1fr 1fr;gap:2px;background:#000;">
+        <!-- Panel 1: Full-width port panorama -->
+        <div style="grid-column:1/3;position:relative;overflow:hidden;">
+          <canvas id="sap-canvas-port" style="display:block;width:100%;height:140px;"></canvas>
+          <div style="position:absolute;bottom:0;left:0;right:0;height:30px;background:linear-gradient(transparent,rgba(0,0,0,0.7));pointer-events:none"></div>
+        </div>
+        <!-- Panel 2: Truck close-up -->
+        <div style="position:relative;overflow:hidden;">
+          <canvas id="sap-canvas-truck" style="display:block;width:100%;height:100px;"></canvas>
+          <div style="position:absolute;bottom:6px;left:8px;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.55);text-transform:uppercase;">Road Freight</div>
+        </div>
+        <!-- Panel 3: Aircraft -->
+        <div style="position:relative;overflow:hidden;">
+          <canvas id="sap-canvas-air" style="display:block;width:100%;height:100px;"></canvas>
+          <div style="position:absolute;bottom:6px;right:8px;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.55);text-transform:uppercase;">Air Cargo</div>
+        </div>
+      </div>
+      <!-- HUD Footer -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 14px;background:rgba(0,0,0,0.55);border-top:1px solid rgba(0,191,165,0.12);">
+        <div style="font-size:9px;color:#2979ff;letter-spacing:1.5px;" id="sap-hud-time"></div>
+        <div style="font-size:9px;color:rgba(200,220,255,0.65);letter-spacing:1px;">
+          VESSELS: <span style="color:#e8edf5;font-weight:700" id="sap-v">14,280</span>
+          <span style="margin:0 8px;opacity:0.3">|</span>
+          TRUCKS: <span style="color:#e8edf5;font-weight:700" id="sap-t">892K</span>
+          <span style="margin:0 8px;opacity:0.3">|</span>
+          <span style="color:#e8edf5;font-weight:700" id="sap-f">12,450</span>
+        </div>
+      </div>
+      <!-- Scan line -->
+      <div style="position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,176,0.12),transparent);pointer-events:none;animation:sapScanLine 8s linear infinite;z-index:3;top:0"></div>
     </div>
   </div>
   <div class="prog-grid">
@@ -387,6 +422,87 @@ main { padding-top:56px; }
       <div id="dash-job-status" style="font-size:13px;color:var(--muted)">Start tracking your applications →</div>
     </div>
   </div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     ENTERPRISE CONTROL TOWER — inside dashboard section
+════════════════════════════════════════════════════════════════════ -->
+<div id="ect-root" style="margin-top:20px">
+
+  <!-- KPI PANEL -->
+  <div id="ect-kpi-panel">
+    <div class="ect-kpi-card" id="ect-kpi-fo">
+      <div class="ect-kpi-icon" style="background:rgba(0,191,165,0.12);color:#00e5b0">⬡</div>
+      <div class="ect-kpi-body">
+        <div class="ect-kpi-label">Active Freight Orders</div>
+        <div class="ect-kpi-val" id="ect-v-fo" style="color:#00e5b0">2,847</div>
+        <div class="ect-kpi-trend ect-up">↑ 4.2% today</div>
+      </div>
+      <div class="ect-kpi-spark" id="ect-spark-fo"></div>
+    </div>
+    <div class="ect-kpi-card" id="ect-kpi-ontime">
+      <div class="ect-kpi-icon" style="background:rgba(0,230,118,0.12);color:#00e676">✓</div>
+      <div class="ect-kpi-body">
+        <div class="ect-kpi-label">On-Time Delivery</div>
+        <div class="ect-kpi-val" id="ect-v-ontime" style="color:#00e676">94.2%</div>
+        <div class="ect-kpi-trend ect-up">↑ 1.1% vs last week</div>
+      </div>
+      <div class="ect-kpi-spark" id="ect-spark-on"></div>
+    </div>
+    <div class="ect-kpi-card" id="ect-kpi-delay">
+      <div class="ect-kpi-icon" style="background:rgba(255,171,0,0.12);color:#ffab00">⚠</div>
+      <div class="ect-kpi-body">
+        <div class="ect-kpi-label">Delayed Shipments</div>
+        <div class="ect-kpi-val" id="ect-v-delay" style="color:#ffab00">163</div>
+        <div class="ect-kpi-trend ect-down">↓ 2.3% improving</div>
+      </div>
+      <div class="ect-kpi-spark" id="ect-spark-delay"></div>
+    </div>
+    <div class="ect-kpi-card" id="ect-kpi-risk">
+      <div class="ect-kpi-icon" style="background:rgba(255,82,82,0.12);color:#ff5252">⬤</div>
+      <div class="ect-kpi-body">
+        <div class="ect-kpi-label">Risk Alerts</div>
+        <div class="ect-kpi-val" id="ect-v-risk" style="color:#ff5252">18</div>
+        <div class="ect-kpi-trend ect-risk" id="ect-risk-pulse">● Live monitoring</div>
+      </div>
+      <div class="ect-kpi-spark" id="ect-spark-risk"></div>
+    </div>
+  </div>
+
+  <!-- MAP + SIDEBAR -->
+  <div id="ect-map-wrap">
+    <div id="ect-map-container">
+      <div id="ect-map-header">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#e8edf5;letter-spacing:0.5px">Global Logistics Control Tower</div>
+          <div style="font-size:11px;color:#6b7a99;margin-top:2px">25 active trade lanes · real-time particle flow</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <div class="ect-legend-item"><span class="ect-legend-dot" style="background:#00bfa5"></span>Sea</div>
+          <div class="ect-legend-item"><span class="ect-legend-dot" style="background:#aa77ff"></span>Air</div>
+          <div class="ect-legend-item"><span class="ect-legend-dot" style="background:#ffab00"></span>Road</div>
+          <div class="ect-legend-item"><span class="ect-legend-dot" style="background:#00e676"></span>Rail</div>
+          <div class="ect-legend-item"><span class="ect-legend-dot" style="background:#ff5252;animation:ectPulse 1.2s ease-in-out infinite"></span>Risk</div>
+        </div>
+      </div>
+      <div style="position:relative">
+        <div id="ect-worldmap"></div>
+        <canvas id="ect-particle-canvas" style="position:absolute;top:0;left:0;pointer-events:none;border-radius:0 0 10px 10px"></canvas>
+      </div>
+    </div>
+    <div id="ect-sidebar">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#6b7a99;margin-bottom:12px">Live Feed</div>
+      <div id="ect-feed"></div>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid #1e2d45">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#6b7a99;margin-bottom:10px">Route Stats</div>
+        <div id="ect-route-stats"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUTE POPUP -->
+  <div id="ect-popup" style="display:none"></div>
+</div>
+
 </section>
 
 <!-- ROADMAP -->
@@ -1084,6 +1200,1767 @@ function init(){
 }
 
 init();
+</script>
+
+<!-- ═══════════════════════ ENTERPRISE CONTROL TOWER CSS ═══════════════════════ -->
+<style>
+@keyframes sapHudBlink{0%,100%{opacity:1}50%{opacity:0.25}}
+@keyframes ectPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.85)}}
+@keyframes ectFeedSlide{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+@keyframes ectRiskFlash{0%,100%{box-shadow:0 0 0 0 rgba(255,82,82,0)}50%{box-shadow:0 0 0 6px rgba(255,82,82,0.18)}}
+@keyframes ectSparkPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+
+#ect-root{
+  background:transparent;
+  padding-bottom:8px;
+}
+
+/* KPI PANEL */
+#ect-kpi-panel{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:16px;
+}
+.ect-kpi-card{
+  background:#161d2e;
+  border:1px solid #1e2d45;
+  border-radius:12px;
+  padding:16px 14px;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .25s, transform .25s;
+  cursor:default;
+}
+.ect-kpi-card:hover{border-color:#2979ff;transform:translateY(-2px);}
+.ect-kpi-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,currentColor,transparent);opacity:0.3}
+#ect-kpi-fo::after{color:#00e5b0}
+#ect-kpi-ontime::after{color:#00e676}
+#ect-kpi-delay::after{color:#ffab00}
+#ect-kpi-risk::after{color:#ff5252;animation:ectRiskFlash 1.8s ease-in-out infinite}
+.ect-kpi-icon{
+  width:36px;height:36px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;font-style:normal;
+}
+.ect-kpi-body{flex:1;min-width:0}
+.ect-kpi-label{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#6b7a99;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ect-kpi-val{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;line-height:1;margin-bottom:5px}
+.ect-kpi-trend{font-size:10px;font-weight:600;}
+.ect-up{color:#00e676}
+.ect-down{color:#00e676}
+.ect-risk{color:#ff5252;animation:ectPulse 1.8s ease-in-out infinite}
+.ect-kpi-spark{position:absolute;bottom:0;right:0;width:60px;height:34px;opacity:0.4}
+
+/* MAP WRAPPER */
+#ect-map-wrap{
+  display:grid;
+  grid-template-columns:1fr 280px;
+  gap:12px;
+  align-items:stretch;
+}
+#ect-map-container{
+  background:#0d1526;
+  border:1px solid #1e2d45;
+  border-radius:12px;
+  overflow:hidden;
+}
+#ect-map-header{
+  padding:14px 16px;
+  border-bottom:1px solid #1e2d45;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+}
+#ect-worldmap{height:380px;background:#06101e}
+#ect-particle-canvas{z-index:500}
+.ect-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#6b7a99}
+.ect-legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+
+/* SIDEBAR */
+#ect-sidebar{
+  background:#161d2e;
+  border:1px solid #1e2d45;
+  border-radius:12px;
+  padding:16px;
+  overflow-y:auto;
+  max-height:434px;
+  display:flex;
+  flex-direction:column;
+}
+.ect-feed-item{
+  padding:9px 10px;
+  border-radius:8px;
+  border:1px solid #1e2d45;
+  margin-bottom:7px;
+  font-size:11px;
+  line-height:1.5;
+  animation:ectFeedSlide .3s ease;
+  transition:border-color .2s;
+  cursor:default;
+}
+.ect-feed-item:hover{border-color:#2979ff}
+.ect-feed-fo{font-family:'Space Mono',monospace;font-size:10px;color:#6b7a99;margin-bottom:3px}
+.ect-feed-route{font-weight:600;font-size:11px;color:#e8edf5;margin-bottom:2px}
+.ect-feed-status{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.ect-stat-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px}
+.ect-stat-row:last-child{border-bottom:none}
+
+/* POPUP */
+#ect-popup{
+  position:fixed;
+  background:#161d2e;
+  border:1px solid #2979ff;
+  border-radius:12px;
+  padding:16px 18px;
+  font-size:12px;
+  z-index:9999;
+  box-shadow:0 12px 40px rgba(0,0,0,0.7),0 0 20px rgba(41,121,255,0.15);
+  min-width:220px;
+  max-width:280px;
+  animation:ectFeedSlide .2s ease;
+  pointer-events:auto;
+}
+.ect-popup-close{
+  position:absolute;top:8px;right:10px;
+  background:transparent;border:none;color:#6b7a99;
+  cursor:pointer;font-size:16px;line-height:1;
+}
+.ect-popup-fo{font-family:'Space Mono',monospace;font-size:10px;color:#6b7a99;margin-bottom:6px}
+.ect-popup-title{font-size:14px;font-weight:700;color:#e8edf5;margin-bottom:10px}
+.ect-popup-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.ect-popup-row:last-child{border-bottom:none}
+.ect-popup-key{color:#6b7a99}
+.ect-popup-val{font-weight:600}
+
+/* Leaflet dark overrides */
+#ect-worldmap .leaflet-container{background:#06101e !important}
+#ect-worldmap .leaflet-tile{filter:brightness(0.38) saturate(0.7) hue-rotate(180deg)}
+#ect-worldmap .leaflet-control-attribution{display:none !important}
+#ect-worldmap .leaflet-control-zoom a{background:#161d2e !important;color:#6b7a99 !important;border-color:#1e2d45 !important}
+#ect-worldmap .leaflet-popup-content-wrapper{background:#161d2e;border:1px solid #2979ff;color:#e8edf5;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.6)}
+#ect-worldmap .leaflet-popup-tip{background:#161d2e}
+
+@media(max-width:900px){
+  #ect-kpi-panel{grid-template-columns:repeat(2,1fr)}
+  #ect-map-wrap{grid-template-columns:1fr}
+  #ect-sidebar{max-height:200px}
+}
+@media(max-width:520px){
+  #ect-kpi-panel{grid-template-columns:1fr 1fr}
+}
+</style>
+
+<!-- Leaflet CSS + JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- ═══════════════ CINEMATIC ENGINE v2 + ECT MAP FIX ═══════════════ -->
+<style>
+@keyframes sapHudBlink{0%,100%{opacity:1}50%{opacity:0.2}}
+@keyframes sapScanLine{from{top:0}to{top:100%}}
+@keyframes ectPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.35;transform:scale(0.8)}}
+@keyframes ectFeedSlide{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes ectRiskFlash{0%,100%{box-shadow:0 0 0 0 rgba(255,82,82,0)}50%{box-shadow:0 0 0 8px rgba(255,82,82,0.15)}}
+</style>
+
+<script>
+try {
+/* ══════════════════════ PANEL 1: PORT PANORAMA ══════════════════════ */
+(function portScene(){
+  const cv = document.getElementById('sap-canvas-port');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  const W=900, H=140;
+  cv.width=W; cv.height=H;
+  let T=0;
+
+  // Stars
+  const stars=Array.from({length:140},()=>({x:Math.random()*W,y:Math.random()*(H*0.6),r:0.25+Math.random()*1.0,ph:Math.random()*6.28,sp:0.4+Math.random()*0.8}));
+
+  // City buildings — dense, warm-windowed
+  const blds=[];
+  for(let i=0;i<60;i++){
+    const x=Math.random()*W*1.2-W*0.1, w=6+Math.random()*22, h=14+Math.random()*72;
+    const depth=Math.random();
+    const base=depth>0.65?'#0a1828':depth>0.3?'#060f1c':'#030810';
+    const wins=[];
+    const wr=Math.floor(h/9), wc=Math.floor(w/6.5);
+    for(let r=0;r<wr;r++) for(let c=0;c<wc;c++)
+      if(Math.random()>0.38) wins.push({r,c,on:Math.random()>0.3,ph:Math.random()*6.28,wc2:wc});
+    blds.push({x,w,h,depth,base,wins,wr,wc,ant:Math.random()>0.55});
+  }
+  blds.sort((a,b)=>a.depth-b.depth);
+
+  // Cranes
+  const cranes=[
+    {x:390,bY:H*0.88,h:80,jL:96,jR:34,ph:0,sp:0.35},
+    {x:510,bY:H*0.90,h:65,jL:78,jR:26,ph:2.1,sp:0.25},
+    {x:620,bY:H*0.88,h:55,jL:64,jR:20,ph:0.9,sp:0.30},
+  ];
+
+  // Containers — vivid, stacked
+  const ctrs=[
+    {x:200,y:H*0.71,w:38,h:15,c:'#cc2800'},{x:240,y:H*0.71,w:38,h:15,c:'#0038a8'},
+    {x:280,y:H*0.71,w:38,h:15,c:'#006c28'},{x:200,y:H*0.61,w:38,h:15,c:'#0038a8'},
+    {x:240,y:H*0.61,w:38,h:15,c:'#cc2800'},{x:200,y:H*0.52,w:38,h:15,c:'#d47000'},
+    {x:330,y:H*0.71,w:38,h:15,c:'#cc2800'},{x:330,y:H*0.61,w:38,h:15,c:'#006c28'},
+    {x:700,y:H*0.71,w:38,h:15,c:'#cc2800'},{x:740,y:H*0.71,w:38,h:15,c:'#0038a8'},
+    {x:780,y:H*0.71,w:38,h:15,c:'#d47000'},{x:700,y:H*0.61,w:38,h:15,c:'#006c28'},
+    {x:740,y:H*0.61,w:38,h:15,c:'#cc2800'},{x:700,y:H*0.52,w:38,h:15,c:'#0038a8'},
+  ];
+
+  // Ship
+  let shipX=-320, shipS=0.85;
+  // Particles
+  const sparks=Array.from({length:40},()=>({x:Math.random()*W,y:H*0.75+Math.random()*20,life:Math.random(),mL:0.3+Math.random()*0.5,r:0.4+Math.random()*1.1}));
+
+  function draw(){
+    T++;
+    ctx.clearRect(0,0,W,H);
+
+    // Sky
+    const sk=ctx.createLinearGradient(0,0,0,H*0.65);
+    sk.addColorStop(0,'#02050a'); sk.addColorStop(0.5,'#060f1e'); sk.addColorStop(1,'#0c1e34');
+    ctx.fillStyle=sk; ctx.fillRect(0,0,W,H*0.65);
+
+    // Horizon glow — warm orange like the reference image
+    const hg=ctx.createRadialGradient(W*0.5,H*0.62,0,W*0.5,H*0.62,W*0.55);
+    hg.addColorStop(0,'rgba(200,90,10,0.28)');
+    hg.addColorStop(0.35,'rgba(180,60,5,0.15)');
+    hg.addColorStop(0.65,'rgba(160,40,0,0.06)');
+    hg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=hg; ctx.fillRect(0,0,W,H);
+
+    // Stars + moon
+    stars.forEach(s=>{
+      const b=0.3+0.7*Math.sin(s.ph+T*s.sp*0.02);
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,6.28);
+      ctx.fillStyle=`rgba(200,220,255,${b*0.75})`; ctx.fill();
+    });
+    // Moon
+    const mx=820,my=22;
+    const mg=ctx.createRadialGradient(mx,my,0,mx,my,14);
+    mg.addColorStop(0,'rgba(235,225,190,1)'); mg.addColorStop(0.65,'rgba(205,192,155,1)'); mg.addColorStop(1,'rgba(150,140,105,0)');
+    ctx.beginPath(); ctx.arc(mx,my,13,0,6.28); ctx.fillStyle=mg; ctx.fill();
+    ctx.beginPath(); ctx.arc(mx+6,my-3,10,0,6.28); ctx.fillStyle='#040a14'; ctx.fill();
+    // Moon halo
+    const mh=ctx.createRadialGradient(mx,my,11,mx,my,30);
+    mh.addColorStop(0,'rgba(200,185,135,0.10)'); mh.addColorStop(1,'rgba(200,185,135,0)');
+    ctx.beginPath(); ctx.arc(mx,my,30,0,6.28); ctx.fillStyle=mh; ctx.fill();
+
+    // Buildings
+    blds.forEach(b=>{
+      const by=H*0.63-b.h;
+      ctx.fillStyle=b.base; ctx.fillRect(b.x,by,b.w,b.h);
+      b.wins.forEach(w=>{
+        if(!w.on) return;
+        const fl=0.5+0.5*Math.sin(w.ph+T*0.007*(b.depth+0.4));
+        const wx2=b.x+1.5+w.c*6.5, wy2=by+2+w.r*9;
+        if(wx2+4>b.x+b.w||wy2+5>by+b.h) return;
+        // warm amber windows like reference
+        const warmR=200+Math.floor(w.r*20), warmG=130+Math.floor(w.c*10);
+        ctx.fillStyle=`rgba(${warmR},${warmG},40,${fl*0.88})`; ctx.fillRect(wx2,wy2,4,5);
+        // window glow
+        const wg=ctx.createRadialGradient(wx2+2,wy2+2,0,wx2+2,wy2+2,9);
+        wg.addColorStop(0,`rgba(255,170,50,${fl*0.14})`); wg.addColorStop(1,'rgba(255,170,50,0)');
+        ctx.fillStyle=wg; ctx.fillRect(wx2-7,wy2-7,18,16);
+      });
+      if(b.ant){
+        ctx.strokeStyle='rgba(80,110,145,0.4)'; ctx.lineWidth=0.7;
+        ctx.beginPath(); ctx.moveTo(b.x+b.w/2,by); ctx.lineTo(b.x+b.w/2,by-10); ctx.stroke();
+        ctx.beginPath(); ctx.arc(b.x+b.w/2,by-10,1.3,0,6.28);
+        ctx.fillStyle=Math.sin(T*0.05)>0.75?'rgba(255,30,30,0.9)':'rgba(255,30,30,0.08)'; ctx.fill();
+      }
+    });
+
+    // Water / sea
+    const wg2=ctx.createLinearGradient(0,H*0.63,0,H*0.78);
+    wg2.addColorStop(0,'#0a1e3a'); wg2.addColorStop(0.4,'#060e22'); wg2.addColorStop(1,'#030810');
+    ctx.fillStyle=wg2; ctx.fillRect(0,H*0.63,W,H*0.15);
+
+    // Water shimmer (orange-tinted from port lights)
+    const ws=ctx.createLinearGradient(0,0,W,0);
+    ws.addColorStop(0,'rgba(200,80,10,0)');
+    ws.addColorStop(0.35,'rgba(200,80,10,0.08)');
+    ws.addColorStop(0.65,'rgba(220,100,20,0.06)');
+    ws.addColorStop(1,'rgba(200,80,10,0)');
+    ctx.fillStyle=ws; ctx.fillRect(0,H*0.63,W,H*0.09);
+
+    // Building light reflections on water
+    blds.forEach(b=>{
+      if(!b.wins.some(w=>w.on)) return;
+      const rg=ctx.createLinearGradient(b.x+b.w/2,H*0.63,b.x+b.w/2,H*0.78);
+      rg.addColorStop(0,`rgba(255,150,40,${0.06*b.depth+0.02})`);
+      rg.addColorStop(1,'rgba(255,150,40,0)');
+      ctx.fillStyle=rg; ctx.fillRect(b.x+b.w/2-2,H*0.63,4,H*0.13);
+    });
+
+    // Wave lines
+    for(let i=0;i<6;i++){
+      const wy=H*0.642+i*5.5+Math.sin(T*0.025+i)*1.3;
+      ctx.beginPath(); ctx.moveTo(0,wy);
+      for(let x=0;x<=W;x+=4) ctx.lineTo(x,wy+Math.sin(x*0.013+T*0.035+i*0.55)*2);
+      ctx.strokeStyle=`rgba(80,150,220,${0.025+i*0.008})`; ctx.lineWidth=0.65; ctx.stroke();
+    }
+
+    // Dock wall
+    ctx.fillStyle='#14100a'; ctx.fillRect(0,H*0.78,W,H*0.22);
+    ctx.fillStyle='#1e1810'; ctx.fillRect(0,H*0.78,W,2);
+    for(let x=0;x<W;x+=32){ctx.strokeStyle='rgba(0,0,0,0.35)';ctx.lineWidth=0.4;ctx.beginPath();ctx.moveTo(x,H*0.78);ctx.lineTo(x,H*0.78+10);ctx.stroke();}
+
+    // Sparks / embers (from port lights / fires)
+    sparks.forEach(sp=>{
+      sp.x+=(-0.1+Math.sin(T*0.04+sp.y)*0.2); sp.life+=0.003;
+      if(sp.life>sp.mL){sp.life=0;sp.x=Math.random()*W;sp.y=H*0.75+Math.random()*18;}
+      const a=Math.sin(sp.life/sp.mL*3.14)*0.45;
+      ctx.beginPath(); ctx.arc(sp.x,sp.y,sp.r,0,6.28);
+      ctx.fillStyle=`rgba(255,${130+Math.floor(sp.r*40)},30,${a})`; ctx.fill();
+    });
+
+    // Containers
+    ctrs.forEach(c=>{
+      // shadow
+      ctx.fillStyle='rgba(0,0,0,0.4)'; ctx.fillRect(c.x+2,c.y+c.h,c.w,3);
+      // face
+      ctx.fillStyle=c.c; ctx.fillRect(c.x,c.y,c.w,c.h);
+      // top specular
+      ctx.fillStyle='rgba(255,255,255,0.09)'; ctx.fillRect(c.x,c.y,c.w,3);
+      // panels
+      ctx.strokeStyle='rgba(0,0,0,0.3)'; ctx.lineWidth=0.4;
+      [c.w/3,c.w*2/3].forEach(dx=>{ctx.beginPath();ctx.moveTo(c.x+dx,c.y);ctx.lineTo(c.x+dx,c.y+c.h);ctx.stroke();});
+      // ambient bounce light from port fire below
+      ctx.fillStyle='rgba(255,120,30,0.06)'; ctx.fillRect(c.x,c.y+c.h-4,c.w,4);
+    });
+
+    // Port lights (warm glowing spheres like reference)
+    const portLights=[{x:155,y:H*0.78,col:'255,160,40'},{x:470,y:H*0.78,col:'255,140,30'},{x:640,y:H*0.78,col:'255,155,35'},{x:830,y:H*0.78,col:'255,150,32'}];
+    portLights.forEach(pl=>{
+      const flk=0.8+0.2*Math.sin(T*0.06+pl.x*0.01);
+      const pg=ctx.createRadialGradient(pl.x,pl.y,0,pl.x,pl.y,35);
+      pg.addColorStop(0,`rgba(${pl.col},${0.65*flk})`);
+      pg.addColorStop(0.3,`rgba(${pl.col},${0.25*flk})`);
+      pg.addColorStop(1,`rgba(${pl.col},0)`);
+      ctx.fillStyle=pg; ctx.fillRect(pl.x-35,pl.y-35,70,70);
+      ctx.beginPath(); ctx.arc(pl.x,pl.y,4,0,6.28);
+      ctx.fillStyle=`rgba(${pl.col},${0.9*flk})`; ctx.fill();
+    });
+
+    // Cranes
+    cranes.forEach(cr=>{
+      const ang=Math.sin(cr.ph+T*cr.sp*0.02)*0.055;
+      const bX=cr.x, bY=cr.bY;
+      // legs
+      ctx.strokeStyle='#b07508'; ctx.lineWidth=5;
+      [[bX-10,bY],[bX+10,bY]].forEach(([lx,ly])=>{ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(lx,ly+36);ctx.stroke();});
+      // tower
+      ctx.fillStyle='#c08010'; ctx.fillRect(bX-9,bY-cr.h,18,cr.h);
+      ctx.strokeStyle='#956008'; ctx.lineWidth=0.9;
+      for(let i=0;i<cr.h;i+=14){
+        ctx.beginPath();ctx.moveTo(bX-9,bY-i);ctx.lineTo(bX+9,bY-i-14);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(bX+9,bY-i);ctx.lineTo(bX-9,bY-i-14);ctx.stroke();
+      }
+      ctx.save(); ctx.translate(bX,bY-cr.h); ctx.rotate(ang);
+      ctx.fillStyle='#d09010'; ctx.fillRect(-cr.jL,0,cr.jL+cr.jR,6);
+      const cX=-cr.jL*0.62, sw=Math.sin(cr.ph+T*0.015)*6;
+      ctx.strokeStyle='rgba(140,138,120,0.65)'; ctx.lineWidth=0.9;
+      ctx.beginPath(); ctx.moveTo(cX,6); ctx.lineTo(cX+sw,36); ctx.stroke();
+      ctx.fillStyle='#c02800'; ctx.fillRect(cX+sw-11,36,22,12);
+      // glow on container
+      const cg2=ctx.createRadialGradient(cX+sw,48,0,cX+sw,48,18);
+      cg2.addColorStop(0,'rgba(255,100,30,0.2)'); cg2.addColorStop(1,'rgba(255,100,30,0)');
+      ctx.fillStyle=cg2; ctx.fillRect(cX+sw-18,30,36,26);
+      ctx.fillStyle='#183898'; ctx.fillRect(-7,-13,24,14);
+      ctx.fillStyle='rgba(120,175,230,0.5)'; ctx.fillRect(-4,-10,18,9);
+      ctx.restore();
+    });
+
+    // Ship
+    shipX -= 0.22; if(shipX < -400*shipS) shipX = W+20;
+    const s=shipS, x=shipX, y=H*0.63;
+    const bob=Math.sin(T*0.018+x*0.001)*0.9*s;
+    ctx.save(); ctx.translate(0,bob);
+    // hull
+    ctx.beginPath();
+    ctx.moveTo(x,y+9*s); ctx.lineTo(x+355*s,y+9*s);
+    ctx.lineTo(x+370*s,y+18*s); ctx.lineTo(x-6*s,y+18*s); ctx.closePath();
+    ctx.fillStyle='#1a2c44'; ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(x-6*s,y+18*s); ctx.lineTo(x+370*s,y+18*s);
+    ctx.lineTo(x+364*s,y+27*s); ctx.lineTo(x+4*s,y+27*s); ctx.closePath();
+    ctx.fillStyle='#101e30'; ctx.fill();
+    ctx.fillStyle='rgba(155,16,0,0.80)'; ctx.fillRect(x+4*s,y+20*s,358*s,3.5*s);
+    ctx.fillStyle='#142232'; ctx.fillRect(x,y,355*s,11*s);
+    // superstructure
+    ctx.fillStyle='#101c2e'; ctx.fillRect(x+125*s,y-33*s,90*s,44*s);
+    ctx.fillStyle='#162436'; ctx.fillRect(x+135*s,y-48*s,70*s,20*s);
+    // windows with warm glow
+    [[x+140*s,y-44*s],[x+154*s,y-44*s],[x+168*s,y-44*s],[x+182*s,y-44*s]].forEach(([wx,wy])=>{
+      ctx.fillStyle='rgba(255,200,80,0.75)'; ctx.fillRect(wx,wy,10*s,8*s);
+      ctx.fillStyle='rgba(255,255,255,0.25)'; ctx.fillRect(wx,wy,10*s,3*s);
+      const wng=ctx.createRadialGradient(wx+5*s,wy+4*s,0,wx+5*s,wy+4*s,12*s);
+      wng.addColorStop(0,'rgba(255,180,50,0.20)'); wng.addColorStop(1,'rgba(255,180,50,0)');
+      ctx.fillStyle=wng; ctx.fillRect(wx-6*s,wy-6*s,22*s,18*s);
+    });
+    // deck containers
+    const dc=['#aa2000','#003288','#006020','#a05800'];
+    for(let row=0;row<2;row++) for(let col=0;col<3;col++){
+      if(col>=2&&row===1) continue;
+      const cx=x+(22+col*37)*s, cy=y+(-10-row*12)*s;
+      ctx.fillStyle=dc[(row*2+col)%4]; ctx.fillRect(cx,cy,33*s,11*s);
+      ctx.fillStyle='rgba(255,255,255,0.06)'; ctx.fillRect(cx,cy,33*s,3*s);
+    }
+    for(let col=0;col<3;col++){
+      const cx=x+(245+col*37)*s, cy=y-10*s;
+      ctx.fillStyle=dc[col%4]; ctx.fillRect(cx,cy,33*s,11*s);
+    }
+    // funnel with smoke
+    ctx.fillStyle='#080e1a'; ctx.fillRect(x+208*s,y-65*s,14*s,36*s);
+    ctx.fillStyle='rgba(185,145,0,0.65)'; ctx.fillRect(x+208*s,y-55*s,14*s,5*s);
+    for(let i=0;i<5;i++){
+      const sp=(T*0.5+i*6)%34;
+      ctx.beginPath(); ctx.arc(x+215*s-sp*0.3,y-66*s-sp,(1.6+sp*0.09)*s,0,6.28);
+      ctx.fillStyle=`rgba(50,55,65,${0.22*(1-sp/34)})`; ctx.fill();
+    }
+    // Warm light on hull from port
+    const hlg=ctx.createLinearGradient(x,y,x+355*s,y);
+    hlg.addColorStop(0,'rgba(255,140,30,0.04)'); hlg.addColorStop(0.5,'rgba(255,140,30,0.10)'); hlg.addColorStop(1,'rgba(255,140,30,0.02)');
+    ctx.fillStyle=hlg; ctx.fillRect(x,y-50*s,355*s,80*s);
+    ctx.restore();
+
+    // Road / ground
+    const rg=ctx.createLinearGradient(0,H*0.78,0,H);
+    rg.addColorStop(0,'#181210'); rg.addColorStop(1,'#0a0806');
+    ctx.fillStyle=rg; ctx.fillRect(0,H*0.78,W,H*0.22);
+    // Wet road sheen
+    const wetG=ctx.createLinearGradient(0,0,W,0);
+    wetG.addColorStop(0,'rgba(80,120,165,0)');
+    wetG.addColorStop(0.4,'rgba(80,120,165,0.04)');
+    wetG.addColorStop(0.7,'rgba(180,100,30,0.05)');
+    wetG.addColorStop(1,'rgba(80,120,165,0)');
+    ctx.fillStyle=wetG; ctx.fillRect(0,H*0.78,W,H*0.22);
+    const dOff=(T*22)%60;
+    ctx.strokeStyle='rgba(200,165,25,0.4)'; ctx.lineWidth=1.2;
+    ctx.setLineDash([30,30]); ctx.lineDashOffset=-dOff;
+    ctx.beginPath(); ctx.moveTo(0,H*0.855); ctx.lineTo(W,H*0.855); ctx.stroke();
+    ctx.setLineDash([]);
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══════════════════════ PANEL 2: TRUCK CLOSE-UP ══════════════════════ */
+(function truckScene(){
+  const cv=document.getElementById('sap-canvas-truck');
+  if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const W=450, H=100;
+  cv.width=W; cv.height=H;
+  let T=0;
+  let truckX=-250;
+
+  function draw(){
+    T++;
+    ctx.clearRect(0,0,W,H);
+
+    // Dark wet road at night — bokeh city bg
+    const bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#04080f'); bg.addColorStop(1,'#0a0806');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+    // Bokeh city lights bg
+    const bokehPts=[{x:60,y:15,r:22,c:'255,120,30'},{x:130,y:25,r:16,c:'40,100,255'},{x:220,y:12,r:20,c:'255,100,20'},{x:300,y:20,r:14,c:'180,60,255'},{x:370,y:14,r:18,c:'255,130,25'},{x:420,y:28,r:12,c:'30,120,255'},{x:90,y:35,r:10,c:'255,90,20'},{x:260,y:30,r:12,c:'255,110,25'}];
+    bokehPts.forEach(b=>{
+      const flk=0.6+0.4*Math.sin(T*0.04+b.x*0.02);
+      const bg2=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);
+      bg2.addColorStop(0,`rgba(${b.c},${0.55*flk})`);
+      bg2.addColorStop(1,`rgba(${b.c},0)`);
+      ctx.fillStyle=bg2; ctx.fillRect(b.x-b.r,b.y-b.r,b.r*2,b.r*2);
+    });
+
+    // Wet road
+    const rg=ctx.createLinearGradient(0,H*0.55,0,H);
+    rg.addColorStop(0,'#1a150e'); rg.addColorStop(1,'#080604');
+    ctx.fillStyle=rg; ctx.fillRect(0,H*0.55,W,H*0.45);
+    // road lane
+    const dOff=(T*18)%52;
+    ctx.strokeStyle='rgba(200,165,25,0.4)'; ctx.lineWidth=1.2;
+    ctx.setLineDash([26,26]); ctx.lineDashOffset=-dOff;
+    ctx.beginPath(); ctx.moveTo(0,H*0.74); ctx.lineTo(W,H*0.74); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Headlight beams — cinematic long beam
+    const bx=truckX+210, by=H*0.48;
+    for(let i=0;i<3;i++){
+      const bg3=ctx.createRadialGradient(bx,by,0,bx+80,H*0.72,160-i*30);
+      bg3.addColorStop(0,`rgba(255,240,180,${0.18-i*0.04})`);
+      bg3.addColorStop(1,'rgba(255,240,180,0)');
+      ctx.fillStyle=bg3; ctx.fillRect(bx-60,by,260,H*0.5);
+    }
+    // Road wet reflection of headlights
+    const refG=ctx.createLinearGradient(bx,H*0.55,bx,H);
+    refG.addColorStop(0,'rgba(255,230,140,0.14)'); refG.addColorStop(1,'rgba(255,230,140,0)');
+    ctx.fillStyle=refG; ctx.fillRect(bx-40,H*0.55,100,H*0.45);
+
+    // TRUCK
+    truckX += 0.6; if(truckX>W+30) truckX=-260;
+    const x=truckX, y=H*0.3;
+    // Shadow
+    ctx.fillStyle='rgba(0,0,0,0.25)';
+    ctx.beginPath(); ctx.ellipse(x+100,H*0.9,120,5,0,0,6.28); ctx.fill();
+    // Trailer
+    ctx.fillStyle='#1c1810';
+    ctx.fillRect(x,y-28,150,36);
+    // Trailer top glint
+    const tg=ctx.createLinearGradient(x,y-28,x,y-18);
+    tg.addColorStop(0,'rgba(255,255,255,0.06)'); tg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=tg; ctx.fillRect(x,y-28,150,12);
+    // MAERSK branding — blue stripe
+    ctx.fillStyle='#0033a0';
+    ctx.fillRect(x+4,y-20,142,8);
+    ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.font='bold 6px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('MAERSK',x+75,y-14);
+    // Trailer ribs
+    ctx.strokeStyle='rgba(60,55,45,0.55)'; ctx.lineWidth=0.5;
+    [50,100].forEach(dx=>{ctx.beginPath();ctx.moveTo(x+dx,y-28);ctx.lineTo(x+dx,y+8);ctx.stroke();});
+    ctx.fillStyle='#161210'; ctx.fillRect(x+3,y+4,144,4);
+    // Cab
+    const cg=ctx.createLinearGradient(x+152,y-30,x+210,y-30);
+    cg.addColorStop(0,'#0e3068'); cg.addColorStop(1,'#1448a0');
+    ctx.fillStyle=cg;
+    ctx.beginPath();
+    ctx.moveTo(x+152,y-30); ctx.lineTo(x+208,y-30);
+    ctx.quadraticCurveTo(x+214,y-30,x+214,y-22);
+    ctx.lineTo(x+214,y+8); ctx.lineTo(x+152,y+8); ctx.closePath(); ctx.fill();
+    // Cab roof fairing
+    ctx.fillStyle='#0c2858';
+    ctx.beginPath();
+    ctx.moveTo(x+152,y-30); ctx.quadraticCurveTo(x+170,y-40,x+212,y-35);
+    ctx.lineTo(x+214,y-30); ctx.lineTo(x+152,y-30); ctx.closePath(); ctx.fill();
+    // Windshield
+    ctx.fillStyle='rgba(100,165,225,0.20)';
+    ctx.beginPath();
+    ctx.moveTo(x+173,y-28); ctx.lineTo(x+210,y-28);
+    ctx.lineTo(x+212,y-12); ctx.lineTo(x+171,y-12); ctx.closePath(); ctx.fill();
+    const wrf=ctx.createLinearGradient(x+173,y-28,x+195,y-12);
+    wrf.addColorStop(0,'rgba(255,255,255,0.18)'); wrf.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=wrf;
+    ctx.beginPath();
+    ctx.moveTo(x+173,y-28); ctx.lineTo(x+192,y-28);
+    ctx.lineTo(x+178,y-12); ctx.lineTo(x+171,y-12); ctx.closePath(); ctx.fill();
+    // Headlight lens flare
+    [[x+211,y-22],[x+211,y-8]].forEach(([hx,hy])=>{
+      const hg2=ctx.createRadialGradient(hx,hy,0,hx,hy,14);
+      hg2.addColorStop(0,'rgba(255,245,210,0.95)');
+      hg2.addColorStop(0.25,'rgba(255,220,130,0.45)');
+      hg2.addColorStop(1,'rgba(255,200,80,0)');
+      ctx.fillStyle=hg2; ctx.fillRect(hx-14,hy-14,28,28);
+      ctx.beginPath(); ctx.arc(hx,hy,3.2,0,6.28); ctx.fillStyle='rgba(255,248,210,0.92)'; ctx.fill();
+    });
+    // Exhaust smoke
+    ctx.fillStyle='#202018'; ctx.fillRect(x+205,y-48,5,18);
+    for(let i=0;i<4;i++){
+      const sp=(T*0.9+i*5)%28;
+      ctx.beginPath(); ctx.arc(x+207-sp*0.2,y-50-sp,1.5+sp*0.14,0,6.28);
+      ctx.fillStyle=`rgba(65,60,50,${0.25*(1-sp/28)})`; ctx.fill();
+    }
+    // Wheels
+    [x+18,x+46,x+116,x+136,x+163,x+186].forEach(wx=>{
+      const wr=9, wy2=y+8;
+      ctx.beginPath(); ctx.arc(wx,wy2,wr,0,6.28); ctx.fillStyle='#100e0a'; ctx.fill();
+      ctx.beginPath(); ctx.arc(wx,wy2,wr-3,0,6.28); ctx.fillStyle='#323028'; ctx.fill();
+      for(let sp=0;sp<5;sp++){
+        const ang=(sp/5)*6.28+T*0.12;
+        ctx.strokeStyle='rgba(65,60,52,0.7)'; ctx.lineWidth=0.8;
+        ctx.beginPath(); ctx.moveTo(wx,wy2); ctx.lineTo(wx+Math.cos(ang)*(wr-3.5),wy2+Math.sin(ang)*(wr-3.5)); ctx.stroke();
+      }
+      ctx.beginPath(); ctx.arc(wx,wy2,1.8,0,6.28); ctx.fillStyle='#787060'; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══════════════════════ PANEL 3: AIRCRAFT / AIR CARGO ══════════════════════ */
+(function airScene(){
+  const cv=document.getElementById('sap-canvas-air');
+  if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const W=450, H=100;
+  cv.width=W; cv.height=H;
+  let T=0;
+  let planeX=W+60;
+
+  function draw(){
+    T++;
+    ctx.clearRect(0,0,W,H);
+
+    // Dramatic dusk sky
+    const sk=ctx.createLinearGradient(0,0,0,H);
+    sk.addColorStop(0,'#080510'); sk.addColorStop(0.4,'#100818'); sk.addColorStop(0.7,'#200a10'); sk.addColorStop(1,'#380e08');
+    ctx.fillStyle=sk; ctx.fillRect(0,0,W,H);
+
+    // Sun/sunset glow low on horizon
+    const sg=ctx.createRadialGradient(W*0.7,H*0.85,0,W*0.7,H*0.85,W*0.5);
+    sg.addColorStop(0,'rgba(255,110,20,0.55)');
+    sg.addColorStop(0.3,'rgba(220,70,10,0.25)');
+    sg.addColorStop(0.65,'rgba(180,40,5,0.10)');
+    sg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=sg; ctx.fillRect(0,0,W,H);
+
+    // Horizon line glow
+    const hl=ctx.createLinearGradient(0,0,W,0);
+    hl.addColorStop(0,'rgba(255,120,30,0)'); hl.addColorStop(0.65,'rgba(255,140,40,0.55)'); hl.addColorStop(1,'rgba(255,100,15,0)');
+    ctx.fillStyle=hl; ctx.fillRect(0,H*0.78,W,3);
+
+    // City silhouette (dark low)
+    ctx.fillStyle='#0a0508';
+    [20,55,90,140,175,210,260,300,350,395,430].forEach((bx,i)=>{
+      const bh=8+((i*7)%22), bw=12+((i*5)%18);
+      ctx.fillRect(bx,H*0.82-bh,bw,bh);
+    });
+    // Windows in silhouette
+    ctx.fillStyle='rgba(255,180,50,0.55)';
+    [22,57,93,145,178,265,303,355].forEach(bx=>{
+      [H*0.78-4, H*0.73-4].forEach(wy=>ctx.fillRect(bx,wy,3,4));
+    });
+
+    // Stars (few, bright)
+    [
+      {x:30,y:8},{x:80,y:15},{x:150,y:6},{x:220,y:12},{x:310,y:8},{x:380,y:16},{x:430,y:10}
+    ].forEach(s=>{
+      const b=0.4+0.6*Math.sin(T*0.04+s.x);
+      ctx.beginPath(); ctx.arc(s.x,s.y,0.8+b*0.5,0,6.28); ctx.fillStyle=`rgba(220,230,255,${b*0.8})`; ctx.fill();
+    });
+
+    // Contrails (long, glowing)
+    planeX -= 1.2; if(planeX<-160) planeX=W+70;
+    const px=planeX, py=H*0.32;
+    for(let i=0;i<2;i++){
+      const tY=py+(i===0?-7:7);
+      const tg=ctx.createLinearGradient(px+60,tY,px+350,tY);
+      tg.addColorStop(0,'rgba(220,230,255,0.50)');
+      tg.addColorStop(0.3,'rgba(220,230,255,0.22)');
+      tg.addColorStop(0.7,'rgba(220,230,255,0.08)');
+      tg.addColorStop(1,'rgba(220,230,255,0)');
+      ctx.strokeStyle=tg; ctx.lineWidth=3.2;
+      ctx.beginPath(); ctx.moveTo(px+60,tY); ctx.lineTo(px+360,tY); ctx.stroke();
+    }
+
+    // AIRCRAFT
+    ctx.save();
+    // Fuselage
+    ctx.fillStyle='#d8dce8';
+    ctx.beginPath();
+    ctx.moveTo(px+18,py-7); ctx.lineTo(px+130,py-7);
+    ctx.quadraticCurveTo(px+148,py-7,px+148,py);
+    ctx.quadraticCurveTo(px+148,py+7,px+130,py+7);
+    ctx.lineTo(px+18,py+7); ctx.closePath(); ctx.fill();
+    // Belly shade
+    ctx.fillStyle='rgba(0,0,0,0.12)';
+    ctx.beginPath(); ctx.moveTo(px+18,py+2); ctx.lineTo(px+130,py+2);
+    ctx.quadraticCurveTo(px+140,py+2,px+140,py+5); ctx.quadraticCurveTo(px+130,py+7,px+18,py+7); ctx.closePath(); ctx.fill();
+    // Main wings
+    ctx.fillStyle='#c8ccd8';
+    ctx.beginPath(); ctx.moveTo(px+72,py-6); ctx.lineTo(px+50,py-40); ctx.lineTo(px+114,py-4); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(px+72,py+6); ctx.lineTo(px+50,py+40); ctx.lineTo(px+114,py+4); ctx.closePath(); ctx.fill();
+    // Tail
+    ctx.fillStyle='#c0c4d0';
+    ctx.beginPath(); ctx.moveTo(px+22,py-6); ctx.lineTo(px+10,py-24); ctx.lineTo(px+38,py-6); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(px+22,py+6); ctx.lineTo(px+10,py+24); ctx.lineTo(px+38,py+6); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(px+14,py-5); ctx.lineTo(px+7,py-16); ctx.lineTo(px+30,py-5); ctx.closePath(); ctx.fill();
+    // Engines
+    [[px+64,py-24],[px+64,py+24]].forEach(([ex,ey])=>{
+      ctx.fillStyle='#a8acc0';
+      ctx.beginPath(); ctx.ellipse(ex,ey,16,5,0,0,6.28); ctx.fill();
+      // Engine glow — vivid orange
+      const eg=ctx.createRadialGradient(ex+14,ey,0,ex+14,ey,8);
+      eg.addColorStop(0,'rgba(255,150,40,0.92)');
+      eg.addColorStop(0.4,'rgba(255,100,20,0.55)');
+      eg.addColorStop(1,'rgba(255,80,0,0)');
+      ctx.fillStyle=eg; ctx.beginPath(); ctx.arc(ex+14,ey,8,0,6.28); ctx.fill();
+      // Outer engine halo
+      const eg2=ctx.createRadialGradient(ex+14,ey,0,ex+14,ey,20);
+      eg2.addColorStop(0,'rgba(255,130,30,0.18)'); eg2.addColorStop(1,'rgba(255,130,30,0)');
+      ctx.fillStyle=eg2; ctx.beginPath(); ctx.arc(ex+14,ey,20,0,6.28); ctx.fill();
+    });
+    // Windows
+    for(let i=0;i<10;i++){
+      ctx.fillStyle='rgba(160,215,255,0.72)';
+      ctx.fillRect(px+52+i*8,py-3,5,7);
+      ctx.fillStyle='rgba(255,255,255,0.25)';
+      ctx.fillRect(px+52+i*8,py-3,5,2.5);
+    }
+    // Airline stripe
+    ctx.fillStyle='rgba(0,40,130,0.60)'; ctx.fillRect(px+18,py+2,130,3.5);
+    // Nav lights
+    ctx.beginPath(); ctx.arc(px+50,py-40,2,0,6.28);
+    ctx.fillStyle=Math.sin(T*0.14)>0?'rgba(255,0,0,0.9)':'rgba(255,0,0,0.1)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(px+50,py+40,2,0,6.28);
+    ctx.fillStyle=Math.sin(T*0.14+3.14)>0?'rgba(0,255,0,0.9)':'rgba(0,255,0,0.1)'; ctx.fill();
+    ctx.restore();
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// HUD live updates
+setInterval(()=>{
+  const n=new Date();
+  const el=document.getElementById('sap-hud-time');
+  const fo=document.getElementById('sap-hud-fo');
+  const v=document.getElementById('sap-v');
+  const t2=document.getElementById('sap-t');
+  if(el) el.textContent=n.toUTCString().slice(5,11).toUpperCase()+' · '+n.toUTCString().slice(17,25)+' UTC';
+  if(fo) fo.textContent=(2800+Math.floor(Math.random()*120)).toLocaleString();
+  if(v)  v.textContent=(14200+Math.floor(Math.random()*200)).toLocaleString();
+  if(t2) t2.textContent=Math.round(880+Math.random()*30)+'K';
+},1300);
+
+} catch(e){ console.log('Cinematic v2 error:',e); }
+</script>
+
+<!-- ═══════════════════════ ENTERPRISE MAP + PARTICLES + KPI ═══════════════════════ -->
+<script>
+try {
+const ECT_ROUTES = [
+  {id:'FO-88210',from:[1.35,103.8],  to:[52.37,4.9],   mode:'sea',  label:'Singapore → Rotterdam',    status:'on-track',vessel:'MSC Gülsün'},
+  {id:'FO-88219',from:[31.2,121.4],  to:[33.9,-118.2], mode:'sea',  label:'Shanghai → Los Angeles',   status:'risk',    vessel:'CSCL Globe'},
+  {id:'FO-88231',from:[25.3,55.3],   to:[18.9,72.8],   mode:'sea',  label:'Dubai → Mumbai',           status:'on-track',vessel:'Maersk Elba'},
+  {id:'FO-88244',from:[52.5,13.4],   to:[55.7,37.6],   mode:'road', label:'Berlin → Moscow',          status:'risk',    vessel:'Truck Fleet 44'},
+  {id:'FO-88258',from:[35.6,139.6],  to:[37.5,126.9],  mode:'sea',  label:'Tokyo → Seoul',            status:'on-track',vessel:'MOL Triumph'},
+  {id:'FO-88267',from:[41.8,-87.6],  to:[43.6,-79.3],  mode:'road', label:'Chicago → Toronto',        status:'on-track',vessel:'Road Express 7'},
+  {id:'FO-88273',from:[49.0,2.55],   to:[40.6,-73.8],  mode:'air',  label:'Paris CDG → JFK',          status:'delay',   vessel:'Air France Cargo'},
+  {id:'FO-88281',from:[39.9,116.4],  to:[55.7,37.6],   mode:'rail', label:'Beijing → Moscow',         status:'on-track',vessel:'China Railway 88'},
+  {id:'FO-88295',from:[-33.9,151.1], to:[1.35,103.8],  mode:'air',  label:'Sydney → Singapore',       status:'on-track',vessel:'Qantas Freight'},
+  {id:'FO-88301',from:[13.1,80.2],   to:[1.35,103.8],  mode:'sea',  label:'Chennai → Singapore',      status:'on-track',vessel:'K Line Sunrise'},
+  {id:'FO-88312',from:[40.7,-74.0],  to:[52.37,4.9],   mode:'sea',  label:'New York → Rotterdam',     status:'risk',    vessel:'MSC Oscar'},
+  {id:'FO-88320',from:[55.7,37.6],   to:[52.5,13.4],   mode:'rail', label:'Moscow → Berlin',          status:'on-track',vessel:'Trans-Siberian Rail'},
+  {id:'FO-88334',from:[18.9,72.8],   to:[25.3,55.3],   mode:'air',  label:'Mumbai → Dubai',           status:'on-track',vessel:'IndiGo Cargo'},
+  {id:'FO-88341',from:[22.5,88.3],   to:[13.1,80.2],   mode:'rail', label:'Kolkata → Chennai',        status:'on-track',vessel:'Indian Railways'},
+  {id:'FO-88355',from:[37.8,-122.3], to:[41.8,-87.6],  mode:'road', label:'San Francisco → Chicago',  status:'delay',   vessel:'FedEx Ground'},
+];
+const ECT_MODE_COLOR={sea:'#00bfa5',air:'#aa77ff',road:'#ffab00',rail:'#00e676'};
+const ECT_MODE_SPEED={sea:0.0018,air:0.0048,road:0.0032,rail:0.0026};
+
+function hexToRgba(hex,a){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+let ectMapInited=false;
+function initECTMap(){
+  if(ectMapInited) return;
+  const mapEl=document.getElementById('ect-worldmap');
+  if(!mapEl||typeof L==='undefined') return;
+
+  // Set explicit height BEFORE init
+  mapEl.style.height='380px';
+  ectMapInited=true;
+
+  const map=L.map('ect-worldmap',{
+    center:[20,15],zoom:2,
+    zoomControl:true,attributionControl:false,
+    minZoom:1,maxZoom:6,
+    preferCanvas:true
+  });
+
+  // CartoDB dark tiles — no API key needed
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    subdomains:'abcd',maxZoom:6
+  }).addTo(map);
+
+  const pCanvas=document.getElementById('ect-particle-canvas');
+  function syncCanvas(){
+    const r=mapEl.getBoundingClientRect();
+    pCanvas.width=r.width; pCanvas.height=r.height;
+    pCanvas.style.width=r.width+'px'; pCanvas.style.height=r.height+'px';
+  }
+  syncCanvas();
+  map.on('moveend zoomend resize',syncCanvas);
+  setTimeout(syncCanvas,500);
+
+  const pCtx=pCanvas.getContext('2d');
+  const routeData=[];
+
+  ECT_ROUTES.forEach(r=>{
+    const isRisk=r.status==='risk'||r.status==='delay';
+    const col=isRisk?'#ff5252':ECT_MODE_COLOR[r.mode];
+    const pts=[];
+    const steps=60;
+    const [la1,ln1]=r.from, [la2,ln2]=r.to;
+    for(let i=0;i<=steps;i++){
+      const t=i/steps;
+      const lat=la1+(la2-la1)*t;
+      const lng=ln1+(ln2-ln1)*t;
+      const arc=Math.sin(t*Math.PI)*(Math.abs(la2-la1)*0.32+Math.abs(ln2-ln1)*0.10);
+      pts.push([lat+arc*(ln2>ln1?0.55:-0.55),lng]);
+    }
+    const line=L.polyline(pts,{
+      color:col, weight:isRisk?2.4:1.8,
+      opacity:isRisk?0.88:0.60,
+      dashArray:r.mode==='air'?'8,5':r.mode==='rail'?'4,4':null,
+      smoothFactor:2
+    }).addTo(map);
+    line.on('click',function(e){showECTPopup(r,e.originalEvent.clientX,e.originalEvent.clientY);});
+    line.on('mouseover',()=>line.setStyle({opacity:1,weight:3}));
+    line.on('mouseout',()=>line.setStyle({opacity:isRisk?0.88:0.60,weight:isRisk?2.4:1.8}));
+    [r.from,r.to].forEach((coord,ci)=>{
+      const sz=ci===0?9:7;
+      L.marker(coord,{icon:L.divIcon({
+        html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${col};border:1.5px solid rgba(255,255,255,0.7);box-shadow:0 0 8px ${col}${isRisk?';animation:ectPulse 1.4s ease-in-out infinite':''}"></div>`,
+        className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
+      })}).addTo(map);
+    });
+    const nPart=r.mode==='air'?6:r.mode==='rail'?5:4;
+    const parts=Array.from({length:nPart},(_,i)=>({t:i/nPart,spd:ECT_MODE_SPEED[r.mode]*(0.75+Math.random()*0.5),trail:[]}));
+    routeData.push({r,pts,parts,col,isRisk});
+  });
+
+  let pulseT=0;
+  function animPart(){
+    try{
+      pCtx.clearRect(0,0,pCanvas.width,pCanvas.height);
+      pulseT+=0.04;
+      routeData.forEach(({r,pts,parts,col,isRisk})=>{
+        const pa=isRisk?0.45+0.55*Math.abs(Math.sin(pulseT*2.5)):0.55+0.30*Math.sin(pulseT+pts[0][1]*0.08);
+        parts.forEach(p=>{
+          p.t=(p.t+p.spd)%1;
+          const ri=p.t*(pts.length-1), lo=Math.floor(ri), hi=Math.min(lo+1,pts.length-1);
+          const fr=ri-lo;
+          const lat=pts[lo][0]+(pts[hi][0]-pts[lo][0])*fr;
+          const lng=pts[lo][1]+(pts[hi][1]-pts[lo][1])*fr;
+          let sp;
+          try{sp=map.latLngToContainerPoint([lat,lng]);}catch(e){return;}
+          p.trail.push({x:sp.x,y:sp.y});
+          const tLen=r.mode==='air'?16:10;
+          if(p.trail.length>tLen) p.trail.shift();
+          if(p.trail.length>1){
+            for(let i=1;i<p.trail.length;i++){
+              pCtx.beginPath();
+              pCtx.moveTo(p.trail[i-1].x,p.trail[i-1].y);
+              pCtx.lineTo(p.trail[i].x,p.trail[i].y);
+              pCtx.strokeStyle=hexToRgba(col,(i/p.trail.length)*0.6*pa);
+              pCtx.lineWidth=r.mode==='air'?2:1.4; pCtx.stroke();
+            }
+          }
+          const dr=r.mode==='air'?3.5:2.5;
+          const grd=pCtx.createRadialGradient(sp.x,sp.y,0,sp.x,sp.y,dr*4);
+          grd.addColorStop(0,hexToRgba(col,0.95*pa));
+          grd.addColorStop(0.4,hexToRgba(col,0.45*pa));
+          grd.addColorStop(1,hexToRgba(col,0));
+          pCtx.beginPath(); pCtx.arc(sp.x,sp.y,dr*4,0,6.28); pCtx.fillStyle=grd; pCtx.fill();
+          pCtx.beginPath(); pCtx.arc(sp.x,sp.y,dr,0,6.28); pCtx.fillStyle=hexToRgba(col,pa); pCtx.fill();
+        });
+      });
+    }catch(e){}
+    requestAnimationFrame(animPart);
+  }
+  animPart();
+  map.invalidateSize();
+}
+
+function showECTPopup(r,cx,cy){
+  const p=document.getElementById('ect-popup'); if(!p) return;
+  const sc=r.status==='on-track'?'#00e676':r.status==='risk'?'#ff5252':'#ffab00';
+  const st=r.status==='on-track'?'On Track':r.status==='risk'?'Risk Alert':'Delayed';
+  const d=new Date(Date.now()+Math.floor(Math.random()*7)*86400000);
+  p.innerHTML=`<button class="ect-popup-close" onclick="document.getElementById('ect-popup').style.display='none'">×</button>
+    <div class="ect-popup-fo">${r.id}</div>
+    <div class="ect-popup-title">${r.label}</div>
+    <div class="ect-popup-row"><span class="ect-popup-key">Mode</span><span class="ect-popup-val" style="color:${ECT_MODE_COLOR[r.mode]}">${r.mode.toUpperCase()}</span></div>
+    <div class="ect-popup-row"><span class="ect-popup-key">Status</span><span class="ect-popup-val" style="color:${sc}">${st}</span></div>
+    <div class="ect-popup-row"><span class="ect-popup-key">Carrier</span><span class="ect-popup-val">${r.vessel}</span></div>
+    <div class="ect-popup-row"><span class="ect-popup-key">ETA</span><span class="ect-popup-val">${d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span></div>`;
+  p.style.display='block';
+  const vw=window.innerWidth,vh=window.innerHeight;
+  let left=cx+14,top=cy-10;
+  if(left+290>vw) left=cx-300;
+  if(top+180>vh)  top=cy-185;
+  p.style.left=left+'px'; p.style.top=top+'px';
+}
+
+// Live feed
+const FEED_MSGS=[
+  {route:'Singapore → Rotterdam',status:'on-track',mode:'sea'},
+  {route:'Shanghai → LA',status:'risk',mode:'sea'},
+  {route:'Dubai → Mumbai',status:'on-track',mode:'sea'},
+  {route:'Berlin → Moscow',status:'risk',mode:'road'},
+  {route:'Paris → New York',status:'delay',mode:'air'},
+  {route:'Beijing → Moscow Rail',status:'on-track',mode:'rail'},
+  {route:'Mumbai → Dubai',status:'on-track',mode:'air'},
+  {route:'Chicago → Toronto',status:'on-track',mode:'road'},
+  {route:'Chennai → Singapore',status:'on-track',mode:'sea'},
+  {route:'Sydney → Singapore',status:'on-track',mode:'air'},
+];
+let feedIdx=0;
+function pushFeed(){
+  const feed=document.getElementById('ect-feed'); if(!feed) return;
+  const item=FEED_MSGS[feedIdx%FEED_MSGS.length]; feedIdx++;
+  const id='FO-'+(88200+Math.floor(Math.random()*900));
+  const sc=item.status==='on-track'?'#00e676':item.status==='risk'?'#ff5252':'#ffab00';
+  const st=item.status==='on-track'?'● On Track':item.status==='risk'?'⚠ Risk Alert':'◆ Delayed';
+  const d=document.createElement('div');
+  d.className='ect-feed-item';
+  if(item.status==='risk'||item.status==='delay') d.style.borderColor='rgba(255,82,82,0.35)';
+  d.innerHTML=`<div class="ect-feed-fo">${id} · ${item.mode.toUpperCase()}</div>
+    <div class="ect-feed-route">${item.route}</div>
+    <div class="ect-feed-status" style="color:${sc}">${st}</div>`;
+  feed.insertBefore(d,feed.firstChild);
+  while(feed.children.length>8) feed.removeChild(feed.lastChild);
+}
+for(let i=0;i<5;i++) pushFeed();
+setInterval(pushFeed,4000);
+
+// Route stats
+function renderRouteStats(){
+  const el=document.getElementById('ect-route-stats'); if(!el) return;
+  ['sea','air','road','rail'].forEach(m=>{
+    const cnt=ECT_ROUTES.filter(r=>r.mode===m).length;
+    const d=document.createElement('div'); d.className='ect-stat-row';
+    d.innerHTML=`<span style="color:${ECT_MODE_COLOR[m]};font-weight:600;text-transform:capitalize">${m}</span><span style="color:#e8edf5;font-family:'Space Mono',monospace;font-size:11px">${cnt} routes</span>`;
+    el.appendChild(d);
+  });
+}
+renderRouteStats();
+
+// Sparklines
+function drawSparkline(id,data,color){
+  try{
+    const el=document.getElementById(id); if(!el) return;
+    const c=document.createElement('canvas');
+    c.width=60;c.height=34;c.style.cssText='width:60px;height:34px';
+    el.appendChild(c);
+    const cx=c.getContext('2d');
+    const mn=Math.min(...data),mx=Math.max(...data),rng=mx-mn||1;
+    cx.beginPath();
+    data.forEach((v,i)=>{
+      const x=(i/(data.length-1))*56+2, y=30-((v-mn)/rng)*26;
+      i===0?cx.moveTo(x,y):cx.lineTo(x,y);
+    });
+    cx.strokeStyle=color;cx.lineWidth=1.5;cx.stroke();
+    cx.lineTo(58,34);cx.lineTo(2,34);cx.closePath();
+    cx.fillStyle=hexToRgba(color,0.12);cx.fill();
+  }catch(e){}
+}
+const rnd=(b,r)=>Array.from({length:12},()=>Math.round(b+Math.random()*r-r/2));
+setTimeout(()=>{
+  drawSparkline('ect-spark-fo',  rnd(2847,300),'#00e5b0');
+  drawSparkline('ect-spark-on',  rnd(94,5),    '#00e676');
+  drawSparkline('ect-spark-delay',rnd(163,40), '#ffab00');
+  drawSparkline('ect-spark-risk',rnd(18,10),   '#ff5252');
+},400);
+
+// Live KPI
+let kpiD=163,kpiR=18,kpiFO=2847;
+setInterval(()=>{
+  kpiFO+=Math.floor(Math.random()*12-4);
+  kpiD+=Math.floor(Math.random()*6-3); kpiD=Math.max(100,Math.min(220,kpiD));
+  kpiR+=Math.floor(Math.random()*4-2); kpiR=Math.max(8,Math.min(35,kpiR));
+  const a=document.getElementById('ect-v-fo'),b=document.getElementById('ect-v-delay'),c2=document.getElementById('ect-v-risk');
+  if(a)a.textContent=kpiFO.toLocaleString();
+  if(b)b.textContent=kpiD;
+  if(c2)c2.textContent=kpiR;
+},2800);
+
+// Boot map: init when dashboard tab is active
+function tryECTBoot(){
+  const dash=document.getElementById('s-dashboard');
+  if(dash&&(dash.classList.contains('active')||getComputedStyle(dash).display!=='none')) initECTMap();
+}
+const _os=window.showSection;
+window.showSection=function(id){
+  if(_os) _os(id);
+  if(id==='dashboard') setTimeout(initECTMap,200);
+};
+window.addEventListener('load',()=>setTimeout(tryECTBoot,800));
+setTimeout(tryECTBoot,1200);
+
+} catch(e){ console.log('ECT error:',e); }
+</script>
+</body>
+</html>
+  const canvas = document.getElementById('sap-cinematic-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 900, H = 190;
+  canvas.width = W; canvas.height = H;
+  let T = 0;
+
+  // Stars
+  const stars = Array.from({length:160},()=>({
+    x:Math.random()*W, y:Math.random()*(H*0.55),
+    r:0.3+Math.random()*1.1, ph:Math.random()*Math.PI*2, sp:0.5+Math.random()*0.8
+  }));
+
+  // Buildings
+  const buildings = [];
+  for(let i=0;i<52;i++){
+    const x=Math.random()*W*1.3-W*0.15, w=7+Math.random()*26, h=18+Math.random()*70;
+    const depth=Math.random();
+    const col=depth>0.6?'#0c1e36':depth>0.3?'#081422':'#050e1a';
+    const wins=[];
+    const wr=Math.floor(h/10), wc=Math.floor(w/7);
+    for(let r=0;r<wr;r++) for(let c=0;c<wc;c++)
+      if(Math.random()>0.42) wins.push({r,c,lit:Math.random()>0.38,ph:Math.random()*Math.PI*2});
+    buildings.push({x,w,h,depth,col,wins,wr,wc,ant:Math.random()>0.6});
+  }
+  buildings.sort((a,b)=>a.depth-b.depth);
+
+  // Cranes
+  const cranes=[
+    {x:440,bY:152,h:82,jL:100,jR:36,ph:0,sp:0.38},
+    {x:580,bY:155,h:68,jL:84,jR:28,ph:1.8,sp:0.28},
+  ];
+
+  // Containers
+  const containers=[
+    {x:310,y:160,w:36,h:14,col:'#a02200'},{x:348,y:160,w:36,h:14,col:'#003a9e'},
+    {x:386,y:160,w:36,h:14,col:'#007028'},{x:310,y:146,w:36,h:14,col:'#003a9e'},
+    {x:348,y:146,w:36,h:14,col:'#a02200'},{x:310,y:132,w:36,h:14,col:'#007028'},
+    {x:480,y:160,w:36,h:14,col:'#b06000'},{x:518,y:160,w:36,h:14,col:'#a02200'},
+    {x:480,y:146,w:36,h:14,col:'#003a9e'},
+  ];
+
+  // Ships
+  const ships=[
+    {x:-320,y:126,sc:0.92,spd:0.25},
+    {x:720,y:133,sc:0.56,spd:0.16},
+  ];
+
+  // Trucks
+  const trucks=[
+    {x:-200,spd:1.4,lane:0,col:'#b01e10',col2:'#d83020',brand:'SAP LOGISTICS NETWORK'},
+    {x:-480,spd:0.98,lane:1,col:'#0d3878',col2:'#1650a8',brand:'MAERSK LINE'},
+    {x:-750,spd:0.76,lane:0,col:'#185218',col2:'#267826',brand:'DB SCHENKER'},
+  ];
+
+  // Plane
+  let planeX = W+80, planeY = 42;
+
+  // Foam particles
+  const foam=Array.from({length:55},()=>({
+    x:Math.random()*W, y:148+Math.random()*14,
+    vx:-0.18-Math.random()*0.25, life:Math.random(),
+    mL:0.4+Math.random()*0.55, r:0.4+Math.random()*1.3
+  }));
+
+  function drawSky(){
+    const g=ctx.createLinearGradient(0,0,0,H*0.62);
+    g.addColorStop(0,'#03060e'); g.addColorStop(0.45,'#08142a'); g.addColorStop(1,'#0c1e3c');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H*0.62);
+    const hg=ctx.createRadialGradient(W*0.72,H*0.6,0,W*0.72,H*0.6,W*0.42);
+    hg.addColorStop(0,'rgba(255,90,15,0.20)'); hg.addColorStop(0.45,'rgba(255,50,5,0.08)'); hg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=hg; ctx.fillRect(0,0,W,H*0.7);
+    const hl=ctx.createLinearGradient(0,0,W,0);
+    hl.addColorStop(0,'rgba(255,110,20,0)'); hl.addColorStop(0.58,'rgba(255,130,40,0.5)'); hl.addColorStop(1,'rgba(255,80,5,0)');
+    ctx.fillStyle=hl; ctx.fillRect(0,H*0.574,W,2);
+  }
+
+  function drawStars(){
+    stars.forEach(s=>{
+      const b=0.35+0.65*Math.sin(s.ph+T*s.sp*0.02);
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,220,255,${b*0.82})`; ctx.fill();
+    });
+    // Moon
+    const mx=105,my=35;
+    const mg=ctx.createRadialGradient(mx,my,0,mx,my,16);
+    mg.addColorStop(0,'rgba(238,228,196,1)'); mg.addColorStop(0.7,'rgba(208,196,160,1)'); mg.addColorStop(1,'rgba(160,148,110,0)');
+    ctx.beginPath(); ctx.arc(mx,my,14,0,Math.PI*2); ctx.fillStyle=mg; ctx.fill();
+    ctx.beginPath(); ctx.arc(mx+7,my-4,11,0,Math.PI*2); ctx.fillStyle='#05101e'; ctx.fill();
+    const mh=ctx.createRadialGradient(mx,my,12,mx,my,34);
+    mh.addColorStop(0,'rgba(200,188,138,0.10)'); mh.addColorStop(1,'rgba(200,188,138,0)');
+    ctx.beginPath(); ctx.arc(mx,my,34,0,Math.PI*2); ctx.fillStyle=mh; ctx.fill();
+  }
+
+  function drawBuildings(){
+    buildings.forEach(b=>{
+      const by=H*0.592-b.h;
+      ctx.fillStyle=b.col; ctx.fillRect(b.x,by,b.w,b.h);
+      b.wins.forEach(w=>{
+        if(!w.lit) return;
+        const fl=0.6+0.4*Math.sin(w.ph+T*0.008*(b.depth+0.5));
+        const wx=b.x+2+w.c*7, wy=by+3+w.r*10;
+        if(wx+4>b.x+b.w||wy+5>by+b.h) return;
+        ctx.fillStyle=`rgba(255,${165+Math.floor(w.r*8)},${55+Math.floor(w.c*4)},${fl*0.82})`;
+        ctx.fillRect(wx,wy,4,5);
+        const wg=ctx.createRadialGradient(wx+2,wy+2,0,wx+2,wy+2,7);
+        wg.addColorStop(0,`rgba(255,195,75,${fl*0.11})`); wg.addColorStop(1,'rgba(255,195,75,0)');
+        ctx.fillStyle=wg; ctx.fillRect(wx-5,wy-5,14,13);
+      });
+      if(b.ant){
+        ctx.strokeStyle='rgba(90,120,155,0.45)'; ctx.lineWidth=0.8;
+        ctx.beginPath(); ctx.moveTo(b.x+b.w/2,by); ctx.lineTo(b.x+b.w/2,by-11); ctx.stroke();
+        ctx.beginPath(); ctx.arc(b.x+b.w/2,by-11,1.4,0,Math.PI*2);
+        ctx.fillStyle=Math.sin(T*0.055)>0.8?'rgba(255,40,40,0.9)':'rgba(255,40,40,0.08)'; ctx.fill();
+      }
+    });
+    const refl=ctx.createLinearGradient(0,H*0.592,0,H*0.592+18);
+    refl.addColorStop(0,'rgba(8,16,34,0.65)'); refl.addColorStop(1,'rgba(8,16,34,0)');
+    ctx.fillStyle=refl; ctx.fillRect(0,H*0.592,W,18);
+  }
+
+  function drawSea(){
+    const sg=ctx.createLinearGradient(0,H*0.572,0,H*0.72);
+    sg.addColorStop(0,'#091c36'); sg.addColorStop(0.3,'#061220'); sg.addColorStop(1,'#030c18');
+    ctx.fillStyle=sg; ctx.fillRect(0,H*0.572,W,H*0.148);
+    const og=ctx.createLinearGradient(W*0.42,H*0.578,W*0.9,H*0.578);
+    og.addColorStop(0,'rgba(255,80,8,0)'); og.addColorStop(0.5,'rgba(255,80,8,0.09)'); og.addColorStop(1,'rgba(255,80,8,0)');
+    ctx.fillStyle=og; ctx.fillRect(W*0.3,H*0.572,W*0.7,H*0.07);
+    for(let i=0;i<7;i++){
+      const wy=H*0.592+i*7.5+Math.sin(T*0.03+i)*1.4;
+      ctx.beginPath(); ctx.moveTo(0,wy);
+      for(let x=0;x<=W;x+=4) ctx.lineTo(x,wy+Math.sin(x*0.014+T*0.04+i*0.5)*2.2);
+      ctx.strokeStyle=`rgba(90,170,255,${0.03+i*0.01})`; ctx.lineWidth=0.7; ctx.stroke();
+    }
+    foam.forEach(f=>{
+      f.x+=f.vx; f.y+=Math.sin(T*0.05+f.x*0.02)*0.035; f.life+=0.0035;
+      if(f.life>f.mL){f.life=0;f.x=Math.random()*W;f.y=H*0.592+Math.random()*16;}
+      const a=Math.sin(f.life/f.mL*Math.PI)*0.32;
+      ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(150,205,255,${a})`; ctx.fill();
+    });
+  }
+
+  function drawDock(){
+    ctx.fillStyle='#18130c'; ctx.fillRect(0,H*0.718,W,11);
+    ctx.fillStyle='#22180e'; ctx.fillRect(0,H*0.718,W,2);
+    for(let x=0;x<W;x+=34){
+      ctx.strokeStyle='rgba(0,0,0,0.38)'; ctx.lineWidth=0.5;
+      ctx.beginPath(); ctx.moveTo(x,H*0.718); ctx.lineTo(x,H*0.718+11); ctx.stroke();
+    }
+    [52,155,288,560].forEach(bx=>{
+      ctx.fillStyle='#2c2418';
+      ctx.beginPath(); ctx.ellipse(bx,H*0.718,5.5,2.8,0,0,Math.PI*2); ctx.fill();
+      ctx.fillRect(bx-4.5,H*0.718-5,9,6);
+      ctx.beginPath(); ctx.ellipse(bx,H*0.718-5,4.5,2.2,0,0,Math.PI*2); ctx.fillStyle='#3c3224'; ctx.fill();
+    });
+  }
+
+  function drawCranes(){
+    cranes.forEach(cr=>{
+      const ang=Math.sin(cr.ph+T*cr.sp*0.02)*0.055;
+      const bX=cr.x, bY=cr.bY;
+      ctx.strokeStyle='#b87808'; ctx.lineWidth=5.5;
+      [[bX-11,bY],[bX+11,bY]].forEach(([lx,ly])=>{
+        ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(lx,ly+38); ctx.stroke();
+      });
+      ctx.fillStyle='#c07808'; ctx.fillRect(bX-9,bY-cr.h,18,cr.h);
+      ctx.strokeStyle='#986005'; ctx.lineWidth=1;
+      for(let i=0;i<cr.h;i+=16){
+        ctx.beginPath(); ctx.moveTo(bX-9,bY-i); ctx.lineTo(bX+9,bY-i-16); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(bX+9,bY-i); ctx.lineTo(bX-9,bY-i-16); ctx.stroke();
+      }
+      ctx.save(); ctx.translate(bX,bY-cr.h); ctx.rotate(ang);
+      ctx.fillStyle='#d89a0c'; ctx.fillRect(-cr.jL,0,cr.jL+cr.jR,6);
+      const cX=-cr.jL*0.65, sw=Math.sin(cr.ph+T*0.016)*7;
+      ctx.strokeStyle='rgba(150,148,130,0.65)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(cX,6); ctx.lineTo(cX+sw,40); ctx.stroke();
+      ctx.fillStyle='#c02800'; ctx.fillRect(cX+sw-13,40,26,13);
+      ctx.fillStyle='rgba(255,255,255,0.07)'; ctx.fillRect(cX+sw-13,40,26,3);
+      ctx.fillStyle='#183888'; ctx.fillRect(-7,-13,24,14);
+      ctx.fillStyle='rgba(130,185,235,0.52)'; ctx.fillRect(-4,-10,18,9);
+      ctx.restore();
+    });
+  }
+
+  function drawContainers(){
+    containers.forEach(c=>{
+      ctx.fillStyle='rgba(0,0,0,0.3)'; ctx.fillRect(c.x+3,c.y+c.h,c.w-2,3);
+      ctx.fillStyle=c.col; ctx.fillRect(c.x,c.y,c.w,c.h);
+      ctx.fillStyle='rgba(255,255,255,0.06)'; ctx.fillRect(c.x,c.y,c.w,3);
+      ctx.strokeStyle='rgba(0,0,0,0.22)'; ctx.lineWidth=0.4;
+      [c.w/3,c.w*2/3].forEach(dx=>{
+        ctx.beginPath(); ctx.moveTo(c.x+dx,c.y); ctx.lineTo(c.x+dx,c.y+c.h); ctx.stroke();
+      });
+    });
+  }
+
+  function drawShip(sh){
+    const s=sh.sc, x=sh.x, y=sh.y;
+    const bob=Math.sin(T*0.02+sh.x*0.001)*1.1*s;
+    ctx.save(); ctx.translate(0,bob);
+    ctx.fillStyle='rgba(0,0,0,0.16)';
+    ctx.beginPath(); ctx.ellipse(x+188*s,y+20*s,190*s,7*s,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(x,y+11*s); ctx.lineTo(x+365*s,y+11*s);
+    ctx.lineTo(x+382*s,y+21*s); ctx.lineTo(x-8*s,y+21*s); ctx.closePath();
+    ctx.fillStyle='#1c2e4a'; ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(x-8*s,y+21*s); ctx.lineTo(x+382*s,y+21*s);
+    ctx.lineTo(x+376*s,y+30*s); ctx.lineTo(x+4*s,y+30*s); ctx.closePath();
+    ctx.fillStyle='#121e30'; ctx.fill();
+    ctx.fillStyle='rgba(150,18,0,0.82)'; ctx.fillRect(x+4*s,y+23*s,370*s,3.5*s);
+    ctx.fillStyle='#162638'; ctx.fillRect(x,y,365*s,13*s);
+    ctx.fillStyle='#142230'; ctx.fillRect(x+128*s,y-36*s,96*s,48*s);
+    ctx.fillStyle='#1a2c3e'; ctx.fillRect(x+140*s,y-52*s,72*s,20*s);
+    ctx.fillStyle='#20364e'; ctx.fillRect(x+150*s,y-65*s,52*s,17*s);
+    [[x+146*s,y-47*s],[x+162*s,y-47*s],[x+178*s,y-47*s],[x+194*s,y-47*s]].forEach(([wx,wy])=>{
+      ctx.fillStyle='rgba(150,205,255,0.10)'; ctx.fillRect(wx,wy,11*s,8*s);
+      ctx.fillStyle='rgba(148,215,255,0.52)'; ctx.fillRect(wx+1,wy+1,9*s,6*s);
+      const wg=ctx.createLinearGradient(wx,wy,wx,wy+8*s);
+      wg.addColorStop(0,'rgba(255,255,255,0.28)'); wg.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.fillStyle=wg; ctx.fillRect(wx,wy,11*s,4*s);
+    });
+    const dc=['#9c1e00','#00358a','#006620','#a85e00'];
+    for(let row=0;row<2;row++) for(let col=0;col<4;col++){
+      if(col>=2&&row===1) continue;
+      const cx=x+(24+col*38)*s, cy=y+(-11-row*13)*s;
+      ctx.fillStyle=dc[(row*2+col)%4]; ctx.fillRect(cx,cy,34*s,12*s);
+      ctx.fillStyle='rgba(255,255,255,0.05)'; ctx.fillRect(cx,cy,34*s,3*s);
+      ctx.strokeStyle='rgba(0,0,0,0.28)'; ctx.lineWidth=0.35; ctx.strokeRect(cx,cy,34*s,12*s);
+    }
+    for(let c=0;c<3;c++){
+      const cx=x+(252+c*38)*s, cy=y-11*s;
+      ctx.fillStyle=dc[c%4]; ctx.fillRect(cx,cy,34*s,12*s);
+      ctx.fillStyle='rgba(255,255,255,0.05)'; ctx.fillRect(cx,cy,34*s,3*s);
+    }
+    ctx.fillStyle='#0a1828'; ctx.fillRect(x+214*s,y-78*s,14*s,44*s);
+    ctx.fillStyle='rgba(195,155,0,0.68)'; ctx.fillRect(x+214*s,y-66*s,14*s,5*s);
+    ctx.fillStyle='#080e1a'; ctx.fillRect(x+211*s,y-80*s,20*s,5*s);
+    for(let i=0;i<4;i++){
+      const sp=(T*0.55+i*6.5)%36;
+      ctx.beginPath(); ctx.arc(x+221*s-sp*0.35,y-80*s-sp,(1.8+sp*0.1)*s,0,Math.PI*2);
+      ctx.fillStyle=`rgba(55,65,75,${0.22*(1-sp/36)})`; ctx.fill();
+    }
+    ctx.strokeStyle='rgba(72,105,135,0.55)'; ctx.lineWidth=1.4;
+    ctx.beginPath(); ctx.moveTo(x+162*s,y-65*s); ctx.lineTo(x+162*s,y-87*s); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x+162*s,y-87*s,1.8*s,0,Math.PI*2);
+    ctx.fillStyle=Math.sin(T*0.11)>0.5?'rgba(255,255,90,0.92)':'rgba(255,255,90,0.08)'; ctx.fill();
+    const wa=0.20*s;
+    for(let i=0;i<5;i++){
+      const wd=i*13*s;
+      ctx.beginPath(); ctx.moveTo(x+365*s+wd,y+21*s); ctx.lineTo(x+382*s+wd+9*s,y+15*s);
+      ctx.strokeStyle=`rgba(130,195,255,${wa*(1-i/5)})`; ctx.lineWidth=(1.8-i*0.18)*s; ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawTruck(tr){
+    const lY=[203,211];
+    const y=lY[tr.lane], x=tr.x;
+    ctx.save();
+    ctx.fillStyle='rgba(0,0,0,0.18)';
+    ctx.beginPath(); ctx.ellipse(x+86,y+9,104,4,0,0,Math.PI*2); ctx.fill();
+    // trailer
+    ctx.fillStyle='#242018'; ctx.fillRect(x,y-24,146,28);
+    const tg=ctx.createLinearGradient(x,y-24,x,y-16);
+    tg.addColorStop(0,'rgba(255,255,255,0.07)'); tg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=tg; ctx.fillRect(x,y-24,146,11);
+    ctx.strokeStyle='rgba(75,65,50,0.55)'; ctx.lineWidth=0.45;
+    [48,96].forEach(dx=>{ ctx.beginPath(); ctx.moveTo(x+dx,y-24); ctx.lineTo(x+dx,y+4); ctx.stroke(); });
+    ctx.strokeRect(x+1,y-23,144,27);
+    const sg=ctx.createLinearGradient(x,y-24,x,y+4);
+    sg.addColorStop(0,tr.col+'22'); sg.addColorStop(1,tr.col+'08');
+    ctx.fillStyle=sg; ctx.fillRect(x+3,y-16,140,7);
+    ctx.fillStyle='rgba(255,255,255,0.82)'; ctx.font='bold 5.5px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(tr.brand,x+73,y-11);
+    ctx.fillStyle='#181410'; ctx.fillRect(x+4,y+2,138,4);
+    ctx.fillStyle='#383020'; ctx.fillRect(x+144,y-12,8,6);
+    // cab
+    const cg=ctx.createLinearGradient(x+152,y-26,x+205,y-26);
+    cg.addColorStop(0,tr.col); cg.addColorStop(1,tr.col2);
+    ctx.fillStyle=cg;
+    ctx.beginPath();
+    ctx.moveTo(x+152,y-26); ctx.lineTo(x+200,y-26);
+    ctx.quadraticCurveTo(x+206,y-26,x+206,y-20);
+    ctx.lineTo(x+206,y+4); ctx.lineTo(x+152,y+4); ctx.closePath(); ctx.fill();
+    ctx.fillStyle=tr.col;
+    ctx.beginPath();
+    ctx.moveTo(x+152,y-26); ctx.quadraticCurveTo(x+168,y-34,x+204,y-30);
+    ctx.lineTo(x+206,y-26); ctx.lineTo(x+152,y-26); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='rgba(110,175,225,0.22)';
+    ctx.beginPath();
+    ctx.moveTo(x+168,y-25); ctx.lineTo(x+202,y-25);
+    ctx.lineTo(x+204,y-11); ctx.lineTo(x+166,y-11); ctx.closePath(); ctx.fill();
+    const wrf=ctx.createLinearGradient(x+168,y-25,x+188,y-11);
+    wrf.addColorStop(0,'rgba(255,255,255,0.14)'); wrf.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=wrf;
+    ctx.beginPath();
+    ctx.moveTo(x+168,y-25); ctx.lineTo(x+186,y-25);
+    ctx.lineTo(x+176,y-11); ctx.lineTo(x+166,y-11); ctx.closePath(); ctx.fill();
+    [[x+203,y-20],[x+203,y-9]].forEach(([hx,hy])=>{
+      const hg=ctx.createRadialGradient(hx,hy,0,hx,hy,10);
+      hg.addColorStop(0,'rgba(255,245,215,0.90)'); hg.addColorStop(0.3,'rgba(255,215,140,0.35)'); hg.addColorStop(1,'rgba(255,195,90,0)');
+      ctx.fillStyle=hg; ctx.fillRect(hx-10,hy-10,20,20);
+      ctx.beginPath(); ctx.arc(hx,hy,2.8,0,Math.PI*2); ctx.fillStyle='rgba(255,245,215,0.92)'; ctx.fill();
+    });
+    ctx.fillStyle='#303020'; ctx.fillRect(x+198,y-40,4.5,14);
+    for(let i=0;i<3;i++){
+      const sp=(T*1.1+i*4.5+tr.x*0.01)%26;
+      ctx.beginPath(); ctx.arc(x+200-sp*0.18,y-42-sp,1.4+sp*0.13,0,Math.PI*2);
+      ctx.fillStyle=`rgba(70,65,55,${0.28*(1-sp/26)})`; ctx.fill();
+    }
+    [x+15,x+43,x+112,x+130,x+160,x+182].forEach(wx=>{
+      const wr=8.5;
+      ctx.beginPath(); ctx.arc(wx,y+6,wr,0,Math.PI*2); ctx.fillStyle='#120e08'; ctx.fill();
+      ctx.beginPath(); ctx.arc(wx,y+6,wr-2.8,0,Math.PI*2); ctx.fillStyle='#363228'; ctx.fill();
+      for(let sp=0;sp<5;sp++){
+        const ang=(sp/5)*Math.PI*2+T*0.11;
+        ctx.strokeStyle='rgba(72,68,58,0.75)'; ctx.lineWidth=0.9;
+        ctx.beginPath(); ctx.moveTo(wx,y+6); ctx.lineTo(wx+Math.cos(ang)*(wr-3.2),y+6+Math.sin(ang)*(wr-3.2)); ctx.stroke();
+      }
+      ctx.beginPath(); ctx.arc(wx,y+6,1.8,0,Math.PI*2); ctx.fillStyle='#787060'; ctx.fill();
+    });
+    // headlight beam on wet road
+    const bg=ctx.createRadialGradient(x+206,y+6,0,x+240,y+28,70);
+    bg.addColorStop(0,'rgba(255,238,170,0.10)'); bg.addColorStop(1,'rgba(255,238,170,0)');
+    ctx.fillStyle=bg; ctx.fillRect(x+180,H*0.728,110,H*0.27);
+    ctx.restore();
+  }
+
+  function drawPlane(){
+    const x=planeX, y=planeY;
+    ctx.save();
+    for(let i=0;i<2;i++){
+      const tY=y+(i===0?-7:7);
+      const tg=ctx.createLinearGradient(x+55,tY,x+290,tY);
+      tg.addColorStop(0,'rgba(215,230,255,0.42)'); tg.addColorStop(0.4,'rgba(215,230,255,0.16)'); tg.addColorStop(1,'rgba(215,230,255,0)');
+      ctx.strokeStyle=tg; ctx.lineWidth=2.8;
+      ctx.beginPath(); ctx.moveTo(x+55,tY); ctx.lineTo(x+310,tY); ctx.stroke();
+    }
+    ctx.fillStyle='#e4e8f2';
+    ctx.beginPath();
+    ctx.moveTo(x+18,y-6); ctx.lineTo(x+124,y-6);
+    ctx.quadraticCurveTo(x+144,y-6,x+144,y);
+    ctx.quadraticCurveTo(x+144,y+6,x+124,y+6);
+    ctx.lineTo(x+18,y+6); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='rgba(0,0,0,0.08)';
+    ctx.beginPath(); ctx.moveTo(x+18,y+2); ctx.lineTo(x+124,y+2);
+    ctx.quadraticCurveTo(x+136,y+2,x+136,y+5); ctx.quadraticCurveTo(x+126,y+6,x+18,y+6); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#d4d8e8';
+    ctx.beginPath(); ctx.moveTo(x+66,y-5); ctx.lineTo(x+44,y-33); ctx.lineTo(x+106,y-3); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x+66,y+5); ctx.lineTo(x+44,y+33); ctx.lineTo(x+106,y+3); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#cacee0';
+    ctx.beginPath(); ctx.moveTo(x+20,y-5); ctx.lineTo(x+9,y-20); ctx.lineTo(x+34,y-5); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x+20,y+5); ctx.lineTo(x+9,y+20); ctx.lineTo(x+34,y+5); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x+13,y-5); ctx.lineTo(x+7,y-14); ctx.lineTo(x+27,y-5); ctx.closePath(); ctx.fill();
+    [[x+62,y-20],[x+62,y+20]].forEach(([ex,ey])=>{
+      ctx.fillStyle='#b0b4c4';
+      ctx.beginPath(); ctx.ellipse(ex,ey,14,4.5,0,0,Math.PI*2); ctx.fill();
+      const eg=ctx.createRadialGradient(ex+13,ey,0,ex+13,ey,5.5);
+      eg.addColorStop(0,'rgba(255,130,35,0.75)'); eg.addColorStop(1,'rgba(255,70,0,0)');
+      ctx.fillStyle=eg; ctx.beginPath(); ctx.arc(ex+13,ey,5.5,0,Math.PI*2); ctx.fill();
+    });
+    for(let i=0;i<9;i++){
+      ctx.fillStyle='rgba(148,205,255,0.68)';
+      ctx.fillRect(x+50+i*8,y-2,4.5,6);
+    }
+    ctx.fillStyle='rgba(0,36,112,0.52)'; ctx.fillRect(x+18,y+2,126,2.5);
+    ctx.restore();
+  }
+
+  function drawRoad(){
+    const rg=ctx.createLinearGradient(0,H*0.728,0,H);
+    rg.addColorStop(0,'#201c15'); rg.addColorStop(1,'#0c0a06');
+    ctx.fillStyle=rg; ctx.fillRect(0,H*0.728,W,H*0.272);
+    ctx.strokeStyle='rgba(255,255,255,0.10)'; ctx.lineWidth=0.9;
+    ctx.beginPath(); ctx.moveTo(0,H*0.73); ctx.lineTo(W,H*0.73); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,H-1); ctx.lineTo(W,H-1); ctx.stroke();
+    const dashOff=(T*26)%68;
+    ctx.strokeStyle='rgba(215,182,28,0.42)'; ctx.lineWidth=1.4;
+    ctx.setLineDash([34,34]); ctx.lineDashOffset=-dashOff;
+    ctx.beginPath(); ctx.moveTo(0,H*0.758); ctx.lineTo(W,H*0.758); ctx.stroke();
+    ctx.setLineDash([]);
+    const wetG=ctx.createLinearGradient(0,H*0.728,W,H*0.728);
+    wetG.addColorStop(0,'rgba(90,130,175,0)');
+    wetG.addColorStop(0.32,'rgba(90,130,175,0.04)');
+    wetG.addColorStop(0.68,'rgba(195,150,72,0.04)');
+    wetG.addColorStop(1,'rgba(90,130,175,0)');
+    ctx.fillStyle=wetG; ctx.fillRect(0,H*0.728,W,H*0.272);
+  }
+
+  function drawLamps(){
+    [195,435,672].forEach(px=>{
+      ctx.strokeStyle='rgba(80,72,58,0.68)'; ctx.lineWidth=2.8;
+      ctx.beginPath(); ctx.moveTo(px,H*0.728); ctx.lineTo(px,H*0.656); ctx.stroke();
+      ctx.strokeStyle='rgba(80,72,58,0.5)'; ctx.lineWidth=2.2;
+      ctx.beginPath(); ctx.moveTo(px,H*0.656); ctx.quadraticCurveTo(px,H*0.632,px+20,H*0.634); ctx.stroke();
+      const lg=ctx.createRadialGradient(px+20,H*0.634,0,px+20,H*0.634,28);
+      lg.addColorStop(0,'rgba(255,205,115,0.52)'); lg.addColorStop(0.3,'rgba(255,185,75,0.14)'); lg.addColorStop(1,'rgba(255,185,75,0)');
+      ctx.fillStyle=lg; ctx.fillRect(px-6,H*0.612,55,H*0.128);
+      ctx.beginPath(); ctx.arc(px+20,H*0.634,3.8,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,225,155,0.88)'; ctx.fill();
+      const poolG=ctx.createRadialGradient(px+20,H*0.728,0,px+20,H*0.75,38);
+      poolG.addColorStop(0,'rgba(255,195,95,0.07)'); poolG.addColorStop(1,'rgba(255,195,95,0)');
+      ctx.fillStyle=poolG; ctx.fillRect(px-14,H*0.728,74,H*0.12);
+    });
+  }
+
+  function frame(){
+    T++;
+    ctx.clearRect(0,0,W,H);
+    drawSky(); drawStars(); drawBuildings(); drawSea(); drawDock();
+    drawContainers(); drawCranes();
+    ships.forEach(sh=>{
+      sh.x-=sh.spd; if(sh.x<-400*sh.sc) sh.x=W+20;
+      drawShip(sh);
+    });
+    drawRoad(); drawLamps();
+    trucks.forEach(tr=>{
+      tr.x+=tr.spd; if(tr.x>W+32) tr.x=-240;
+      drawTruck(tr);
+    });
+    planeX-=1.35; if(planeX<-200) planeX=W+90;
+    drawPlane();
+    requestAnimationFrame(frame);
+  }
+  frame();
+
+  // HUD clock
+  setInterval(()=>{
+    const n=new Date();
+    const el=document.getElementById('sap-hud-time');
+    const fo=document.getElementById('sap-hud-fo');
+    if(el) el.textContent=n.toUTCString().slice(17,25)+' UTC';
+    if(fo) fo.textContent='FO: '+(2800+Math.floor(Math.random()*120)).toLocaleString()+' active';
+  },1200);
+})();
+} catch(e){ console.log('Cinematic scene error:',e); }
+</script>
+
+<!-- ═══════════════════════ ENTERPRISE MAP + PARTICLES + KPI ═══════════════════════ -->
+<script>
+try {
+// ─── ROUTES DATA ─────────────────────────────────────────────────────────────
+const ECT_ROUTES = [
+  {id:'FO-88210',from:[1.35,103.8],  to:[52.37,4.9],   mode:'sea',  label:'Singapore → Rotterdam',   status:'on-track', vessel:'MSC Gülsün'},
+  {id:'FO-88219',from:[31.2,121.4],  to:[33.9,-118.2], mode:'sea',  label:'Shanghai → Los Angeles',  status:'risk',     vessel:'CSCL Globe'},
+  {id:'FO-88231',from:[25.3,55.3],   to:[18.9,72.8],   mode:'sea',  label:'Dubai → Mumbai',          status:'on-track', vessel:'Maersk Elba'},
+  {id:'FO-88244',from:[52.5,13.4],   to:[55.7,37.6],   mode:'road', label:'Berlin → Moscow',         status:'risk',     vessel:'Truck Fleet 44'},
+  {id:'FO-88258',from:[35.6,139.6],  to:[37.5,126.9],  mode:'sea',  label:'Tokyo → Seoul',           status:'on-track', vessel:'MOL Triumph'},
+  {id:'FO-88267',from:[41.8,-87.6],  to:[43.6,-79.3],  mode:'road', label:'Chicago → Toronto',       status:'on-track', vessel:'Road Express 7'},
+  {id:'FO-88273',from:[49.0,2.55],   to:[40.6,-73.8],  mode:'air',  label:'Paris CDG → New York JFK',status:'delay',    vessel:'Air France Cargo'},
+  {id:'FO-88281',from:[39.9,116.4],  to:[55.7,37.6],   mode:'rail', label:'Beijing → Moscow (Silk Road)',status:'on-track',vessel:'China Railway 88'},
+  {id:'FO-88295',from:[-33.9,151.1], to:[1.35,103.8],  mode:'air',  label:'Sydney → Singapore',      status:'on-track', vessel:'Qantas Freight'},
+  {id:'FO-88301',from:[13.1,80.2],   to:[1.35,103.8],  mode:'sea',  label:'Chennai → Singapore',     status:'on-track', vessel:'K Line Sunrise'},
+  {id:'FO-88312',from:[40.7,-74.0],  to:[52.37,4.9],   mode:'sea',  label:'New York → Rotterdam',    status:'risk',     vessel:'MSC Oscar'},
+  {id:'FO-88320',from:[55.7,37.6],   to:[52.5,13.4],   mode:'rail', label:'Moscow → Berlin',         status:'on-track', vessel:'Trans-Siberian Rail'},
+  {id:'FO-88334',from:[18.9,72.8],   to:[25.3,55.3],   mode:'air',  label:'Mumbai → Dubai',          status:'on-track', vessel:'IndiGo Cargo'},
+  {id:'FO-88341',from:[22.5,88.3],   to:[13.1,80.2],   mode:'rail', label:'Kolkata → Chennai',       status:'on-track', vessel:'Indian Railways'},
+  {id:'FO-88355',from:[37.8,-122.3], to:[41.8,-87.6],  mode:'road', label:'San Francisco → Chicago', status:'delay',    vessel:'FedEx Ground'},
+];
+
+const ECT_MODE_COLOR = {sea:'#00bfa5',air:'#aa77ff',road:'#ffab00',rail:'#00e676'};
+const ECT_MODE_SPEED = {sea:0.0018,air:0.0045,road:0.0030,rail:0.0025};
+
+// ─── INIT MAP ─────────────────────────────────────────────────────────────────
+function initECTMap(){
+  const mapEl = document.getElementById('ect-worldmap');
+  if(!mapEl || typeof L === 'undefined') return;
+
+  const map = L.map('ect-worldmap', {
+    center:[20,20], zoom:2,
+    zoomControl:true, attributionControl:false,
+    minZoom:1, maxZoom:6
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:6, attribution:''
+  }).addTo(map);
+
+  // Canvas overlay for particles
+  const mapContainer = mapEl;
+  const particleCanvas = document.getElementById('ect-particle-canvas');
+
+  function syncCanvas(){
+    const rect = mapContainer.getBoundingClientRect();
+    particleCanvas.width  = rect.width;
+    particleCanvas.height = rect.height;
+    particleCanvas.style.width  = rect.width+'px';
+    particleCanvas.style.height = rect.height+'px';
+  }
+  syncCanvas();
+  map.on('moveend zoomend resize', syncCanvas);
+  setTimeout(syncCanvas, 400);
+
+  const pCtx = particleCanvas.getContext('2d');
+
+  // Build curved routes + particles
+  const routeLines = [];
+
+  ECT_ROUTES.forEach((r,idx)=>{
+    const isRisk = r.status==='risk';
+    const col = isRisk ? '#ff5252' : ECT_MODE_COLOR[r.mode];
+    const dashArr = r.mode==='air' ? [8,6] : r.mode==='rail' ? [5,5] : null;
+
+    // Interpolate curved path (great-circle-like arc via intermediate points)
+    const pts = [];
+    const steps = 40;
+    const [lat1,lng1] = r.from;
+    const [lat2,lng2] = r.to;
+    for(let i=0;i<=steps;i++){
+      const t = i/steps;
+      const lat = lat1 + (lat2-lat1)*t;
+      let lng = lng1 + (lng2-lng1)*t;
+      // sine-wave arc lift
+      const arc = Math.sin(t*Math.PI) * (Math.abs(lat2-lat1)*0.38 + Math.abs(lng2-lng1)*0.12);
+      const perpLat = lat + arc * (lng2>lng1 ? 0.5 : -0.5);
+      pts.push([perpLat, lng]);
+    }
+
+    const line = L.polyline(pts, {
+      color: col,
+      weight: isRisk ? 2.2 : 1.6,
+      opacity: isRisk ? 0.9 : 0.65,
+      dashArray: dashArr,
+      smoothFactor: 2
+    }).addTo(map);
+
+    // Click handler
+    line.on('click', function(e){
+      showECTPopup(r, e.originalEvent.clientX, e.originalEvent.clientY);
+    });
+    line.on('mouseover', function(){ line.setStyle({opacity:1,weight:isRisk?3.2:2.5}); });
+    line.on('mouseout',  function(){ line.setStyle({opacity:isRisk?0.9:0.65,weight:isRisk?2.2:1.6}); });
+
+    // Node markers
+    [r.from, r.to].forEach((coord,ci)=>{
+      const dotHtml = `<div style="width:${ci===0?10:8}px;height:${ci===0?10:8}px;border-radius:50%;
+        background:${col};border:2px solid ${ci===0?'#fff':'rgba(255,255,255,0.6)'};
+        box-shadow:0 0 ${isRisk?'10px':'7px'} ${col};
+        ${isRisk?'animation:ectPulse 1.4s ease-in-out infinite':''}"></div>`;
+      L.marker(coord, {
+        icon: L.divIcon({html:dotHtml, className:'', iconSize:[12,12], iconAnchor:[6,6]})
+      }).addTo(map);
+    });
+
+    // Particles for this route
+    const numParticles = r.mode==='air' ? 5 : r.mode==='rail' ? 4 : 3;
+    const particles = Array.from({length:numParticles},(_,i)=>({
+      t: i/numParticles,
+      spd: ECT_MODE_SPEED[r.mode] * (0.8+Math.random()*0.4),
+      trail: []
+    }));
+
+    routeLines.push({r, pts, particles, col, isRisk});
+  });
+
+  // ─── PARTICLE ANIMATION ────────────────────────────────────────────────────
+  let animFrame;
+  let pulseT = 0;
+
+  function animateParticles(){
+    try {
+      const rect = mapContainer.getBoundingClientRect();
+      pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+      pulseT += 0.04;
+
+      routeLines.forEach(({r, pts, particles, col, isRisk})=>{
+        const pulseAlpha = isRisk
+          ? 0.5 + 0.5*Math.sin(pulseT*2.2)
+          : 0.6 + 0.25*Math.sin(pulseT + pts[0][1]*0.1);
+
+        particles.forEach(p=>{
+          p.t += p.spd;
+          if(p.t >= 1) p.t -= 1;
+
+          // Interpolate position along pts
+          const rawIdx = p.t * (pts.length-1);
+          const lo = Math.floor(rawIdx), hi = Math.min(lo+1, pts.length-1);
+          const frac = rawIdx - lo;
+          const lat = pts[lo][0] + (pts[hi][0]-pts[lo][0])*frac;
+          const lng = pts[lo][1] + (pts[hi][1]-pts[lo][1])*frac;
+
+          const screenPt = map.latLngToContainerPoint([lat,lng]);
+          const sx = screenPt.x, sy = screenPt.y;
+
+          // Trail
+          p.trail.push({x:sx,y:sy});
+          if(p.trail.length > (r.mode==='air'?14:9)) p.trail.shift();
+
+          // Draw trail
+          if(p.trail.length>1){
+            for(let i=1;i<p.trail.length;i++){
+              const a=(i/p.trail.length)*0.55*pulseAlpha;
+              pCtx.beginPath();
+              pCtx.moveTo(p.trail[i-1].x, p.trail[i-1].y);
+              pCtx.lineTo(p.trail[i].x,   p.trail[i].y);
+              pCtx.strokeStyle = hexToRgba(col, a);
+              pCtx.lineWidth = r.mode==='air' ? 1.8 : 1.2;
+              pCtx.stroke();
+            }
+          }
+
+          // Particle dot
+          const dotR = r.mode==='air' ? 3 : 2.2;
+          const grd = pCtx.createRadialGradient(sx,sy,0,sx,sy,dotR*3.5);
+          grd.addColorStop(0, hexToRgba(col, 0.95*pulseAlpha));
+          grd.addColorStop(0.4, hexToRgba(col, 0.5*pulseAlpha));
+          grd.addColorStop(1, hexToRgba(col, 0));
+          pCtx.beginPath(); pCtx.arc(sx,sy,dotR*3.5,0,Math.PI*2);
+          pCtx.fillStyle=grd; pCtx.fill();
+          pCtx.beginPath(); pCtx.arc(sx,sy,dotR,0,Math.PI*2);
+          pCtx.fillStyle=hexToRgba(col, pulseAlpha); pCtx.fill();
+        });
+      });
+
+      animFrame = requestAnimationFrame(animateParticles);
+    } catch(err){ console.log('Particle error',err); }
+  }
+  animateParticles();
+  map.on('unload',()=>cancelAnimationFrame(animFrame));
+}
+
+function hexToRgba(hex,a){
+  const r=parseInt(hex.slice(1,3),16);
+  const g=parseInt(hex.slice(3,5),16);
+  const b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+// ─── POPUP ─────────────────────────────────────────────────────────────────
+function showECTPopup(r, cx, cy){
+  const popup = document.getElementById('ect-popup');
+  if(!popup) return;
+  const statusCol = r.status==='on-track'?'#00e676':r.status==='risk'?'#ff5252':'#ffab00';
+  const statusTxt = r.status==='on-track'?'On Track':r.status==='risk'?'Risk Alert':'Delayed';
+  popup.innerHTML = `
+    <button class="ect-popup-close" onclick="document.getElementById('ect-popup').style.display='none'">×</button>
+    <div class="ect-popup-fo">${r.id}</div>
+    <div class="ect-popup-title">${r.label}</div>
+    <div class="ect-popup-row"><span class="ect-popup-key">Mode</span><span class="ect-popup-val" style="color:${ECT_MODE_COLOR[r.mode]}">${r.mode.toUpperCase()}</span></div>
+    <div class="ect-popup-row"><span class="ect-popup-key">Status</span><span class="ect-popup-val" style="color:${statusCol}">${statusTxt}</span></div>
+    <div class="ect-popup-row"><span class="ect-popup-key">Carrier</span><span class="ect-popup-val">${r.vessel}</span></div>
+    <div class="ect-popup-row"><span class="ect-popup-key">ETA</span><span class="ect-popup-val">${getETA()}</span></div>`;
+  popup.style.display='block';
+  const vw=window.innerWidth, vh=window.innerHeight;
+  let left=cx+14, top=cy-10;
+  if(left+290>vw) left=cx-300;
+  if(top+180>vh) top=cy-180;
+  popup.style.left=left+'px'; popup.style.top=top+'px';
+}
+function getETA(){
+  const d=new Date(Date.now()+Math.floor(Math.random()*7*86400000));
+  return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+}
+
+// ─── LIVE FEED ──────────────────────────────────────────────────────────────
+const ECT_FEED_MSGS = [
+  {route:'Singapore → Rotterdam', status:'on-track', mode:'sea'},
+  {route:'Shanghai → Los Angeles', status:'risk', mode:'sea'},
+  {route:'Dubai → Mumbai', status:'on-track', mode:'sea'},
+  {route:'Berlin → Moscow', status:'risk', mode:'road'},
+  {route:'Paris CDG → New York', status:'delay', mode:'air'},
+  {route:'Beijing → Moscow Rail', status:'on-track', mode:'rail'},
+  {route:'Mumbai → Dubai', status:'on-track', mode:'air'},
+  {route:'Chicago → Toronto', status:'on-track', mode:'road'},
+];
+let feedIdx = 0;
+function pushFeedItem(){
+  const feed = document.getElementById('ect-feed');
+  if(!feed) return;
+  const item = ECT_FEED_MSGS[feedIdx % ECT_FEED_MSGS.length];
+  feedIdx++;
+  const id = 'FO-'+(88200+Math.floor(Math.random()*900));
+  const statusCol = item.status==='on-track'?'#00e676':item.status==='risk'?'#ff5252':'#ffab00';
+  const statusTxt = item.status==='on-track'?'● On Track':item.status==='risk'?'⚠ Risk Alert':'◆ Delayed';
+  const div = document.createElement('div');
+  div.className = 'ect-feed-item';
+  div.style.borderColor = item.status==='risk'?'rgba(255,82,82,0.35)':'';
+  div.innerHTML = `
+    <div class="ect-feed-fo">${id} · ${item.mode.toUpperCase()}</div>
+    <div class="ect-feed-route">${item.route}</div>
+    <div class="ect-feed-status" style="color:${statusCol}">${statusTxt}</div>`;
+  feed.insertBefore(div, feed.firstChild);
+  while(feed.children.length > 8) feed.removeChild(feed.lastChild);
+}
+for(let i=0;i<5;i++) pushFeedItem();
+setInterval(pushFeedItem, 4200);
+
+// ─── ROUTE STATS ────────────────────────────────────────────────────────────
+function renderRouteStats(){
+  const el = document.getElementById('ect-route-stats');
+  if(!el) return;
+  const modes = ['sea','air','road','rail'];
+  el.innerHTML = modes.map(m=>{
+    const cnt = ECT_ROUTES.filter(r=>r.mode===m).length;
+    const col = ECT_MODE_COLOR[m];
+    return `<div class="ect-stat-row">
+      <span style="color:${col};font-weight:600;text-transform:capitalize">${m}</span>
+      <span style="color:#e8edf5;font-family:'Space Mono',monospace;font-size:11px">${cnt} routes</span>
+    </div>`;
+  }).join('');
+}
+renderRouteStats();
+
+// ─── SPARKLINES ────────────────────────────────────────────────────────────
+function drawSparkline(canvasId, data, color){
+  try {
+    const el = document.getElementById(canvasId);
+    if(!el) return;
+    const c = document.createElement('canvas');
+    c.width=60; c.height=34; c.style.cssText='width:60px;height:34px';
+    el.appendChild(c);
+    const cx = c.getContext('2d');
+    const mn=Math.min(...data), mx2=Math.max(...data), rng=mx2-mn||1;
+    cx.beginPath();
+    data.forEach((v,i)=>{
+      const x=(i/(data.length-1))*56+2;
+      const y=30-(((v-mn)/rng)*26);
+      i===0?cx.moveTo(x,y):cx.lineTo(x,y);
+    });
+    cx.strokeStyle=color; cx.lineWidth=1.5; cx.stroke();
+    cx.lineTo(58,34); cx.lineTo(2,34); cx.closePath();
+    cx.fillStyle=color.replace(')',',0.12)').replace('rgb','rgba').replace('#',color.length===7?'rgba('+parseInt(color.slice(1,3),16)+','+parseInt(color.slice(3,5),16)+','+parseInt(color.slice(5,7),16)+',':''); 
+    try{cx.fillStyle=hexToRgba(color,0.12);cx.fill();}catch(e){}
+  } catch(e){}
+}
+const rnd=(base,range)=>Array.from({length:12},()=>Math.round(base+Math.random()*range-range/2));
+setTimeout(()=>{
+  drawSparkline('ect-spark-fo',   rnd(2847,300), '#00e5b0');
+  drawSparkline('ect-spark-on',   rnd(94,5),     '#00e676');
+  drawSparkline('ect-spark-delay',rnd(163,40),   '#ffab00');
+  drawSparkline('ect-spark-risk', rnd(18,10),    '#ff5252');
+},300);
+
+// ─── LIVE KPI UPDATES ───────────────────────────────────────────────────────
+let kpiDelay=163, kpiRisk=18, kpiFO=2847;
+setInterval(()=>{
+  kpiFO   += Math.floor(Math.random()*12-4);
+  kpiDelay += Math.floor(Math.random()*6-3);
+  kpiRisk  += Math.floor(Math.random()*4-2);
+  kpiDelay = Math.max(100,Math.min(220,kpiDelay));
+  kpiRisk  = Math.max(8,Math.min(35,kpiRisk));
+  const foEl=document.getElementById('ect-v-fo');
+  const dEl=document.getElementById('ect-v-delay');
+  const rEl=document.getElementById('ect-v-risk');
+  if(foEl) foEl.textContent=kpiFO.toLocaleString();
+  if(dEl)  dEl.textContent=kpiDelay;
+  if(rEl)  rEl.textContent=kpiRisk;
+}, 2800);
+
+// ─── BOOT ─────────────────────────────────────────────────────────────────
+// Only init when dashboard is visible
+function tryInitMap(){
+  const dash = document.getElementById('s-dashboard');
+  if(dash && dash.classList.contains('active')){
+    initECTMap();
+  }
+}
+// Hook into existing showSection if possible
+const _origShowSection = window.showSection;
+window.showSection = function(id){
+  if(_origShowSection) _origShowSection(id);
+  if(id==='dashboard'){
+    setTimeout(()=>{
+      const mapEl=document.getElementById('ect-worldmap');
+      if(mapEl && !mapEl._leaflet_id) initECTMap();
+    },150);
+  }
+};
+// Auto-init on load
+window.addEventListener('load',()=>{ setTimeout(tryInitMap,600); });
+
+} catch(e){ console.log('Enterprise dashboard error:',e); }
 </script>
 </body>
 </html>
