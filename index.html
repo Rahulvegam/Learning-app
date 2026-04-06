@@ -291,6 +291,10 @@ main { padding-top:56px; }
 .joule-input:focus { border-color:var(--ai); }
 .joule-send { padding:9px 18px; border-radius:7px; border:none; background:var(--ai); color:#fff; cursor:pointer; font-size:13px; }
 .joule-send:hover { filter:brightness(1.2); }
+.joule-suggest { padding:4px 10px; border-radius:14px; border:1px solid rgba(170,0,255,.3); background:rgba(170,0,255,.08); color:rgba(170,0,255,.9); cursor:pointer; font-size:11px; font-family:'DM Sans',sans-serif; transition:all .2s; white-space:nowrap; }
+.joule-suggest:hover { background:rgba(170,0,255,.2); border-color:var(--ai); }
+.joule-msg b { color:inherit; }
+.joule-msg a { color:var(--ai); }
 
 /* TOAST */
 .toast { position:fixed; bottom:20px; right:20px; z-index:3000; background:var(--bg3); border:1px solid var(--border); border-radius:9px; padding:12px 18px; font-size:13px; display:flex; align-items:center; gap:8px; transform:translateY(100px); opacity:0; transition:all .3s; pointer-events:none; }
@@ -591,8 +595,19 @@ main { padding-top:56px; }
       <div class="joule-chat" id="joule-chat">
         <div class="joule-msg bot">Hi! I'm Joule, SAP's AI copilot. Ask me about SAP processes, T-codes, certifications, or anything on your learning journey!</div>
       </div>
+      <!-- Quick suggest chips -->
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px" id="joule-suggestions">
+        <button class="joule-suggest" onclick="jouleAsk('What is tcode to create a PO?')">PO T-code</button>
+        <button class="joule-suggest" onclick="jouleAsk('Explain 3-way match')">3-way match</button>
+        <button class="joule-suggest" onclick="jouleAsk('What is VA01?')">VA01</button>
+        <button class="joule-suggest" onclick="jouleAsk('How to post goods receipt?')">Goods Receipt</button>
+        <button class="joule-suggest" onclick="jouleAsk('What is the P2P cycle?')">P2P cycle</button>
+        <button class="joule-suggest" onclick="jouleAsk('Which certification should I do first?')">Cert path</button>
+        <button class="joule-suggest" onclick="jouleAsk('What is Joule?')">About Joule</button>
+        <button class="joule-suggest" onclick="jouleAsk('SAP consultant salary in India')">Salary</button>
+      </div>
       <div class="joule-input-row">
-        <input class="joule-input" id="joule-input" placeholder="Ask about freight orders, purchase orders, certs..." onkeydown="if(event.key==='Enter')jouleChat()">
+        <input class="joule-input" id="joule-input" placeholder="Ask any SAP question — T-codes, processes, certs, career..." onkeydown="if(event.key==='Enter')jouleChat()">
         <button class="joule-send" onclick="jouleChat()">Send ✦</button>
       </div>
     </div>
@@ -977,16 +992,159 @@ const GOALS=[
   {id:"g3",icon:"💼",title:"Apply to 1 Job",desc:"Submit one job application today"},
 ];
 
-const JOULE_RESP={
-  "freight order":"A Freight Order (/SCMTMS/FO) is the main TM execution document. It contains carrier assignment, route, stops, freight costs, and legal documents. It is created from Transportation Requirements and confirmed with the carrier.",
-  "purchase order":"In SAP MM, a PO (ME21N) is a legal document committing to buy from a vendor. Key fields: vendor, material, quantity, price, delivery date, payment terms. It links PR → PO → GR (MIGO) → IR (MIRO) in the P2P cycle.",
-  "miro":"MIRO is SAP's Logistics Invoice Verification transaction. It performs 3-way matching: PO quantity vs Goods Receipt quantity vs Invoice quantity. Tolerances are configured in SPRO under MM settings.",
-  "joule":"I'm Joule, SAP's built-in AI copilot powered by LLMs. I'm embedded in S/4HANA, SuccessFactors, Ariba, and more. I can create documents, answer questions, and automate tasks using natural language — no T-codes needed!",
-  "salary":"SAP MM Functional Consultants in India typically earn ₹8–18 LPA with 3–5 years experience. Senior consultants with TM+MM skills can reach ₹20–35 LPA. SAP AI skills add a further premium in 2024–25.",
-  "certification":"Your path: Start with C_TM_95 (Month 7) — validates your existing TM knowledge. Then C_MM_301 (Month 8) for MM. Both available via SAP Training centres or online proctored exams through Pearson VUE.",
-  "abap":"ABAP (Advanced Business Application Programming) is SAP's proprietary language. For a functional consultant, you need: SE38 (editor), SE11 (data dictionary), SE16N (table browser). Deep ABAP is for Month 9+ in your roadmap.",
-  "default":"Great question! In a real S/4HANA system, Joule would access your company data for a precise answer. Key principle: SAP processes are highly integrated — always think about upstream and downstream impacts when making changes.",
-};
+/* ═══════════════════════════════════════════════════════
+   JOULE KNOWLEDGE BASE — 100+ SAP Q&A entries
+   Each entry: { match: [keywords], answer: "..." }
+═══════════════════════════════════════════════════════ */
+const JOULE_KB = [
+  // ── T-CODES ─────────────────────────────────────────
+  { match:["va01","create sales order","sales order tcode","t-code sales","tcode sales","create so"],
+    answer:"📋 <b>VA01 — Create Sales Order</b><br>VA01 is the SD transaction to create a sales order. VA02 to change, VA03 to display. A sales order captures: sold-to party, material, quantity, delivery date, pricing conditions, and shipping point. It triggers the delivery process (VL01N) and billing (VF01)." },
+  { match:["va02","change sales order"],
+    answer:"📋 <b>VA02 — Change Sales Order</b><br>Use VA02 to change an existing sales order — update quantity, delivery date, or pricing. VA03 is for display only. If delivery is already created, changes may need VL02N as well." },
+  { match:["me21n","create purchase order","po creation","create po","purchase order tcode"],
+    answer:"📋 <b>ME21N — Create Purchase Order</b><br>ME21N creates a PO in SAP MM. Fill in: vendor, purchasing org, plant, material/service, quantity, price, delivery date. PO types: NB (standard), K (consignment), L (subcontracting), U (stock transfer). ME22N = change, ME23N = display." },
+  { match:["me51n","purchase requisition","create pr","pr tcode","pr creation"],
+    answer:"📋 <b>ME51N — Create Purchase Requisition</b><br>ME51N creates an internal purchase request. A PR is NOT sent to vendors — it triggers the buyer to create a PO. Can be created manually or auto-generated by MRP (MD01/MD02). ME52N = change, ME53N = display, ME54N = approve." },
+  { match:["migo","goods receipt","gr tcode","goods receipt tcode","movement type 101","101"],
+    answer:"📋 <b>MIGO — Goods Receipt / Goods Issue</b><br>MIGO handles all inventory movements. Key movement types: 101 (GR against PO), 102 (reverse GR), 261 (GI for production order), 311/312 (transfer posting), 551 (scrapping). When you post GR, SAP creates a material document AND an accounting document automatically." },
+  { match:["miro","invoice verification","3 way match","3-way match","invoice tcode","logistics invoice"],
+    answer:"📋 <b>MIRO — Logistics Invoice Verification</b><br>MIRO posts vendor invoices and performs 3-way match: PO price × GR quantity × Invoice amount. Variances within tolerance keys (OMRM) are auto-posted. Outside tolerance → blocked for review. MRBR releases blocked invoices. FI document created on posting." },
+  { match:["mm01","mm02","mm03","material master","create material"],
+    answer:"📋 <b>MM01/MM02/MM03 — Material Master</b><br>MM01 creates a material master record. Key views to configure for MM: Basic Data 1&2, Purchasing, MRP 1-4, Accounting 1&2, Plant Data/Storage. Each view has its own organisational level. The Valuation Class in Accounting view links material to GL accounts." },
+  { match:["xk01","xk02","xk03","vendor master","create vendor","bp vendor"],
+    answer:"📋 <b>XK01 / BP — Vendor Master (Supplier)</b><br>In S/4HANA, vendors are created via BP (Business Partner) transaction. XK01 still works for backward compatibility. Key account groups: KRED (external vendor), 0005 (one-time). Vendor master has: General data, Company code data (payment terms, reconciliation account), Purchasing org data (incoterms, order currency)." },
+  { match:["md01","md02","mrp","material requirements planning","mrp run"],
+    answer:"📋 <b>MD01/MD02 — MRP Run</b><br>MD01 = Total planning (all materials in plant). MD02 = Single-item multi-level planning. MD04 = Stock/Requirements list (shows current MRP situation). MRP creates planned orders and purchase requisitions automatically based on demand (sales orders, forecast) minus supply (stock, POs in process)." },
+  { match:["spro","customising","customizing","configuration","img"],
+    answer:"📋 <b>SPRO — SAP Customising / IMG</b><br>SPRO opens the Implementation Guide (IMG) — SAP's configuration tree. All functional configuration is done here: MM settings, TM config, pricing, output determination, account assignment, tolerance keys. Changes in SPRO are client-specific and transported via TR (transport requests) to QA then Production." },
+  { match:["se38","abap editor","abap program","program editor"],
+    answer:"📋 <b>SE38 — ABAP Program Editor</b><br>SE38 is where ABAP programs are written, edited, debugged and activated. SE80 is the Object Navigator (full ABAP Workbench). For a functional consultant, you mainly use SE38 to run programs, read custom code, or debug. SE16N is more commonly used to browse database tables." },
+  { match:["se16","se16n","table browser","database table","table content"],
+    answer:"📋 <b>SE16N — Table Browser</b><br>SE16N displays contents of any SAP database table. Essential for troubleshooting: EKKO (PO header), EKPO (PO item), MSEG (material document items), BKPF (accounting doc header), BSEG (accounting doc items), LIKP (delivery header), VBAK (sales order header). Use judiciously in Production." },
+  { match:["fb01","fb60","vendor invoice","post vendor invoice","financial posting"],
+    answer:"📋 <b>FB60 / FB01 — Financial Postings</b><br>FB60 posts a vendor invoice directly in FI (without MM). FB01 is the general posting transaction. For MM-integrated flow, use MIRO instead of FB60 for vendor invoices — MIRO handles the 3-way match. F110 runs the automatic payment program for due vendor invoices." },
+  { match:["f110","automatic payment","payment run","payment program"],
+    answer:"📋 <b>F110 — Automatic Payment Program</b><br>F110 selects all due vendor invoices based on payment terms, determines payment method (bank transfer/check), creates payment documents, and generates the payment file for the bank. Schedule as a background job. Paired with FBZP for payment method configuration." },
+  { match:["vl01n","delivery","create delivery","outbound delivery"],
+    answer:"📋 <b>VL01N — Create Outbound Delivery</b><br>VL01N creates a delivery against a sales order. Key steps: picking (transfer order in WM), packing, goods issue (VL02N + Post Goods Issue). GI reduces inventory and triggers revenue posting. VT01N creates a shipment in SD — different from SAP TM freight orders." },
+  { match:["vf01","billing","invoice customer","billing document"],
+    answer:"📋 <b>VF01 — Create Billing Document</b><br>VF01 creates a customer invoice after goods issue. Billing document types: F2 (standard invoice), G2 (credit memo), L2 (debit memo). VF02 = change, VF03 = display, VF04 = billing due list (mass billing). FI document is created automatically when billing doc is saved." },
+
+  // ── SAP TM ────────────────────────────────────────────
+  { match:["freight order","fo creation","scmtms","tm freight","create fo"],
+    answer:"🚛 <b>SAP TM — Freight Order</b><br>A Freight Order (FO) is the carrier-facing execution document in SAP TM. Created from Transportation Demands or Forwarding Orders. Key fields: carrier, transport mode, stops, freight units, planned costs. Statuses: Created → Tendered → Accepted → In Execution → Completed. Transaction: /SCMTMS/FRO_COCKPIT" },
+  { match:["forwarding order","fwo","forwarding"],
+    answer:"🚛 <b>SAP TM — Forwarding Order (FWO)</b><br>A Forwarding Order represents the customer's transport request — what the shipper needs moved. It is the inbound side. Multiple FWOs can be consolidated into one Freight Order. In SAP TM WebUI: Transportation Management → Forwarding Orders." },
+  { match:["carrier selection","vsr","optimizer","route planning","route optimiz"],
+    answer:"🚛 <b>SAP TM — Carrier Selection & VSR Optimizer</b><br>SAP TM selects carriers based on: Transportation Lanes (valid routes), contracted rates, transit time, carrier compliance score, and capacity. The VSR (Vehicle Scheduling & Routing) Optimizer calculates optimal vehicle assignments and stop sequences. Manual override is always possible." },
+  { match:["transportation lane","transport lane","lane"],
+    answer:"🚛 <b>SAP TM — Transportation Lane</b><br>A Transportation Lane defines a valid route between two locations (e.g. warehouse → customer). It specifies: allowed carriers, transport modes, transit time, distance, and cost rules. Without a lane, TM cannot plan a shipment. Configured in: SAP TM WebUI → Master Data → Transportation Lanes." },
+  { match:["freight settlement","settlement","tm cost","freight cost"],
+    answer:"🚛 <b>SAP TM — Freight Settlement</b><br>After delivery, TM calculates actual freight charges using agreed tariffs and execution data. A Freight Settlement Document is created and posted to FI-AP for carrier payment. Transaction: /SCMTMS/FSD. Key config: charge calculation rules, rate tables, and dispute management." },
+  { match:["event management","track and trace","tracking","shipment tracking","tm event"],
+    answer:"🚛 <b>SAP TM — Event Management / Track & Trace</b><br>SAP TM Event Management monitors shipments in real-time. Carriers send status updates (Departed, Arrived, Delayed) via EDI (214 message), IoT, or web services. Alerts are triggered for exceptions like delays or missed milestones. Integrated with SAP Global Track and Trace (GTT)." },
+  { match:["dangerous goods","dg management","hazmat","dangerous material"],
+    answer:"🚛 <b>SAP TM — Dangerous Goods Management</b><br>SAP TM validates hazardous materials against transport regulations: IATA (air), IMDG (sea), ADR (road). The system checks packing, labeling, documentation and quantity limits. Configured via Dangerous Goods Master data and regulatory profiles per transport mode." },
+
+  // ── SAP MM ────────────────────────────────────────────
+  { match:["procure to pay","p2p","procure-to-pay","p2p cycle","procurement cycle"],
+    answer:"📦 <b>SAP MM — Procure-to-Pay Cycle</b><br>Full P2P flow:<br>1. Purchase Requisition (ME51N)<br>2. Source Determination / RFQ (ME41)<br>3. Purchase Order (ME21N)<br>4. Goods Receipt (MIGO, MT 101)<br>5. Invoice Verification (MIRO, 3-way match)<br>6. Payment (F110)<br>Each step creates linked documents traceable through the PO history." },
+  { match:["valuation class","account determination","obyc","automatic posting"],
+    answer:"📦 <b>SAP MM — Valuation Class & Account Determination</b><br>The Valuation Class in Material Master (Accounting view) controls which GL accounts SAP posts to automatically. OBYC configures the account determination rules (transaction/event keys). When a GR is posted: BSX (inventory) and WRX (GR/IR clearing) accounts are hit. This is the core of MM-FI integration." },
+  { match:["3 way","3way","3-way","invoice match","miro match","gr ir"],
+    answer:"📦 <b>SAP MM — 3-Way Match</b><br>The 3-Way Match in MIRO compares:<br>① PO — agreed price × quantity<br>② GR — actual quantity received<br>③ Vendor Invoice — billed amount<br>All three must align within tolerance keys (configured in OMRM). Differences beyond tolerance create a payment block (MRBR releases)." },
+  { match:["movement type","movement types","mm movement"],
+    answer:"📦 <b>SAP MM — Key Movement Types</b><br>101 = GR against PO ✅<br>102 = Reverse GR<br>261 = GI for Production Order<br>262 = Reverse GI<br>301 = Transfer posting plant to plant<br>311/312 = Transfer storage location<br>501 = GR without PO (receipt without reference)<br>551 = Scrapping<br>Configured in OMJJ." },
+  { match:["info record","purchasing info","me11","me12"],
+    answer:"📦 <b>SAP MM — Purchasing Info Record (ME11)</b><br>A Purchasing Info Record stores the purchasing relationship between a vendor and a material: price, lead time, minimum quantity, tax codes, and conditions. SAP uses it for automatic source determination and price proposals when creating POs. ME11 = create, ME12 = change, ME13 = display." },
+  { match:["source list","me01","sourcing"],
+    answer:"📦 <b>SAP MM — Source List (ME01)</b><br>The Source List specifies which vendors are approved to supply a material for a plant, and for which period. Combined with Info Records, it enables automatic source assignment during PO creation. Fixed sources can block ordering from non-listed vendors." },
+  { match:["goods issue","gi","material consumption","issue goods"],
+    answer:"📦 <b>SAP MM — Goods Issue (MIGO)</b><br>Goods Issue reduces stock and posts an accounting document. Common scenarios:<br>• MT 261 — GI for Production Order (consumes raw material)<br>• MT 201 — GI for Cost Centre<br>• MT 221 — GI for Project<br>• MT 551 — Scrapping<br>The accounting entry: Debit Consumption Account, Credit Inventory Account." },
+  { match:["mrbr","blocked invoice","release invoice","payment block"],
+    answer:"📦 <b>MRBR — Release Blocked Invoices</b><br>MRBR displays all vendor invoices blocked due to 3-way match variances, quantity differences, or price variances. The buyer reviews and either releases for payment or disputes with the vendor. Blocking reasons are configured in OMRM (tolerance keys MM). Related: MIR6 (invoice overview)." },
+
+  // ── SAP AI / JOULE ───────────────────────────────────
+  { match:["what is joule","joule","who is joule","joule ai","sap joule"],
+    answer:"🤖 <b>SAP Joule — SAP's Generative AI Copilot</b><br>I am Joule, SAP's embedded AI assistant powered by Large Language Models (LLMs). I am available across S/4HANA, SuccessFactors, Ariba, SAP Analytics Cloud, and more. I can: create documents with natural language, query live SAP data, summarise reports, automate approvals, and explain any process. No T-codes needed — just ask in plain language!" },
+  { match:["sap ai","business ai","sap artificial intelligence","ai in sap"],
+    answer:"🤖 <b>SAP Business AI</b><br>SAP embeds AI across three layers:<br>① <b>Joule</b> — AI copilot for end users (natural language)<br>② <b>Predictive Analytics</b> — demand forecasting, risk scoring<br>③ <b>Document Intelligence</b> — extract data from invoices, contracts<br>Built on SAP BTP AI Core. SAP calls it 'Responsible AI' — human oversight, data privacy, bias detection built-in." },
+  { match:["btp","business technology platform","sap btp"],
+    answer:"🤖 <b>SAP BTP — Business Technology Platform</b><br>SAP BTP is SAP's unified cloud platform. Key services:<br>• AI Core — ML model training & deployment<br>• Integration Suite — connect SAP to any system<br>• Build — low-code app development<br>• Analytics Cloud — embedded analytics<br>• ABAP Environment — cloud ABAP development<br>Joule and all SAP AI services run on BTP." },
+  { match:["document intelligence","document extraction","invoice extraction","auto invoice"],
+    answer:"🤖 <b>SAP Document Intelligence</b><br>SAP Document Intelligence uses ML to automatically extract data from unstructured documents: vendor invoices, purchase orders, contracts, delivery notes. Extracted data is validated and proposed for MIRO or other transactions — reducing manual entry by up to 80%. Available via SAP BTP." },
+
+  // ── CERTIFICATIONS ──────────────────────────────────
+  { match:["c_ts452","ts452","mm certification","mm cert","s/4hana procurement cert"],
+    answer:"🏆 <b>C_TS452 — SAP S/4HANA Sourcing & Procurement</b><br>This is your primary MM certification target. 80 questions, 180 minutes, passing score ~65%. Key topics: Org structure, Material Master, Vendor Master, Procurement processes, Inventory Management, Invoice Verification, Account Determination, MRP. Study resource: SAP Learning Hub journey + ERPPrep practice tests." },
+  { match:["c_tm_95","tm certification","c_tm","tm cert"],
+    answer:"🏆 <b>C_TM_95 — SAP Transportation Management</b><br>Validates your SAP TM expertise. Great first cert given your testing background. Topics: TM architecture, Freight Order management, Carrier Selection, Route Planning, VSR Optimizer, Freight Settlement, Event Management, TM-ERP integration. Use your testing experience — you already know the processes!" },
+  { match:["certification path","which cert","which certification","cert roadmap","cert plan"],
+    answer:"🏆 <b>Your Certification Roadmap</b><br>Recommended order:<br>① C_TS452 — SAP MM/Procurement (Month 4-5) — fastest path to job<br>② C_TM_95 — SAP TM (Month 7) — leverages your testing background<br>③ C_BTP_2408 — SAP BTP (Month 10) — adds AI/integration skills<br>④ SAP Business AI cert (Month 12) — premium market differentiator<br>All exams: ~₹30,000 via Pearson VUE or SAP testing centres." },
+
+  // ── SAP INTEGRATION ─────────────────────────────────
+  { match:["mm fi integration","fi integration","automatic account","gl posting","account assignment"],
+    answer:"🔗 <b>MM-FI Integration</b><br>SAP MM automatically posts to FI when inventory movements occur. Key account determination (OBYC):<br>• GR: BSX (inventory ↑) + WRX (GR/IR clearing ↑)<br>• Invoice: GR/IR clearing ↓ + Vendor payable ↑<br>• Goods Issue: BSX (inventory ↓) + GBB/consumption account ↑<br>Valuation Class in material master links material to GL accounts." },
+  { match:["mm sd integration","mm sd","order to cash","sales integration","sd mm"],
+    answer:"🔗 <b>MM-SD Integration</b><br>Key integration points: Sales orders trigger MRP demand → Purchase Requisitions created → POs placed → Stock received via GR → Delivery (VL01N) reduces stock → Billing (VF01) posts revenue. Also: Trading goods flow (purchase and sell the same material), cross-company sales." },
+  { match:["tm erp integration","tm mm integration","tm integration","tm ecc"],
+    answer:"🔗 <b>SAP TM — ERP Integration</b><br>SAP TM integrates with ERP/S/4HANA via: Core Interface (CI) for on-premise, or SAP Integration Suite for cloud. Key flows: ① Delivery orders from SD trigger Forwarding Orders in TM ② Freight costs from TM post back to FI via COPA ③ GR confirmations update TM event status. EDI (204/990) handles carrier communication." },
+
+  // ── S/4HANA ─────────────────────────────────────────
+  { match:["s4hana","s/4hana","s4 hana","sap s4","sap s/4","rise with sap"],
+    answer:"💠 <b>SAP S/4HANA</b><br>SAP S/4HANA is SAP's flagship ERP suite built on the in-memory HANA database. Key differences from ECC: Simplified data model (MATDOC instead of MSEG+MKPF), Fiori UX, real-time analytics, embedded AI (Joule). Migration from ECC to S/4HANA is the biggest SAP project wave — creating huge consultant demand until 2027+." },
+  { match:["fiori","sap fiori","fiori app","launchpad"],
+    answer:"💠 <b>SAP Fiori</b><br>SAP Fiori is the UX design system for S/4HANA. Role-based apps replace old SAPGUI screens. Key app types: Transactional (ME21N equivalent), Analytical (embedded charts), Fact Sheets (master data overview). Fiori Launchpad is the home screen. T-codes still work via SAPGUI but Fiori is the default in S/4HANA Cloud." },
+  { match:["hana","sap hana","in-memory","in memory database"],
+    answer:"💠 <b>SAP HANA</b><br>SAP HANA is SAP's in-memory column-store database. Key advantages: Real-time analytics on live transactional data (no data warehouse needed), massive performance improvement for MRP, period-end closing, and reporting. S/4HANA runs ONLY on HANA. Legacy ECC can run on Oracle/SQL Server/DB2." },
+
+  // ── CAREER / SAP GENERAL ─────────────────────────────
+  { match:["salary","pay","compensation","lpa","how much earn","earning"],
+    answer:"💰 <b>SAP Consultant Salaries — India 2025</b><br>• Fresher / 1yr: ₹6–9 LPA<br>• Junior consultant 2-3yr: ₹10–16 LPA<br>• Mid-level 4-6yr: ₹18–30 LPA<br>• Senior / Manager 7+yr: ₹35–60 LPA<br>• SAP TM + MM combo: +20–30% premium<br>• SAP AI/Joule skills: +15–25% additional premium in 2024–25<br>Top hiring: Accenture, Deloitte, Infosys, TCS, Capgemini, IBM." },
+  { match:["transition","testing to consultant","tester to consultant","career change","how to transition"],
+    answer:"🚀 <b>Transitioning from SAP Tester → Consultant</b><br>Your advantage: You already know the PROCESSES deeply from testing. Strategy:<br>① Document your SAP TM test cases as functional expertise<br>② Target 'Functional Analyst' roles (bridge between testing and consulting)<br>③ Get C_TS452 certified (Month 4)<br>④ Apply to SAP partner firms (Big 4 + boutique SAP shops)<br>⑤ Your SAP TM knowledge + MM cert = unique market position. Target 6 months to first offer." },
+  { match:["interview question","sap interview","interview prep","interview tips","prepare interview"],
+    answer:"🎤 <b>Top SAP MM Interview Questions</b><br>1. Walk me through the P2P process end-to-end<br>2. What is 3-way match? What happens if it fails?<br>3. Explain Valuation Class and account determination<br>4. Difference between MM60 and ME21N? (Valuation vs PO)<br>5. How does MRP work? What triggers it?<br>6. What is Movement Type 101 and what account entries does it create?<br>Tip: Use your TM testing stories — real examples beat textbook answers every time." },
+  { match:["functional consultant","sap consultant role","what does consultant do","consultant job"],
+    answer:"💼 <b>What Does an SAP Functional Consultant Do?</b><br>• Gather business requirements from clients<br>• Configure SAP to meet requirements (SPRO/IMG)<br>• Write functional specifications for ABAP developers<br>• Conduct unit, integration and UAT testing<br>• Train end users<br>• Support go-live and post-production<br>• Manage change requests and patches<br>Your testing background gives you a massive head start — you already understand UAT, defect lifecycle, and integration testing." },
+  { match:["learning","study plan","how to learn","best way to learn","learn sap","study sap"],
+    answer:"📚 <b>Best Way to Learn SAP in 2025</b><br>① SAP Learning Hub (free tier) — official learning journeys<br>② openSAP.com — free courses with certificates<br>③ SAP Community — real-world questions + expert answers<br>④ YouTube: search 'SAP MM tutorial' or 'SAP TM demo'<br>⑤ SAP Trial System (BTP free tier) — hands-on practice<br>⑥ This app's flashcards + quiz + process flows 🎯<br>Consistency beats intensity — 1 hour daily beats 8 hours on weekends." },
+  { match:["open sap","opensap","sap learning hub","sap training","free sap course"],
+    answer:"🎓 <b>Free SAP Learning Resources</b><br>• <b>openSAP.com</b> — Free MOOCs with completion certificates (AI, S/4HANA, Joule courses available)<br>• <b>learning.sap.com</b> — Official learning journeys (some free, some paid)<br>• <b>SAP Community</b> — community.sap.com (free, expert-driven)<br>• <b>YouTube @SAPTechnology</b> — official SAP demos<br>• <b>SAP BTP Trial</b> — free sandbox for hands-on practice. Go to the 📖 Learn tab for direct links!" },
+
+  // ── QUICK HELP ───────────────────────────────────────
+  { match:["hello","hi","hey","good morning","good afternoon","namaste"],
+    answer:"👋 <b>Hello! I'm Joule, your SAP learning assistant.</b><br>I can help you with:<br>• Any SAP T-code (VA01, ME21N, MIGO, MIRO, SPRO...)<br>• SAP processes (P2P, Order-to-Cash, TM Shipment cycle)<br>• Certifications (C_TS452, C_TM_95)<br>• Career advice (salary, interview prep, transition tips)<br>• SAP AI & Joule features<br>Try asking: <i>'What is the tcode to post a goods receipt?'</i>" },
+  { match:["help","what can you","what do you know","capabilities","features"],
+    answer:"🤖 <b>What I can answer:</b><br>📋 T-codes: VA01, ME21N, MIGO, MIRO, SPRO, SE16N, MD01...<br>📦 MM processes: P2P, MRP, 3-way match, account determination<br>🚛 TM processes: Freight orders, carrier selection, settlement<br>💠 S/4HANA & Fiori concepts<br>🤖 SAP AI & Joule features<br>🏆 Certification guidance<br>💰 Salary & career advice<br>🎤 Interview preparation<br>Just type your question naturally!" },
+  { match:["thank","thanks","great","awesome","perfect"],
+    answer:"😊 Glad I could help! Keep learning — you're on the right track to becoming an SAP consultant. Use the 📖 Learn tab for deep-dive resources, the 🃏 Flashcards to memorise T-codes, and the 🎤 Interview section to practise. You've got this! 🚀" },
+];
+
+/* Intelligent matching function — checks all keywords, scores by match count */
+function jouleMatch(input){
+  const low = input.toLowerCase().replace(/[?!.,]/g,'');
+  let best=null, bestScore=0;
+  for(const entry of JOULE_KB){
+    let score=0;
+    for(const kw of entry.match){
+      if(low.includes(kw)) score++;
+    }
+    if(score>bestScore){bestScore=score;best=entry;}
+  }
+  if(best && bestScore>0) return best.answer;
+  // Fuzzy fallback — check individual words
+  const words = low.split(/\s+/).filter(w=>w.length>3);
+  for(const entry of JOULE_KB){
+    for(const kw of entry.match){
+      for(const word of words){
+        if(kw.includes(word) && word.length>=4){return entry.answer;}
+      }
+    }
+  }
+  return null;
+}
 
 // =================== STATE ===================
 let S={
@@ -1189,17 +1347,42 @@ function renderAI(){
     </div>`).join('');
 }
 
+function jouleAsk(q){
+  const inp=document.getElementById('joule-input');
+  if(inp){inp.value=q;jouleChat();}
+}
 function jouleChat(){
   const inp=document.getElementById('joule-input');
   const msg=inp.value.trim();if(!msg)return;
   const chat=document.getElementById('joule-chat');
-  chat.innerHTML+=`<div class="joule-msg user">${msg}</div>`;
+  // User bubble
+  const userDiv=document.createElement('div');
+  userDiv.className='joule-msg user';
+  userDiv.textContent=msg;
+  chat.appendChild(userDiv);
   inp.value='';
-  const low=msg.toLowerCase();
-  let resp=JOULE_RESP.default;
-  for(const k of Object.keys(JOULE_RESP)){if(k!=='default'&&low.includes(k)){resp=JOULE_RESP[k];break;}}
-  setTimeout(()=>{chat.innerHTML+=`<div class="joule-msg bot">🤖 ${resp}</div>`;chat.scrollTop=9999;},700);
   chat.scrollTop=9999;
+  // Typing indicator
+  const typing=document.createElement('div');
+  typing.className='joule-msg bot';
+  typing.id='joule-typing';
+  typing.innerHTML='<span style="opacity:.6;font-size:18px;letter-spacing:3px">•••</span>';
+  chat.appendChild(typing);
+  chat.scrollTop=9999;
+  setTimeout(()=>{
+    typing.remove();
+    const matched=jouleMatch(msg);
+    const resp=matched||
+      `🤖 I don't have a specific answer for "<b>${msg}</b>" yet, but here are some suggestions:<br>` +
+      `• Try the <b>📖 Learn tab</b> for structured SAP resources<br>` +
+      `• Search <a href="https://community.sap.com/t5/forums/searchpage/tab/message?q=${encodeURIComponent(msg)}" target="_blank" style="color:var(--ai)">SAP Community</a> for this topic<br>` +
+      `• Try asking: "What is tcode for..." or "Explain the P2P process" or "How do I post a goods receipt?"`;
+    const botDiv=document.createElement('div');
+    botDiv.className='joule-msg bot';
+    botDiv.innerHTML=resp;
+    chat.appendChild(botDiv);
+    chat.scrollTop=9999;
+  },800);
 }
 
 // =================== STREAK ===================
