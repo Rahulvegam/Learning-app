@@ -323,6 +323,10 @@ main { padding-top:56px; }
     <button class="nav-tab" onclick="showSection('jobs')">💼 Jobs</button>
     <button class="nav-tab" onclick="showSection('resume')">📄 Resume</button>
     <button class="nav-tab" onclick="showSection('certs')">🏆 Certs</button>
+    <button class="nav-tab" onclick="showSection('learn')">📖 Learn</button>
+    <button class="nav-tab" onclick="showSection('news')">📰 SAP News</button>
+    <button class="nav-tab" onclick="showSection('linkedin')">🔗 LinkedIn Jobs</button>
+    <button class="nav-tab" onclick="showSection('profile')">👤 My Profile</button>
   </div>
   <div class="nav-actions">
     <button class="nav-btn" onclick="showSection('streak')">🔥 <span id="nav-streak">0</span></button>
@@ -675,6 +679,172 @@ main { padding-top:56px; }
     <div id="cert-resources" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px"></div>
   </div>
 </section>
+
+<!-- ═══════════════════════════════════ LEARN HUB ═══════════════════════════════════ -->
+<section class="section" id="s-learn">
+  <div class="section-heading"><h1>📖 LEARNING <span style="color:var(--ai)">HUB</span></h1><p>Curated learning paths for SAP Joule AI, SAP MM, SAP TM and ABAP. Click any resource to open it.</p></div>
+
+  <!-- Module selector tabs -->
+  <div class="inner-tabs" id="learn-tabs">
+    <button class="inner-tab active" onclick="showLearnModule('joule',this)">🤖 SAP Joule &amp; AI</button>
+    <button class="inner-tab" onclick="showLearnModule('mm',this)">📦 SAP MM</button>
+    <button class="inner-tab" onclick="showLearnModule('tm',this)">🚛 SAP TM</button>
+    <button class="inner-tab" onclick="showLearnModule('abap',this)">💻 ABAP</button>
+    <button class="inner-tab" onclick="showLearnModule('cert',this)">🏆 Certifications</button>
+  </div>
+
+  <div id="learn-content"></div>
+</section>
+
+<!-- ═══════════════════════════════════ SAP NEWS ═══════════════════════════════════ -->
+<section class="section" id="s-news">
+  <div class="section-heading"><h1>📰 SAP <span style="color:var(--mm)">NEWS</span></h1><p>Latest updates from SAP community, release notes and industry news.</p></div>
+  <div style="display:grid;grid-template-columns:1fr 320px;gap:16px" id="news-layout">
+    <div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="news-filter-bar">
+        <button class="fc-filter-btn active" onclick="filterNews('all',this)">All</button>
+        <button class="fc-filter-btn" onclick="filterNews('joule',this)">Joule / AI</button>
+        <button class="fc-filter-btn" onclick="filterNews('mm',this)">SAP MM</button>
+        <button class="fc-filter-btn" onclick="filterNews('tm',this)">SAP TM</button>
+        <button class="fc-filter-btn" onclick="filterNews('s4',this)">S/4HANA</button>
+        <button class="fc-filter-btn" onclick="filterNews('career',this)">Career</button>
+      </div>
+      <div id="news-grid"></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-header"><div class="card-icon" style="background:rgba(41,121,255,.15)">🔔</div><div><div class="card-title">SAP Release Calendar</div><div class="card-sub">Key dates 2025</div></div></div>
+        <div id="news-calendar"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon" style="background:rgba(0,191,165,.15)">🔗</div><div><div class="card-title">Quick Links</div></div></div>
+        <div id="news-quicklinks"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ LINKEDIN JOBS ═══════════════════════════════════ -->
+<section class="section" id="s-linkedin">
+  <div class="section-heading"><h1>🔗 LINKEDIN <span style="color:var(--mm)">JOB SEARCH</span></h1><p>Search SAP jobs directly on LinkedIn. Filter, save and apply — all from this app.</p></div>
+
+  <!-- Search builder -->
+  <div class="card" style="margin-bottom:16px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:12px">
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:5px">Job Title / Keywords</div>
+        <input class="form-input" id="li-keywords" value="SAP MM Consultant" placeholder="SAP MM Consultant">
+      </div>
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:5px">Location</div>
+        <input class="form-input" id="li-location" value="India" placeholder="India / Remote / Bangalore">
+      </div>
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:5px">Experience Level</div>
+        <select class="form-select" id="li-exp">
+          <option value="">Any Level</option>
+          <option value="1">Entry Level</option>
+          <option value="2" selected>Associate</option>
+          <option value="3">Mid-Senior</option>
+          <option value="4">Director</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <button class="btn btn-primary" onclick="openLinkedInSearch()" style="width:100%">🔍 Search</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;margin-right:4px">Quick roles:</div>
+      <button class="fc-filter-btn" onclick="liQuick('SAP MM Functional Consultant')">SAP MM Consultant</button>
+      <button class="fc-filter-btn" onclick="liQuick('SAP TM Consultant')">SAP TM Consultant</button>
+      <button class="fc-filter-btn" onclick="liQuick('SAP S4HANA Consultant')">S/4HANA Consultant</button>
+      <button class="fc-filter-btn" onclick="liQuick('SAP Joule AI Consultant')">SAP AI / Joule</button>
+      <button class="fc-filter-btn" onclick="liQuick('SAP ABAP Developer')">ABAP Developer</button>
+      <button class="fc-filter-btn" onclick="liQuick('SAP Functional Analyst')">SAP Functional Analyst</button>
+      <button class="fc-filter-btn" onclick="liQuick('SAP Business Analyst')">SAP Business Analyst</button>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer">
+        <input type="checkbox" id="li-remote" style="accent-color:var(--tm)"> Remote Only
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer">
+        <input type="checkbox" id="li-recent" checked style="accent-color:var(--mm)"> Posted last 7 days
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer">
+        <input type="checkbox" id="li-easy" style="accent-color:var(--ai)"> Easy Apply only
+      </label>
+    </div>
+  </div>
+
+  <!-- Embedded LinkedIn frame -->
+  <div class="card" style="padding:0;overflow:hidden">
+    <div id="li-frame-placeholder" style="padding:40px;text-align:center;">
+      <div style="font-size:48px;margin-bottom:14px">🔗</div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:8px">Ready to find SAP jobs</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Use the search builder above to open pre-filtered LinkedIn job results. Due to LinkedIn's security policy, jobs open in a new tab — your searches are saved below.</div>
+      <button class="btn btn-primary" onclick="openLinkedInSearch()" style="margin-bottom:12px">Open LinkedIn Jobs →</button>
+      <div style="font-size:11px;color:var(--muted)">Tip: Sign in to LinkedIn first for best results</div>
+    </div>
+  </div>
+
+  <!-- Saved searches -->
+  <div class="card" style="margin-top:14px">
+    <div class="card-header"><div class="card-icon" style="background:rgba(41,121,255,.15)">🔖</div><div><div class="card-title">Saved Searches</div><div class="card-sub">Your search history</div></div></div>
+    <div id="li-saved-searches"></div>
+  </div>
+
+  <!-- SAP Recruiter tips -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px" id="li-tips-grid"></div>
+</section>
+
+<!-- ═══════════════════════════════════ MY PROFILE ═══════════════════════════════════ -->
+<section class="section" id="s-profile">
+  <div class="section-heading"><h1>👤 MY <span style="color:var(--tm)">PROFILE</span></h1><p>Your SAP career identity. Connect LinkedIn, track your brand, get recommendations.</p></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+
+    <!-- Profile card -->
+    <div class="card">
+      <div style="text-align:center;padding:12px 0 20px">
+        <div id="prof-avatar" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--tm),var(--mm));display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 12px;cursor:pointer;border:3px solid var(--border)" onclick="document.getElementById('prof-avatar-emoji').click()">👤</div>
+        <input type="text" id="prof-avatar-emoji" style="display:none">
+        <input class="form-input" id="prof-name" placeholder="Your Full Name" style="text-align:center;font-size:16px;font-weight:700;margin-bottom:8px" oninput="saveProfile()">
+        <input class="form-input" id="prof-title" placeholder="e.g. SAP TM Tester | Aspiring MM Consultant" style="text-align:center;font-size:12px;margin-bottom:8px" oninput="saveProfile()">
+        <input class="form-input" id="prof-location" placeholder="City, Country" style="text-align:center;font-size:12px" oninput="saveProfile()">
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:14px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px">LinkedIn Profile</div>
+        <div style="display:flex;gap:8px">
+          <input class="form-input" id="prof-linkedin-url" placeholder="https://linkedin.com/in/yourname" style="font-size:12px" oninput="saveProfile()">
+          <button class="btn btn-primary btn-sm" onclick="openLinkedIn()">Open</button>
+        </div>
+        <button class="btn btn-secondary" style="width:100%;margin-top:10px;font-size:12px" onclick="showSection('linkedin')">🔍 Search SAP Jobs on LinkedIn →</button>
+      </div>
+    </div>
+
+    <!-- LinkedIn profile checker -->
+    <div class="card">
+      <div class="card-header"><div class="card-icon" style="background:rgba(41,121,255,.15)">✨</div><div><div class="card-title">LinkedIn Profile Optimiser</div><div class="card-sub">SAP-specific recommendations</div></div></div>
+      <div id="linkedin-recommendations"></div>
+    </div>
+  </div>
+
+  <!-- SAP Skills tracker -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-header"><div class="card-icon" style="background:rgba(0,191,165,.15)">🎯</div><div><div class="card-title">SAP Skills on LinkedIn</div><div class="card-sub">Add these skills to get recruiter attention</div></div></div>
+    <div id="prof-skills-grid"></div>
+  </div>
+
+  <!-- Career metrics -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px" id="prof-metrics"></div>
+
+  <!-- SAP community links -->
+  <div class="card">
+    <div class="card-header"><div class="card-icon" style="background:rgba(170,0,255,.15)">🌐</div><div><div class="card-title">Your SAP Professional Network</div><div class="card-sub">Communities and platforms to follow</div></div></div>
+    <div id="prof-community"></div>
+  </div>
+</section>
+
 </main>
 
 <script>
@@ -2184,6 +2354,595 @@ window.addEventListener('load',()=>setTimeout(tryECTBoot,800));
 setTimeout(tryECTBoot,1200);
 
 } catch(e){ console.log('ECT error:',e); }
+</script>
+<!-- ═══════════════════════ NEW SECTIONS CSS + JS ═══════════════════════ -->
+<style>
+/* ── LEARN HUB ── */
+.learn-module{display:none}.learn-module.active{display:block}
+.learn-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.learn-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:all .2s;text-decoration:none;color:var(--text)}
+.learn-card:hover{border-color:var(--mm);transform:translateX(4px);box-shadow:0 4px 20px rgba(41,121,255,.15)}
+.learn-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.learn-card-title{font-size:14px;font-weight:700;margin-bottom:3px}
+.learn-card-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.learn-card-meta{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.learn-tag{padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.learn-free{background:rgba(0,230,118,.12);color:var(--success);border:1px solid rgba(0,230,118,.2)}
+.learn-official{background:rgba(41,121,255,.12);color:var(--mm);border:1px solid rgba(41,121,255,.2)}
+.learn-video{background:rgba(255,82,82,.12);color:var(--danger);border:1px solid rgba(255,82,82,.2)}
+.learn-cert{background:rgba(255,171,0,.12);color:var(--abap);border:1px solid rgba(255,171,0,.2)}
+.learn-progress-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.learn-progress-row:last-child{border-bottom:none}
+.learn-check-btn{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;transition:all .2s}
+.learn-check-btn.done{background:var(--success);border-color:var(--success);color:#000}
+
+/* ── NEWS ── */
+.news-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;cursor:pointer;transition:all .2s;text-decoration:none;display:block;color:var(--text)}
+.news-card:hover{border-color:var(--mm);transform:translateY(-2px)}
+.news-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+.news-card-title{font-size:14px;font-weight:700;line-height:1.4;flex:1}
+.news-tag{padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;flex-shrink:0}
+.news-card-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.news-card-footer{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted)}
+.news-cal-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.news-cal-item:last-child{border-bottom:none}
+.news-cal-date{font-family:'Space Mono',monospace;font-size:10px;color:var(--tm);min-width:52px;font-weight:700;padding-top:2px}
+.news-cal-text{font-size:12px;color:var(--text);line-height:1.4}
+.news-ql-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;text-decoration:none;transition:all .2s;color:var(--text)}
+.news-ql-item:last-child{border-bottom:none}
+.news-ql-item:hover{color:var(--mm)}
+.news-ql-icon{font-size:16px;width:24px;text-align:center;flex-shrink:0}
+.news-ql-text{font-size:12px;font-weight:500}
+
+/* ── LINKEDIN JOBS ── */
+.li-tip-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.li-tip-icon{font-size:24px;margin-bottom:8px}
+.li-tip-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.li-tip-text{font-size:12px;color:var(--muted);line-height:1.5}
+.li-saved-item{display:flex;align-items:center;gap:10px;padding:9px;background:var(--bg3);border-radius:8px;margin-bottom:6px;font-size:12px}
+.li-saved-kw{font-weight:700;flex:1}
+.li-saved-date{color:var(--muted);font-size:11px}
+.li-saved-open{padding:4px 10px;border-radius:6px;border:1px solid var(--mm);background:transparent;color:var(--mm);cursor:pointer;font-size:11px;transition:all .2s}
+.li-saved-open:hover{background:var(--mm);color:#000}
+
+/* ── PROFILE ── */
+.prof-skill-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);margin:4px;font-size:12px;cursor:pointer;transition:all .2s;user-select:none}
+.prof-skill-chip.added{background:rgba(0,191,165,.15);border-color:var(--tm);color:var(--tm)}
+.prof-skill-chip:hover:not(.added){border-color:var(--muted)}
+.prof-metric-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.prof-metric-val{font-family:'Space Mono',monospace;font-size:24px;font-weight:700;margin-bottom:4px}
+.prof-metric-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.prof-rec-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.prof-rec-item:last-child{border-bottom:none}
+.prof-rec-icon{font-size:18px;width:26px;text-align:center;flex-shrink:0;margin-top:1px}
+.prof-rec-content .prof-rec-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.prof-rec-content .prof-rec-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.prof-rec-status{margin-left:auto;flex-shrink:0}
+.prof-rec-done-btn{padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:11px;transition:all .2s;white-space:nowrap}
+.prof-rec-done-btn:hover{border-color:var(--success);color:var(--success)}
+.prof-rec-done-btn.done{border-color:var(--success);background:rgba(0,230,118,.1);color:var(--success)}
+.community-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;text-decoration:none;color:var(--text);transition:color .2s}
+.community-item:last-child{border-bottom:none}
+.community-item:hover{color:var(--mm)}
+.community-icon{font-size:22px;width:32px;text-align:center;flex-shrink:0}
+.community-name{font-size:13px;font-weight:700}
+.community-desc{font-size:11px;color:var(--muted)}
+.community-arrow{margin-left:auto;color:var(--muted);font-size:14px}
+@media(max-width:768px){
+  #news-layout{grid-template-columns:1fr !important}
+  #li-search-grid{grid-template-columns:1fr 1fr !important}
+}
+</style>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   LEARN HUB DATA
+════════════════════════════════════════════════════════ */
+const LEARN_DATA = {
+  joule: {
+    sections: [
+      {
+        title: 'Official SAP Documentation',
+        items: [
+          {icon:'📘',title:'SAP Joule — Official Product Page',desc:'Overview of Joule capabilities, supported SAP applications and how it integrates across the SAP ecosystem.',url:'https://www.sap.com/products/artificial-intelligence/ai-assistant.html',tags:['official','free'],time:'30 min'},
+          {icon:'📗',title:'SAP Help — Joule for S/4HANA Cloud',desc:'Technical documentation on how Joule works within S/4HANA Cloud, including supported tasks and configuration.',url:'https://help.sap.com/docs/SAP_S4HANA_CLOUD/0f69f8fb28ac4bf48d2b57b9637e81fa/joule',tags:['official','free'],time:'45 min'},
+          {icon:'📙',title:'SAP Business AI — What\'s New',desc:'Release notes and new capabilities added to SAP Business AI and Joule across quarterly updates.',url:'https://help.sap.com/whats-new/cf0cb2cb149647329a7d8ae12e8182be',tags:['official','free'],time:'20 min'},
+          {icon:'🧩',title:'SAP AI Core — Technical Guide',desc:'Developer-focused documentation on SAP AI Core, the underlying infrastructure that powers Joule and custom AI scenarios on BTP.',url:'https://help.sap.com/docs/sap-ai-core',tags:['official','free'],time:'60 min'},
+        ]
+      },
+      {
+        title: 'Free Learning (openSAP & Learning Hub)',
+        items: [
+          {icon:'🎓',title:'openSAP: AI-Powered Intelligent Enterprise',desc:'Free instructor-led course. Covers SAP Business AI strategy, Joule, and how AI embeds into SAP workflows. Certificate included.',url:'https://open.sap.com/courses',tags:['free','cert'],time:'6 hrs'},
+          {icon:'🎓',title:'SAP Learning Hub — AI Foundation',desc:'Official SAP Learning journey on AI fundamentals, generative AI in SAP, and Joule role-based scenarios.',url:'https://learning.sap.com/learning-journeys',tags:['free','official'],time:'8 hrs'},
+          {icon:'🎓',title:'SAP Learning: Introduction to SAP Business AI',desc:'Entry-level course explaining what SAP Business AI is, how Joule differs from traditional AI, and real-world use cases in MM, TM, and Finance.',url:'https://learning.sap.com',tags:['free','official'],time:'3 hrs'},
+        ]
+      },
+      {
+        title: 'YouTube & Video Learning',
+        items: [
+          {icon:'▶️',title:'SAP Official YouTube — Joule Demos',desc:'Watch Joule in action: creating POs with natural language, querying inventory, checking shipment status. Highly visual.',url:'https://www.youtube.com/@SAPTechnology',tags:['free','video'],time:'1 hr'},
+          {icon:'▶️',title:'SAP TechEd Sessions — AI Keynotes',desc:'Annual SAP TechEd keynote sessions where Joule features are unveiled. Essential for staying current on the roadmap.',url:'https://www.youtube.com/results?search_query=SAP+TechEd+Joule+AI',tags:['free','video'],time:'2 hrs'},
+          {icon:'▶️',title:'SAP BTP & AI Tutorials — YouTube',desc:'Community tutorials on building AI apps on SAP BTP, integrating Joule, and using Document Intelligence.',url:'https://www.youtube.com/results?search_query=SAP+BTP+AI+Joule+tutorial',tags:['free','video'],time:'Ongoing'},
+        ]
+      },
+      {
+        title: 'SAP Community & Blogs',
+        items: [
+          {icon:'💬',title:'SAP Community — Joule & AI Topic',desc:'Questions, answers and expert blogs from the SAP community on Joule, AI Core, and BTP AI services.',url:'https://community.sap.com/t5/artificial-intelligence-and-machine-learning/ct-p/artificial-intelligence',tags:['free'],time:'Ongoing'},
+          {icon:'📝',title:'SAP Blogs — Business AI Category',desc:'Practitioner-written deep dives on SAP AI implementations, real project experiences, and technical how-tos.',url:'https://blogs.sap.com/tags/73555000100800001272/',tags:['free'],time:'Ongoing'},
+        ]
+      },
+      {
+        title: 'Certifications',
+        items: [
+          {icon:'🏆',title:'SAP Certified Associate — SAP Business AI',desc:'Certification validating knowledge of SAP AI strategy, Joule capabilities, AI governance, and BTP AI services.',url:'https://training.sap.com/certification/c_ai_900-sap-certified-associate-sap-business-ai-g/',tags:['cert','official'],time:'Study 2 weeks'},
+          {icon:'🏆',title:'SAP BTP Certification — C_BTP_2408',desc:'Covers SAP BTP fundamentals including AI Core, Integration Suite, and Build. Pairs well with Joule knowledge.',url:'https://training.sap.com/certification/sap-btp',tags:['cert','official'],time:'Study 3 weeks'},
+        ]
+      }
+    ]
+  },
+  mm: {
+    sections: [
+      {
+        title: 'Official SAP Learning — MM',
+        items: [
+          {icon:'📘',title:'SAP Learning Journey — Procurement with SAP S/4HANA',desc:'Structured, official learning path covering the complete MM Procure-to-Pay cycle, material master, and vendor management.',url:'https://learning.sap.com/learning-journeys/acquire-core-skills-for-sap-s-4hana-sourcing-and-procurement',tags:['official','free'],time:'12 hrs'},
+          {icon:'📗',title:'SAP Help: MM Customising Reference',desc:'Official configuration guide for SAP MM — org structure, purchasing, inventory management, invoice verification.',url:'https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/8a8d0a31439a41f59f787c40cd57059b',tags:['official','free'],time:'Reference'},
+          {icon:'📙',title:'SAP S/4HANA Procurement — What\'s New',desc:'Latest updates to MM/procurement functionality in each S/4HANA release. Must-read before interviews.',url:'https://help.sap.com/whats-new/cf0cb2cb149647329a7d8ae12e8182be',tags:['official','free'],time:'20 min'},
+        ]
+      },
+      {
+        title: 'YouTube Deep Dives',
+        items: [
+          {icon:'▶️',title:'SAP MM Complete Course — P2P End to End',desc:'Full Procure-to-Pay walkthrough with live system demos. Covers ME51N → ME21N → MIGO → MIRO with settings explained.',url:'https://www.youtube.com/results?search_query=SAP+MM+procure+to+pay+tutorial',tags:['free','video'],time:'8 hrs'},
+          {icon:'▶️',title:'SAP MM Configuration Tutorial Series',desc:'SPRO configuration walkthroughs: company code, plant, purchasing org, document types, tolerance keys and account determination.',url:'https://www.youtube.com/results?search_query=SAP+MM+configuration+SPRO+tutorial',tags:['free','video'],time:'10 hrs'},
+          {icon:'▶️',title:'SAP MIRO — Invoice Verification Deep Dive',desc:'Invoice verification, 3-way match, parked invoices, MRBR release, tolerance keys, and FI posting logic.',url:'https://www.youtube.com/results?search_query=SAP+MIRO+invoice+verification+tutorial',tags:['free','video'],time:'3 hrs'},
+        ]
+      },
+      {
+        title: 'Practice & Certification',
+        items: [
+          {icon:'🏆',title:'C_TS452 — SAP S/4HANA Sourcing & Procurement',desc:'The primary SAP MM certification. Covers purchasing, inventory management, MRP, invoice verification and account determination.',url:'https://training.sap.com/certification/c_ts452_2021-sap-certified-associate---sap-s4hana-sourcing-and-procurement-g/',tags:['cert','official'],time:'Study 4 weeks'},
+          {icon:'📝',title:'SAP MM Practice Questions — ERPPrep',desc:'Free SAP MM practice exam questions with explanations. Covers all exam topics: org structure, master data, P2P, MRP.',url:'https://www.erpprep.com/sap-mm-practice-tests',tags:['free'],time:'Ongoing'},
+          {icon:'📝',title:'SAP Community — MM Questions Forum',desc:'Real-world SAP MM questions from practitioners. Reading these builds practical knowledge beyond textbook learning.',url:'https://community.sap.com/t5/enterprise-resource-planning-forums/ct-p/erp-forums',tags:['free'],time:'Ongoing'},
+        ]
+      }
+    ]
+  },
+  tm: {
+    sections: [
+      {
+        title: 'Official TM Learning',
+        items: [
+          {icon:'📘',title:'SAP TM Learning Journey — S/4HANA Transportation',desc:'Official SAP learning path for Transportation Management, covering freight order management, carrier selection, and settlement.',url:'https://learning.sap.com/learning-journeys/implement-sap-s-4hana-transportation-management',tags:['official','free'],time:'10 hrs'},
+          {icon:'📗',title:'SAP Help: Transportation Management',desc:'Complete TM documentation — freight units, shipment cycles, VSR optimizer, event management, and TM-ERP integration.',url:'https://help.sap.com/docs/SAP_TM',tags:['official','free'],time:'Reference'},
+        ]
+      },
+      {
+        title: 'YouTube & Video',
+        items: [
+          {icon:'▶️',title:'SAP TM Overview & Demo',desc:'Walkthroughs of TM freight order creation, carrier tendering, track & trace, and freight settlement.',url:'https://www.youtube.com/results?search_query=SAP+Transportation+Management+TM+tutorial',tags:['free','video'],time:'5 hrs'},
+        ]
+      },
+      {
+        title: 'Certification',
+        items: [
+          {icon:'🏆',title:'C_TM_95 — SAP Transportation Management',desc:'SAP TM certification covering TM architecture, freight order management, carrier selection, route planning, and settlement.',url:'https://training.sap.com/certification/sap-tm',tags:['cert','official'],time:'Study 3 weeks'},
+        ]
+      }
+    ]
+  },
+  abap: {
+    sections: [
+      {
+        title: 'Official ABAP Learning',
+        items: [
+          {icon:'📘',title:'SAP Learning: ABAP for Beginners',desc:'Official SAP course — ABAP syntax, data types, internal tables, SELECT statements and basic report writing.',url:'https://learning.sap.com/learning-journeys/acquire-core-abap-skills',tags:['official','free'],time:'16 hrs'},
+          {icon:'📗',title:'ABAP RESTful Application Programming Model',desc:'Modern ABAP development using RAP (RESTful Application Programming Model) — the future of ABAP in S/4HANA.',url:'https://help.sap.com/docs/abap-cloud/abap-rap/restful-abap-programming-model',tags:['official','free'],time:'20 hrs'},
+        ]
+      },
+      {
+        title: 'Practice',
+        items: [
+          {icon:'▶️',title:'ABAP Programming Tutorials — YouTube',desc:'Free ABAP tutorial series covering syntax, ALV reports, Function Modules, BAPIs, User Exits, and BADIs.',url:'https://www.youtube.com/results?search_query=SAP+ABAP+programming+tutorial+beginners',tags:['free','video'],time:'12 hrs'},
+          {icon:'💻',title:'SAP ABAP Trial System — BTP Free Tier',desc:'Get a free SAP BTP account with ABAP environment to practice coding with real SAP tools.',url:'https://account.hana.ondemand.com/',tags:['free','official'],time:'Ongoing'},
+        ]
+      }
+    ]
+  },
+  cert: {
+    sections: [
+      {
+        title: 'Recommended Certification Path',
+        items: [
+          {icon:'1️⃣',title:'C_TS452 — SAP S/4HANA Sourcing & Procurement (MM)',desc:'Your primary target. Validates complete MM knowledge. Recognised by all SAP partners and clients globally.',url:'https://training.sap.com/certification/c_ts452_2021-sap-certified-associate---sap-s4hana-sourcing-and-procurement-g/',tags:['cert','official'],time:'₹30,000 approx'},
+          {icon:'2️⃣',title:'C_TM_95 — SAP Transportation Management',desc:'Leverage your TM testing experience. Fastest cert for you given your background.',url:'https://training.sap.com/certification/sap-tm',tags:['cert','official'],time:'₹30,000 approx'},
+          {icon:'3️⃣',title:'C_BTP_2408 — SAP BTP Associate',desc:'Validates SAP Business Technology Platform skills including AI, Integration and Build tools.',url:'https://training.sap.com/certification/c_btp_2408',tags:['cert','official'],time:'₹30,000 approx'},
+          {icon:'4️⃣',title:'SAP Certified — Business AI',desc:'Validates knowledge of SAP AI strategy, Joule and responsible AI governance.',url:'https://training.sap.com/certification/c_ai_900-sap-certified-associate-sap-business-ai-g/',tags:['cert','official'],time:'₹30,000 approx'},
+          {icon:'🆓',title:'Free: SAP Learning Hub Discovery Edition',desc:'Free tier of SAP Learning Hub. Access official e-learning, SAP Live Access (trial systems), and learning journeys.',url:'https://learninghub.sap.com/',tags:['free','official'],time:'Free'},
+          {icon:'🆓',title:'Free: openSAP Courses with Certificate',desc:'All openSAP courses are free. Completion certificates are respected by SAP employers.',url:'https://open.sap.com/',tags:['free','cert'],time:'Free'},
+        ]
+      }
+    ]
+  }
+};
+
+/* ════════════════════════════════════════════════════════
+   NEWS DATA
+════════════════════════════════════════════════════════ */
+const NEWS_ITEMS = [
+  {id:'n1',cat:'joule',tag:'Joule AI',tagCol:'var(--ai)',title:'SAP Joule now available across 80+ SAP workflows',desc:'SAP expanded Joule\'s reach to over 80 business processes including MM purchase orders, TM freight planning, and FI invoice approvals. Users can now create, query and approve without leaving their flow.',url:'https://news.sap.com/2024/10/sap-joule-ai-assistant-expansion/',date:'Mar 2025',source:'SAP News'},
+  {id:'n2',cat:'s4',tag:'S/4HANA',tagCol:'var(--mm)',title:'SAP S/4HANA 2024 FPS2 — Key MM & TM Changes',desc:'Procurement enhancements include AI-powered vendor suggestion in ME21N, automatic duplicate invoice detection in MIRO, and new TM event management APIs for IoT integration.',url:'https://help.sap.com/whats-new/cf0cb2cb149647329a7d8ae12e8182be',date:'Feb 2025',source:'SAP Help'},
+  {id:'n3',cat:'joule',tag:'Joule AI',tagCol:'var(--ai)',title:'Joule can now write ABAP code — developer implications',desc:'SAP announced Joule for Developers, enabling natural language to ABAP code generation in ABAP Development Tools (ADT). This changes how junior ABAP devs onboard.',url:'https://community.sap.com/t5/artificial-intelligence-and-machine-learning/ct-p/artificial-intelligence',date:'Jan 2025',source:'SAP Community'},
+  {id:'n4',cat:'mm',tag:'SAP MM',tagCol:'var(--mm)',title:'SAP MM Certification exam updated for S/4HANA 2023',desc:'The C_TS452 exam now includes S/4HANA Cloud procurement scenarios, sourcing cockpit questions, and embedded analytics. Updated study guide available on SAP Learning Hub.',url:'https://training.sap.com/certification/c_ts452_2021-sap-certified-associate---sap-s4hana-sourcing-and-procurement-g/',date:'Jan 2025',source:'SAP Training'},
+  {id:'n5',cat:'career',tag:'Career',tagCol:'var(--tm)',title:'SAP consultant salaries in India up 18% YoY — 2025 survey',desc:'Naukri and LinkedIn data shows SAP MM consultants with S/4HANA experience command ₹12-22 LPA. TM specialists with AI exposure are among the fastest-rising profiles.',url:'https://www.linkedin.com/jobs/search/?keywords=SAP+MM+Consultant&location=India',date:'Mar 2025',source:'LinkedIn'},
+  {id:'n6',cat:'s4',tag:'S/4HANA',tagCol:'var(--mm)',title:'SAP Rise with S/4HANA migration wave — consulting demand surge',desc:'Over 40,000 companies plan S/4HANA migrations by 2027. SAP partners are aggressively hiring functional consultants, creating the largest demand for SAP skills in a decade.',url:'https://news.sap.com/2024/sapphire/',date:'Feb 2025',source:'SAP Sapphire'},
+  {id:'n7',cat:'tm',tag:'SAP TM',tagCol:'var(--tm)',title:'SAP TM integrates with Google Maps Platform for real-time routing',desc:'New partnership brings Google Maps real-time traffic data into SAP TM route optimisation and carrier selection, improving on-time delivery prediction accuracy.',url:'https://community.sap.com/t5/supply-chain-management-blogs/ct-p/scm',date:'Dec 2024',source:'SAP Blog'},
+  {id:'n8',cat:'career',tag:'Career',tagCol:'var(--tm)',title:'How to transition from SAP Tester to SAP Consultant — Guide',desc:'Step-by-step guide from SAP Community experts on leveraging testing experience as a foundation for functional consulting. Highlights SAP TM → MM as fastest path.',url:'https://community.sap.com/t5/enterprise-resource-planning-blogs-by-members/ct-p/enterprise-resource-planning-blogs-members',date:'Nov 2024',source:'SAP Community'},
+  {id:'n9',cat:'joule',tag:'Joule AI',tagCol:'var(--ai)',title:'SAP TechEd 2024 — AI-first SAP strategy keynote recap',desc:'SAP CEO Christian Klein committed to embedding Joule into every SAP product by 2026. Key announcements: Document Intelligence upgrades, Joule for analytics, and AI governance framework.',url:'https://www.sap.com/events/teched.html',date:'Nov 2024',source:'SAP TechEd'},
+  {id:'n10',cat:'mm',tag:'SAP MM',tagCol:'var(--mm)',title:'Automatic PO creation via AI in SAP S/4HANA Cloud',desc:'New AI capability analyses purchase requisitions, checks inventory levels and past vendor performance, then auto-creates POs with approval routing — reducing buyer workload by 60%.',url:'https://help.sap.com/docs/SAP_S4HANA_CLOUD',date:'Oct 2024',source:'SAP Help'},
+];
+
+const CALENDAR_ITEMS = [
+  {date:'Apr 25','text':'SAP S/4HANA 2024 FPS02 General Availability'},
+  {date:'May 25','text':'C_TS452 exam updated syllabus effective'},
+  {date:'Jun 25','text':'SAP Sapphire Orlando — AI announcements'},
+  {date:'Jul 25','text':'SAP TM 2024 patch release window'},
+  {date:'Sep 25','text':'SAP TechEd 2025 — Product roadmap'},
+  {date:'Oct 25','text':'C_TM_95 v9.6 exam version deadline'},
+  {date:'Dec 25','text':'S/4HANA 2025 release (expected)'},
+];
+
+const QUICKLINKS = [
+  {icon:'🌐',text:'SAP Learning Hub',url:'https://learning.sap.com'},
+  {icon:'💬',text:'SAP Community Forums',url:'https://community.sap.com'},
+  {icon:'📋',text:'SAP What\'s New Viewer',url:'https://help.sap.com/whats-new/cf0cb2cb149647329a7d8ae12e8182be'},
+  {icon:'🏆',text:'SAP Certification Overview',url:'https://training.sap.com/certification'},
+  {icon:'▶️',text:'SAP YouTube Channel',url:'https://www.youtube.com/@SAPTechnology'},
+  {icon:'📘',text:'SAP Help Portal',url:'https://help.sap.com'},
+  {icon:'📰',text:'SAP Blogs',url:'https://blogs.sap.com'},
+  {icon:'📢',text:'SAP News Center',url:'https://news.sap.com'},
+];
+
+/* ════════════════════════════════════════════════════════
+   LINKEDIN TIPS DATA
+════════════════════════════════════════════════════════ */
+const LI_TIPS = [
+  {icon:'🎯',title:'Optimise your headline',text:'Use: "SAP TM Expert | SAP MM Consultant (Transitioning) | S/4HANA | Procurement". Recruiters search by module keywords.'},
+  {icon:'🔑',title:'Add 15+ SAP skills',text:'Add: SAP TM, SAP MM, SAP S/4HANA, Procurement, Supply Chain, SAP Fiori, MIRO, ME21N. Endorsed skills rank you higher in recruiter searches.'},
+  {icon:'📸',title:'Profile completeness = 5x views',text:'LinkedIn\'s algorithm boosts "All-Star" profiles. Add photo, summary, all experience, education, 5+ skills, and 3 recommendations.'},
+];
+
+const LI_RECOMMENDATIONS = [
+  {id:'r1',icon:'📸',title:'Add a professional headshot',desc:'Profiles with photos get 21x more views. Use a clear, professional photo with plain background.'},
+  {id:'r2',icon:'✍️',title:'Write an SAP-focused headline',desc:'Include your SAP modules. Example: "SAP TM Tester | Transitioning to MM Functional Consultant | 3+ yrs SAP experience"'},
+  {id:'r3',icon:'📝',title:'Add 2000-char About section',desc:'Tell your SAP story: testing background → functional aspiration. Include T-codes you work with daily.'},
+  {id:'r4',icon:'🏷️',title:'Add SAP Skills (minimum 10)',desc:'SAP TM, SAP MM, SAP S/4HANA, Freight Management, Procurement, Supply Chain, MIRO, ME21N, SAP Fiori, Test Management'},
+  {id:'r5',icon:'🎓',title:'List your SAP certifications',desc:'Add in-progress certifications too: "SAP C_TS452 — Target: Q3 2025". Recruiters filter by certifications.'},
+  {id:'r6',icon:'💼',title:'Describe SAP testing work with numbers',desc:'E.g. "Executed 300+ test cases for SAP TM freight order module, identified 42 critical defects pre-go-live"'},
+  {id:'r7',icon:'🤝',title:'Get 3 LinkedIn recommendations',desc:'Ask your SAP project manager or team lead. SAP-specific recommendations from professionals carry significant weight.'},
+  {id:'r8',icon:'📣',title:'Post SAP content weekly',desc:'Share SAP tips, T-codes, learning updates. Recruiters track who is active in the SAP space.'},
+  {id:'r9',icon:'🔔',title:'Turn on "Open to Work" for SAP roles',desc:'Use private mode (visible only to recruiters). Specify: SAP MM Consultant, SAP Functional Analyst, SAP TM Consultant.'},
+  {id:'r10',icon:'🌐',title:'Follow SAP, Accenture, Deloitte, Infosys',desc:'Following top SAP employers ensures their jobs appear in your feed and their recruiters can see your profile.'},
+];
+
+const SAP_SKILLS = [
+  'SAP TM','SAP MM','SAP S/4HANA','SAP ECC','SAP Fiori','SAP BTP',
+  'SAP Business AI','SAP Joule','Procurement','Supply Chain Management',
+  'Freight Management','Transportation Management','Purchase Orders',
+  'Invoice Verification','Goods Receipt','Material Master',
+  'Test Management','SAP Testing','MIRO','ME21N','MIGO',
+  'ABAP (Basic)','SAP Integration','SAP Customising'
+];
+
+const COMMUNITY_LINKS = [
+  {icon:'💬',name:'SAP Community',desc:'Official SAP Q&A and expert blogs',url:'https://community.sap.com'},
+  {icon:'🔗',name:'LinkedIn SAP Professionals Group',desc:'600K+ SAP professionals — jobs and insights',url:'https://www.linkedin.com/groups/1968/'},
+  {icon:'📺',name:'SAP YouTube Channel',desc:'Official demos, TechEd sessions, tutorials',url:'https://www.youtube.com/@SAPTechnology'},
+  {icon:'📰',name:'SAP News Center',desc:'Official press releases and product announcements',url:'https://news.sap.com'},
+  {icon:'🎤',name:'SAP Podcast — The Best Run Podcast',desc:'Business and technology insights from SAP experts',url:'https://podcast.opensap.info/open-sap-podcasts/'},
+  {icon:'📚',name:'SAP Press Books',desc:'Official SAP textbooks for MM, TM, ABAP',url:'https://www.sap-press.com/'},
+  {icon:'🤖',name:'SAP AI Community',desc:'Dedicated forum for SAP AI, BTP and Joule',url:'https://community.sap.com/t5/artificial-intelligence-and-machine-learning/ct-p/artificial-intelligence'},
+  {icon:'🏆',name:'SAP Certification Hub',desc:'All certifications, pricing, sample questions',url:'https://training.sap.com/certification'},
+];
+
+/* ════════════════════════════════════════════════════════
+   RENDER FUNCTIONS
+════════════════════════════════════════════════════════ */
+
+// ── LEARN HUB ──
+function showLearnModule(mod, btn){
+  document.querySelectorAll('#learn-content .learn-module').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('#learn-tabs .inner-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const el=document.getElementById('learn-mod-'+mod);
+  if(el){el.classList.add('active');return;}
+  // render fresh
+  const container=document.getElementById('learn-content');
+  const div=document.createElement('div');
+  div.className='learn-module active';
+  div.id='learn-mod-'+mod;
+  const data=LEARN_DATA[mod];
+  if(!data){div.innerHTML='<p style="color:var(--muted);padding:20px">Coming soon.</p>';container.appendChild(div);return;}
+  let html='';
+  data.sections.forEach(sec=>{
+    html+=`<div class="learn-section-title">${sec.title}</div>`;
+    sec.items.forEach((item,i)=>{
+      const tagHtml=item.tags.map(t=>{
+        const cls=t==='free'?'learn-free':t==='official'?'learn-official':t==='video'?'learn-video':'learn-cert';
+        return `<span class="learn-tag ${cls}">${t}</span>`;
+      }).join('');
+      const progKey='lp_'+mod+'_'+sec.title.replace(/\s/g,'')+'_'+i;
+      const done=S&&S.learnProgress&&S.learnProgress[progKey];
+      html+=`<a class="learn-card" href="${item.url}" target="_blank" rel="noopener">
+        <div class="learn-card-icon" style="background:rgba(41,121,255,.12)">${item.icon}</div>
+        <div style="flex:1">
+          <div class="learn-card-title">${item.title}</div>
+          <div class="learn-card-desc">${item.desc}</div>
+          <div class="learn-card-meta">${tagHtml}<span style="font-size:10px;color:var(--muted);margin-left:auto;padding-top:2px">⏱ ${item.time}</span></div>
+        </div>
+        <div style="flex-shrink:0;margin-left:6px">
+          <button class="learn-check-btn ${done?'done':''}" title="Mark complete" onclick="event.preventDefault();toggleLearnProgress('${progKey}',this)">${done?'✓':''}</button>
+        </div>
+      </a>`;
+    });
+  });
+  div.innerHTML=html;
+  container.appendChild(div);
+}
+
+function toggleLearnProgress(key,btn){
+  if(!S.learnProgress) S.learnProgress={};
+  S.learnProgress[key]=!S.learnProgress[key];
+  btn.classList.toggle('done',S.learnProgress[key]);
+  btn.textContent=S.learnProgress[key]?'✓':'';
+  saveS();
+  toast(S.learnProgress[key]?'✅ Resource marked complete!':'↩ Unmarked');
+}
+
+// ── NEWS ──
+let currentNewsFilter='all';
+function filterNews(cat,btn){
+  currentNewsFilter=cat;
+  document.querySelectorAll('#news-filter-bar .fc-filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderNews();
+}
+
+function renderNews(){
+  const grid=document.getElementById('news-grid'); if(!grid) return;
+  const items=currentNewsFilter==='all'?NEWS_ITEMS:NEWS_ITEMS.filter(n=>n.cat===currentNewsFilter);
+  grid.innerHTML=items.map(n=>`
+    <a class="news-card" href="${n.url}" target="_blank" rel="noopener">
+      <div class="news-card-header">
+        <div class="news-card-title">${n.title}</div>
+        <span class="news-tag" style="background:rgba(255,255,255,.06);color:${n.tagCol};border:1px solid ${n.tagCol}40">${n.tag}</span>
+      </div>
+      <div class="news-card-desc">${n.desc}</div>
+      <div class="news-card-footer">
+        <span>📰 ${n.source}</span>
+        <span>🗓 ${n.date}</span>
+        <span style="color:var(--mm)">Read more →</span>
+      </div>
+    </a>`).join('');
+}
+
+function renderNewsCalendar(){
+  const el=document.getElementById('news-calendar'); if(!el) return;
+  el.innerHTML=CALENDAR_ITEMS.map(c=>`
+    <div class="news-cal-item">
+      <div class="news-cal-date">${c.date}</div>
+      <div class="news-cal-text">${c.text}</div>
+    </div>`).join('');
+}
+
+function renderQuickLinks(){
+  const el=document.getElementById('news-quicklinks'); if(!el) return;
+  el.innerHTML=QUICKLINKS.map(q=>`
+    <a class="news-ql-item" href="${q.url}" target="_blank" rel="noopener">
+      <span class="news-ql-icon">${q.icon}</span>
+      <span class="news-ql-text">${q.text}</span>
+      <span style="margin-left:auto;color:var(--muted)">→</span>
+    </a>`).join('');
+}
+
+// ── LINKEDIN JOBS ──
+function openLinkedInSearch(){
+  const kw=encodeURIComponent(document.getElementById('li-keywords').value||'SAP MM Consultant');
+  const loc=encodeURIComponent(document.getElementById('li-location').value||'India');
+  const exp=document.getElementById('li-exp').value;
+  const remote=document.getElementById('li-remote').checked;
+  const recent=document.getElementById('li-recent').checked;
+  const easy=document.getElementById('li-easy').checked;
+  let url=`https://www.linkedin.com/jobs/search/?keywords=${kw}&location=${loc}`;
+  if(exp) url+=`&f_E=${exp}`;
+  if(remote) url+=`&f_WT=2`;
+  if(recent) url+=`&f_TPR=r604800`;
+  if(easy) url+=`&f_LF=f_EA`;
+  window.open(url,'_blank');
+  // save search
+  if(!S.liSearches) S.liSearches=[];
+  const entry={kw:document.getElementById('li-keywords').value,loc:document.getElementById('li-location').value,url,date:new Date().toLocaleDateString()};
+  S.liSearches=S.liSearches.filter(s=>s.kw!==entry.kw||s.loc!==entry.loc);
+  S.liSearches.unshift(entry);
+  if(S.liSearches.length>10) S.liSearches.pop();
+  saveS();
+  renderSavedSearches();
+}
+
+function liQuick(kw){
+  document.getElementById('li-keywords').value=kw;
+  openLinkedInSearch();
+}
+
+function renderSavedSearches(){
+  const el=document.getElementById('li-saved-searches'); if(!el) return;
+  if(!S.liSearches||!S.liSearches.length){el.innerHTML='<div style="font-size:13px;color:var(--muted);padding:10px 0">No searches yet. Use the form above to search.</div>';return;}
+  el.innerHTML=S.liSearches.map((s,i)=>`
+    <div class="li-saved-item">
+      <div class="li-saved-kw">${s.kw}</div>
+      <div class="li-saved-date">📍 ${s.loc} · ${s.date}</div>
+      <button class="li-saved-open" onclick="window.open('${s.url}','_blank')">Open →</button>
+    </div>`).join('');
+}
+
+function renderLiTips(){
+  const el=document.getElementById('li-tips-grid'); if(!el) return;
+  el.innerHTML=LI_TIPS.map(t=>`
+    <div class="li-tip-card">
+      <div class="li-tip-icon">${t.icon}</div>
+      <div class="li-tip-title">${t.title}</div>
+      <div class="li-tip-text">${t.text}</div>
+    </div>`).join('');
+}
+
+// ── PROFILE ──
+function loadProfile(){
+  const p=S.profile||{};
+  ['prof-name','prof-title','prof-location','prof-linkedin-url'].forEach(id=>{
+    const el=document.getElementById(id);
+    const key=id.replace('prof-','').replace(/-/g,'_');
+    if(el&&p[key]) el.value=p[key];
+  });
+  renderLinkedInRecs();
+  renderSAPSkills();
+  renderProfMetrics();
+  renderCommunity();
+}
+
+function saveProfile(){
+  if(!S.profile) S.profile={};
+  ['prof-name','prof-title','prof-location','prof-linkedin-url'].forEach(id=>{
+    const el=document.getElementById(id);
+    const key=id.replace('prof-','').replace(/-/g,'_');
+    if(el) S.profile[key]=el.value;
+  });
+  saveS();
+}
+
+function openLinkedIn(){
+  const url=document.getElementById('prof-linkedin-url').value;
+  if(url) window.open(url.startsWith('http')?url:'https://'+url,'_blank');
+  else toast('⚠ Enter your LinkedIn URL first');
+}
+
+function renderLinkedInRecs(){
+  const el=document.getElementById('linkedin-recommendations'); if(!el) return;
+  if(!S.profileRecs) S.profileRecs={};
+  el.innerHTML=LI_RECOMMENDATIONS.map(r=>`
+    <div class="prof-rec-item">
+      <div class="prof-rec-icon">${r.icon}</div>
+      <div class="prof-rec-content">
+        <div class="prof-rec-title">${r.title}</div>
+        <div class="prof-rec-desc">${r.desc}</div>
+      </div>
+      <div class="prof-rec-status">
+        <button class="prof-rec-done-btn ${S.profileRecs[r.id]?'done':''}" onclick="toggleProfileRec('${r.id}',this)">
+          ${S.profileRecs[r.id]?'✓ Done':'Mark done'}
+        </button>
+      </div>
+    </div>`).join('');
+  const done=Object.values(S.profileRecs||{}).filter(Boolean).length;
+  const pct=Math.round(done/LI_RECOMMENDATIONS.length*100);
+  const heading=el.previousElementSibling;
+  if(heading&&heading.classList.contains('card-header')){
+    // add score
+  }
+  // add progress at top
+  const prog=document.createElement('div');
+  prog.style.cssText='margin-bottom:14px';
+  prog.innerHTML=`<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px"><span>Profile strength</span><span style="color:var(--success);font-weight:700">${pct}%</span></div><div style="height:5px;background:var(--bg3);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--tm),var(--mm));border-radius:3px;transition:width .5s"></div></div>`;
+  el.insertBefore(prog,el.firstChild);
+}
+
+function toggleProfileRec(id,btn){
+  if(!S.profileRecs) S.profileRecs={};
+  S.profileRecs[id]=!S.profileRecs[id];
+  btn.classList.toggle('done',S.profileRecs[id]);
+  btn.textContent=S.profileRecs[id]?'✓ Done':'Mark done';
+  saveS();
+  toast(S.profileRecs[id]?'✅ LinkedIn recommendation done!':'↩ Unmarked');
+}
+
+function renderSAPSkills(){
+  const el=document.getElementById('prof-skills-grid'); if(!el) return;
+  if(!S.addedSkills) S.addedSkills=[];
+  const done=S.addedSkills.length;
+  el.innerHTML=`<div style="font-size:12px;color:var(--muted);margin-bottom:10px">Click to mark as added on your LinkedIn profile. <span style="color:var(--success);font-weight:700">${done}/${SAP_SKILLS.length} added</span></div><div style="flex-wrap:wrap;display:flex">` +
+    SAP_SKILLS.map(sk=>`<div class="prof-skill-chip ${S.addedSkills.includes(sk)?'added':''}" onclick="toggleSkill('${sk}',this)">${S.addedSkills.includes(sk)?'✓ ':''} ${sk}</div>`).join('') + '</div>';
+}
+
+function toggleSkill(sk,el){
+  if(!S.addedSkills) S.addedSkills=[];
+  if(S.addedSkills.includes(sk)) S.addedSkills=S.addedSkills.filter(s=>s!==sk);
+  else{S.addedSkills.push(sk);toast('✅ '+sk+' marked as added to LinkedIn!');}
+  el.classList.toggle('added',S.addedSkills.includes(sk));
+  el.textContent=(S.addedSkills.includes(sk)?'✓ ':'')+sk;
+  saveS();
+  // refresh count
+  const grid=document.getElementById('prof-skills-grid');
+  if(grid){const span=grid.querySelector('span');if(span)span.textContent=S.addedSkills.length+'/'+SAP_SKILLS.length+' added';}
+}
+
+function renderProfMetrics(){
+  const el=document.getElementById('prof-metrics'); if(!el) return;
+  const totalTopics=12+10+8+6;
+  const doneT=S.completedCards?S.completedCards.length:0;
+  const apps=S.jobs?S.jobs.length:0;
+  const streak=S.streak||0;
+  const recDone=Object.values(S.profileRecs||{}).filter(Boolean).length;
+  const metrics=[
+    {val:Math.min(100,Math.round((doneT/totalTopics)*100))+'%',label:'Learning Progress',col:'var(--tm)'},
+    {val:apps,label:'Jobs Applied',col:'var(--mm)'},
+    {val:streak+'d',label:'Study Streak',col:'var(--abap)'},
+    {val:recDone+'/'+LI_RECOMMENDATIONS.length,label:'LinkedIn Tasks Done',col:'var(--ai)'},
+  ];
+  el.innerHTML=metrics.map(m=>`
+    <div class="prof-metric-card">
+      <div class="prof-metric-val" style="color:${m.col}">${m.val}</div>
+      <div class="prof-metric-label">${m.label}</div>
+    </div>`).join('');
+}
+
+function renderCommunity(){
+  const el=document.getElementById('prof-community'); if(!el) return;
+  el.innerHTML=COMMUNITY_LINKS.map(c=>`
+    <a class="community-item" href="${c.url}" target="_blank" rel="noopener">
+      <span class="community-icon">${c.icon}</span>
+      <div><div class="community-name">${c.name}</div><div class="community-desc">${c.desc}</div></div>
+      <span class="community-arrow">→</span>
+    </a>`).join('');
+}
+
+/* ════════════════════════════════════════════════════════
+   BOOT — run on section activate
+════════════════════════════════════════════════════════ */
+const _origShowSectionNew = window.showSection;
+window.showSection = function(id){
+  if(_origShowSectionNew) _origShowSectionNew(id);
+  if(id==='learn' && !document.getElementById('learn-mod-joule')){
+    showLearnModule('joule', document.querySelector('#learn-tabs .inner-tab'));
+  }
+  if(id==='news'){
+    renderNews(); renderNewsCalendar(); renderQuickLinks();
+  }
+  if(id==='linkedin'){
+    renderSavedSearches(); renderLiTips();
+  }
+  if(id==='profile'){
+    loadProfile();
+  }
+};
+
+// init state keys
+(function(){
+  if(!S.learnProgress) S.learnProgress={};
+  if(!S.profileRecs)   S.profileRecs={};
+  if(!S.addedSkills)   S.addedSkills=[];
+  if(!S.liSearches)    S.liSearches=[];
+  if(!S.profile)       S.profile={};
+})();
 </script>
 </body>
 </html>
